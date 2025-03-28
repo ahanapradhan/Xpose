@@ -18,13 +18,12 @@ set boxwidth 0.8 relative  # Use 0.8 relative to default, creating space between
 
 # Set y-axis range to start from 0
 set yrange [0:*]
-set ytics 400
-
+set logscale y
 # Rotate x-axis labels by 45 degrees and offset them downward
 set xtics rotate by 45 offset 0,-1
 
 # Plot the data with red-colored bars
-plot '-' using ($2+$3+750):xtic(1) title "Database Minimization"  with boxes ls 1
+plot '-' using 2:xtic(1) title "Database Minimization"  with boxes ls 1
 
 # Data to plot
 1	431
@@ -49,5 +48,3 @@ plot '-' using ($2+$3+750):xtic(1) title "Database Minimization"  with boxes ls 
 20	450
 21  500
 22	36000
-23	127 10
-24	191 11
