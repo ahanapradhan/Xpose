@@ -26,7 +26,7 @@ set style line 5 lc rgb "#FFD700"  # XFE-Comb (Yellow) - different texture
 # Define inline data
 $DATA << EOD
 2   5   5    10  240  126
-7   5   313  5   240  0
+7   5   513  5   240  0
 8   17  19.5 20  240  0
 11  13  15   8   240  0
 12  8.5 9.5  7   240  0
@@ -37,7 +37,7 @@ $DATA << EOD
 18  15  150  40  240  0
 20  5   54   25  160  0
 21  2   27   15  120  0
-22  8   425  30  240  0
+22  8   725  30  240  0
 EOD
 
 # Plot the stacked bars

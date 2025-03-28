@@ -399,14 +399,14 @@ where
 		 sl_suppkey as l_suppkey,
 		 sl_shipdate as l_shipdate
 		 from store_lineitem
-		 UNION ALL
-		 select
-		 wl_extendedprice as l_extendedprice,
-		 wl_discount as l_discount,
-		 wl_partkey as l_partkey,
-		 wl_suppkey as l_suppkey,
-		 wl_shipdate as l_shipdate
-		 from web_lineitem
+		 --UNION ALL
+		 --select
+		 --wl_extendedprice as l_extendedprice,
+		 --wl_discount as l_discount,
+		 --wl_partkey as l_partkey,
+		-- wl_suppkey as l_suppkey,
+		-- wl_shipdate as l_shipdate
+		-- from web_lineitem
         ) as lineitem
 where
         l_shipdate >= date '1995-01-01'
@@ -488,12 +488,12 @@ from
 where
         o_orderkey in (
                 select
-                        wl_orderkey
+                        wl1_orderkey
                 from
-                        web_lineitem
+                        web_lineitem1
                 group by
-                        wl_orderkey having
-                                sum(wl_quantity) > 300
+                        wl1_orderkey having
+                                sum(wl1_quantity) > 300
         )
         and c_custkey = o_custkey
         and o_orderkey = wl_orderkey
@@ -1040,11 +1040,11 @@ where
         and p_container = 'MED BAG'
         and wl_quantity < (
                 select
-                        0.7 * avg(wl_quantity)
+                        0.7 * avg(wl1_quantity)
                 from
-                        web_lineitem
+                        web_lineitem1
                 where
-                        wl_partkey = p_partkey
+                        wl1_partkey = p_partkey
         );""", False, True, False, False),
                      TestQuery("ETPCH_Q19", """select
         sum(wl_extendedprice* (1 - wl_discount)) as revenue
