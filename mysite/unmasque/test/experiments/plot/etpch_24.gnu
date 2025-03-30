@@ -1,15 +1,10 @@
 reset
-set terminal pngcairo size 1000,750 enhanced font 'Arial,22'
+set terminal pngcairo size 1000,400 enhanced font 'Arial,22'
 set output 'dual_barplot.png'
 
-set multiplot layout 5,1
-
 ### TOP PLOT: Stacked Bar Chart ###
-set size 1, 0.55
-set origin 0, 0.5
-set title "(a) Overall Extraction Times" font ", 24"
 set xlabel "QID" font ",24"
-set ylabel "Time (Minutes)" font ",24"
+set ylabel "Extraction Time (Minutes)" font ",20"
 set key top right
 set style data histogram
 set style histogram rowstacked
@@ -20,7 +15,7 @@ set grid ytics
 set xtics rotate by -45
 set xtics nomirror
 set ytics nomirror
-set ytics 15
+set ytics 10
 
 # Define colors and styles
 set style line 1 lc rgb "#8a2be2"  # FROM (Violet) - with texture
@@ -49,7 +44,6 @@ $DATA << EOD
 16  13  50   4   120   0    1
 17  10  21   5   120   0    1
 18  15  150  40  240   0    7
-19  12  343  35  0     0    1
 20  5   54   25  160   0    3
 21  2   27   15  120   0    1.3
 22  8   425  30  240   0    2
@@ -61,20 +55,4 @@ EOD
 plot $DATA using (($2+$3+$4)/60):xtic(1) title "XRE" ls 1 with histogram fill pattern 25, \
      '' using (($5+$6)/60) title "XFE" ls 2 with histogram fill pattern 2
 
-### BOTTOM PLOT: New Computed Bar Chart ###
-set size 1, 0.45
-set origin 0, 0
-set title "(b) Normalized XRE Times wrt Q_H execution times" font ",24"
-set xlabel "QID" font ",24"
-unset ylabel
-unset key
-set style fill solid
-set style data histogram
-set style histogram clustered gap 0.5
-set boxwidth 0.5
-set ytics 100
-set grid ytics
 
-# Compute and plot the new metric
-plot $DATA using (($2+$3+$4)/$7):xtic(1) title "Normalized Value" with histogram lc rgb "#1f77b4"
-unset multiplot
