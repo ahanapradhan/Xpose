@@ -1197,32 +1197,90 @@ b2.b1_site_id = so_user.su_site_id and
 b2.b1_user_id = so_user.su_id and
 b2.b1_name = 'Student' and
 b2.b1_date > b1.b_date --+ '3 months'::interval""", False, False, False, False),
-                     TestQuery("""Stack_Q9""", """select count(distinct account.ac_id) from
-account, 
-	site, 
-	so_user, 
-	question q, post_link pl, 
-	tag 
+                     TestQuery("""Stack_Q9""", """SELECT COUNT(*)
+FROM account a
+JOIN so_user so 
+	ON a.ac_id = so.su_account_id
+JOIN question q 
+	ON q.q_owner_user_id = so.su_id 
+	AND q.q_site_id = so.su_site_id
+JOIN site s 
+	ON s.s_site_id = q.q_site_id
+JOIN post_link pl 
+	ON pl.pl_site_id = q.q_site_id 
+	AND pl.pl_post_id_to = q.q_id
+JOIN tag t 
+	ON t.t_site_id = q.q_site_id 
+	AND t.t_name = 'perl'
+JOIN tag_question tq 
+	ON tq.tq_site_id = t.t_site_id 
+	AND tq.tq_tag_id = t.t_id 
+	AND tq.tq_question_id = q.q_id
+WHERE
+  s.s_site_name = 'stackoverflow'
+  AND q.q_creation_date > DATE '2014-01-01'
+  AND so.su_reputation > 67
+  AND ac_website_url != ''
+  AND not exists (select * from answer a where a.an_site_id = q.q_site_id 
+  and a.an_question_id = q.q_id);""", False, False, False, False, True),
+                     TestQuery("""Stack_Q10""", """select count(*) from
+site, post_link1 pl1, post_link pl2, question1 q1, question2 q2, question q3 where
+site.s_site_name = 'aviation' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q2_site_id and
+q2.q2_site_id = q3.q_site_id and
+pl1.pl1_site_id = q1.q1_site_id and
+pl1.pl1_post_id_from = q1.q1_id and
+pl1.pl1_post_id_to = q2.q2_id and
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q2_id and
+pl2.pl_post_id_to = q3.q_id and
+exists ( select * from comment1 where comment1.c1_site_id = q3.q_site_id and comment1.c1_post_id = q3.q_id ) and
+exists ( select * from comment2 where comment2.c2_site_id = q2.q2_site_id and comment2.c2_post_id = q2.q2_id ) and
+exists ( select * from comment where comment.c_site_id = q1.q1_site_id and comment.c_post_id = q1.q1_id ) and
+q1.q1_score < q3.q_score;
+""", False, False, False, False),
+                     TestQuery("""StackQ7_new""", """select count(distinct account.ac_display_name) 
+	from account, so_user, badge b1, badge1 b2 
 	where
-not exists (select * from answer a where a.an_site_id = q.q_site_id and a.an_question_id = q.q_id) and
-site.s_site_name = 'stackoverflow' and
-site.s_site_id = q.q_site_id 
-	and
-pl.pl_site_id = q.q_site_id 
-	and
-pl.pl_post_id_to = q.q_id 
-	and
-tag.t_name = 'perl' and
-tag.t_site_id = q.q_site_id 
-	and
-q.q_creation_date > '2014-01-01'::date and
-q.q_owner_user_id = so_user.su_id 
-	and
-q.q_site_id = so_user.su_site_id 
-	and
-so_user.su_reputation > 67 and
+account.ac_website_url != '' and
 account.ac_id = so_user.su_account_id and
-account.ac_website_url != ''""", False, False, False, False)
+b1.b_site_id = so_user.su_site_id and
+b1.b_user_id = so_user.su_id and
+b1.b_name = 'Supporter' and
+b2.b1_site_id = so_user.su_site_id and
+b2.b1_user_id = so_user.su_id and
+b2.b1_name = 'Student' and
+b2.b1_date > b1.b_date + '3 months'::interval;""", False, False, False, False),
+                     TestQuery("""Stack_Q8rev""", """SELECT count(*)
+FROM site s, post_link pl, question q1, question2 q2, comment c1, comment2 c2,
+tag t, tag_question tq1, tag_question2 tq2
+WHERE
+s.s_site_name = 'aviation' 
+AND 
+	s.s_site_id = pl.pl_site_id 
+AND s.s_site_id = q1.q_site_id 
+AND s.s_site_id = q2.q2_site_id 
+AND s.s_site_id = c1.c_site_id
+AND s.s_site_id = c2.c2_site_id 
+AND s.s_site_id = t.t_site_id
+AND s.s_site_id = tq1.tq_site_id 
+AND s.s_site_id = tq2.tq2_site_id
+
+
+AND tq1.tq_question_id = q1.q_id
+AND pl.pl_post_id_from = q1.q_id
+AND c1.c_post_id = q1.q_id 
+AND pl.pl_post_id_to = q2.q2_id 
+AND c2.c2_post_id = q2.q2_id
+AND tq2.tq2_question_id = q2.q2_id
+
+AND c1.c_date < c2.c2_date 
+
+AND t.t_name IN ('terminology', 'history', 'security', 'untagged', 'statistics') 
+
+AND t.t_id = tq1.tq_tag_id 
+AND t.t_id = tq2.tq2_tag_id ;""", False, False, False, False)
 
                      ]
     return test_workload

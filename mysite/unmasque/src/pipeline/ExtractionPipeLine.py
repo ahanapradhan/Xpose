@@ -50,7 +50,7 @@ class ExtractionPipeLine(DisjunctionPipeLine,
         GenericPipeLine.verify_correctness(self, query, result)
 
     def extract(self, query):
-        self.connectionHelper.connectUsingParams()
+        self.connectionHelper.connectUsingParams(True)
         self.info[UNION] = "SKIPPED"
         '''
         From Clause Extraction

@@ -1364,3 +1364,497 @@ account.ac_website_url != '';
  --- extracted query:
  too many values to unpack (expected 2)
  --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl, question q1, question q2, comment c1, comment c2,
+tag, tag_question tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and pl_post_id_from = q1.q_id and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c_site_id = q1.q_site_id and c1.c_post_id = q1.q_id and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c_date < c2.c_date and tag.t_name in ('gender', 'grammar', 'nouns', 'lyrics', 'quotes') 
+	and tag.t_id = tq1.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq_site_id = q1.q_site_id and
+tq1.tq_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl, question q1, question q2, comment1 c1, comment c2,
+tag, tag_question tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and pl_post_id_from = q1.q_id and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q_site_id and c1.c1_post_id = q1.q_id and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('gender', 'grammar', 'nouns', 'lyrics', 'quotes') 
+	and tag.t_id = tq1.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq_site_id = q1.q_site_id and
+tq1.tq_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;;
+ --- extracted query:
+ Some problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl, question q1, question q2, comment1 c1, comment c2,
+tag, tag_question tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and pl_post_id_from = q1.q_id and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q_site_id and c1.c1_post_id = q1.q_id and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('gender', 'grammar', 'nouns', 'lyrics', 'quotes') 
+	and tag.t_id = tq1.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq_site_id = q1.q_site_id and
+tq1.tq_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl, question q1, question q2, comment1 c1, comment c2,
+tag, tag_question tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and pl_post_id_from = q1.q_id and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q_site_id and c1.c1_post_id = q1.q_id and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('gender', 'grammar', 'nouns', 'lyrics', 'quotes') 
+	and tag.t_id = tq1.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq_site_id = q1.q_site_id and
+tq1.tq_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!connection already closed
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl, question q1, question q2, comment1 c1, comment c2,
+tag, tag_question tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and pl_post_id_from = q1.q_id and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q_site_id and c1.c1_post_id = q1.q_id and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('gender', 'grammar', 'nouns', 'lyrics', 'quotes') 
+	and tag.t_id = tq1.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq_site_id = q1.q_site_id and
+tq1.tq_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl, question q1, question q2, comment1 c1, comment c2,
+tag, tag_question1 tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and 
+pl_post_id_from = q1.q_id and pl_site_id = q2.q_site_id 
+and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q_site_id and c1.c1_post_id = q1.q_id 
+and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('gender', 'grammar', 'nouns', 'lyrics', 'quotes') 
+	and tag.t_id = tq1.tq1_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq1_site_id = q1.q_site_id and
+tq1.tq1_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!connection already closed
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl, question q1, question q2, comment1 c1, comment c2,
+tag, tag_question1 tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and 
+pl_post_id_from = q1.q_id and pl_site_id = q2.q_site_id 
+and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q_site_id and c1.c1_post_id = q1.q_id 
+and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('gender', 'grammar', 'nouns', 'lyrics', 'quotes') 
+	and tag.t_id = tq1.tq1_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq1_site_id = q1.q_site_id and
+tq1.tq1_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!connection already closed
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from 
+site, post_link pl, question q1, question q2, comment1 c1, comment c2,
+tag, tag_question1 tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and pl_post_id_from = q1.q_id 
+	and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q_site_id and c1.c1_post_id = q1.q_id and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('regional') 
+	and tag.t_id = tq1.tq1_tag_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq1_site_id = q1.q_site_id and
+tq1.tq1_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from 
+site, post_link pl, question1 q1, question q2, comment1 c1, comment c2,
+tag, tag_question1 tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q1_site_id and pl_post_id_from = q1.q1_id 
+	and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q1_site_id and c1.c1_post_id = q1.q1_id 
+and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('regional') 
+	and tag.t_id = tq1.tq1_tag_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq1_site_id = q1.q1_site_id and
+tq1.tq1_question_id = q1.q1_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;
+ --- extracted query:
+ invalid input syntax for type date: "None"
+LINE 1: UPDATE unmasque.question  SET q_deletion_date='None';
+                                                      ^
+Some problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from 
+site, post_link pl, question1 q1, question q2, comment1 c1, comment c2,
+tag, tag_question1 tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q1_site_id and pl_post_id_from = q1.q1_id 
+	and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q1_site_id and c1.c1_post_id = q1.q1_id 
+and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('regional') 
+	and tag.t_id = tq1.tq1_tag_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq1_site_id = q1.q1_site_id and
+tq1.tq1_question_id = q1.q1_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;
+ --- extracted query:
+ invalid input syntax for type date: "None"
+LINE 1: UPDATE unmasque.question  SET q_closed_date='None';
+                                                    ^
+Some problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from 
+site, post_link pl, question1 q1, question q2, comment1 c1, comment c2,
+tag, tag_question1 tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q1_site_id and pl_post_id_from = q1.q1_id 
+	and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q1_site_id and c1.c1_post_id = q1.q1_id 
+and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('regional') 
+	and tag.t_id = tq1.tq1_tag_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq1_site_id = q1.q1_site_id and
+tq1.tq1_question_id = q1.q1_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;
+ --- extracted query:
+  
+ Select Count(*) as count 
+ From comment, comment1, post_link, question, question1, site, tag, tag_question, tag_question1 
+ Where comment.c_site_id = comment1.c1_site_id
+ and comment1.c1_site_id = post_link.pl_site_id
+ and post_link.pl_site_id = question.q_site_id
+ and question.q_site_id = question1.q1_site_id
+ and question1.q1_site_id = site.s_site_id
+ and site.s_site_id = tag.t_site_id
+ and tag.t_site_id = tag_question.tq_site_id
+ and tag_question.tq_site_id = tag_question1.tq1_site_id
+ and comment.c_post_id = post_link.pl_post_id_to
+ and post_link.pl_post_id_to = question.q_id
+ and question.q_id = tag_question.tq_question_id
+ and comment1.c1_post_id = post_link.pl_post_id_from
+ and post_link.pl_post_id_from = question1.q1_id
+ and question1.q1_id = tag_question1.tq1_question_id
+ and tag.t_id = tag_question.tq_tag_id
+ and tag_question.tq_tag_id = tag_question1.tq1_tag_id
+ and comment1.c1_date < comment.c_date
+ and site.s_site_name = 'german'
+ and tag.t_name = 'regional';
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl1, post_link pl2, question1 q1, question q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q_site_id and
+q2.q_site_id = q3.q_site_id and
+
+pl1.pl_site_id = q1.q1_site_id and
+pl1.pl_post_id_from = q1.q1_id and
+pl1.pl_post_id_to = q2.q_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment where comment.c_site_id = q2.q_site_id and comment.c_post_id = q2.q_id ) and
+exists ( select * from comment where comment.c_site_id = q1.q1_site_id and comment.c_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl1, post_link pl2, question1 q1, question q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q_site_id and
+q2.q_site_id = q3.q_site_id and
+
+pl1.pl_site_id = q1.q1_site_id and
+pl1.pl_post_id_from = q1.q1_id and
+pl1.pl_post_id_to = q2.q_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment where comment.c_site_id = q2.q_site_id and comment.c_post_id = q2.q_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q1.q1_site_id and comment1.c1_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl1, post_link pl2, question1 q1, question q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q_site_id and
+q2.q_site_id = q3.q_site_id and
+
+pl1.pl_site_id = q1.q1_site_id and
+pl1.pl_post_id_from = q1.q1_id and
+pl1.pl_post_id_to = q2.q_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q2.q_site_id and comment1.c1_post_id = q2.q_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q1.q1_site_id and comment1.c1_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link pl1, post_link pl2, question1 q1, question q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q_site_id and
+q2.q_site_id = q3.q_site_id and
+
+pl1.pl_site_id = q1.q1_site_id and
+pl1.pl_post_id_from = q1.q1_id and
+pl1.pl_post_id_to = q2.q_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment2 where comment2.c2_site_id = q2.q_site_id and comment2.c2_post_id = q2.q_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q1.q1_site_id and comment1.c1_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link1 pl1, post_link pl2, question1 q1, question q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q_site_id and
+q2.q_site_id = q3.q_site_id and
+
+pl1.pl1_site_id = q1.q1_site_id and
+pl1.pl1_post_id_from = q1.q1_id and
+pl1.pl1_post_id_to = q2.q_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment2 where comment2.c2_site_id = q2.q_site_id and comment2.c2_post_id = q2.q_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q1.q1_site_id and comment1.c1_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;
+ --- extracted query:
+ Cannot do database minimizationSome problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link1 pl1, post_link pl2, question1 q1, question2 q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q2_site_id and
+q2.q2_site_id = q3.q_site_id and
+
+pl1.pl1_site_id = q1.q1_site_id and
+pl1.pl1_post_id_from = q1.q1_id and
+pl1.pl1_post_id_to = q2.q2_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q2_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment2 where comment2.c2_site_id = q2.q_site_id and comment2.c2_post_id = q2.q2_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q1.q1_site_id and comment1.c1_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;
+ --- extracted query:
+ 
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link1 pl1, post_link pl2, question1 q1, question2 q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q2_site_id and
+q2.q2_site_id = q3.q_site_id and
+
+pl1.pl1_site_id = q1.q1_site_id and
+pl1.pl1_post_id_from = q1.q1_id and
+pl1.pl1_post_id_to = q2.q2_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q2_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment2 where comment2.c2_site_id = q2.q2_site_id and comment2.c2_post_id = q2.q2_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q1.q1_site_id and comment1.c1_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;
+ --- extracted query:
+ Some problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ select count(*) from
+site, post_link1 pl1, post_link pl2, question1 q1, question2 q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q2_site_id and
+q2.q2_site_id = q3.q_site_id and
+
+pl1.pl1_site_id = q1.q1_site_id and
+pl1.pl1_post_id_from = q1.q1_id and
+pl1.pl1_post_id_to = q2.q2_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q2_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment2 where comment2.c2_site_id = q2.q2_site_id and comment2.c2_post_id = q2.q2_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q1.q1_site_id and comment1.c1_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;
+ --- extracted query:
+ Some problem in Regular mutation pipeline. Aborting extraction!
+ --- END OF ONE EXTRACTION EXPERIMENT

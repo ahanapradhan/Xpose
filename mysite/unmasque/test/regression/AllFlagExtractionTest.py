@@ -1123,38 +1123,83 @@ group by c_address
         self.do_test(q24)
 
     def test_stack_q9(self):
-        query = """select count(distinct account.ac_id) from
-account, 
-	site, 
-	so_user, 
-	question q, post_link pl, 
-	tag 
-	where
-not exists (select * from answer a where a.an_site_id = q.q_site_id and a.an_question_id = q.q_id) and
-site.s_site_name = 'stackoverflow' and
-site.s_site_id = q.q_site_id 
-	and
-pl.pl_site_id = q.q_site_id 
-	and
-pl.pl_post_id_to = q.q_id 
-	and
-tag.t_name = 'perl' and
-tag.t_site_id = q.q_site_id 
-	and
-q.q_creation_date > '2014-01-01'::date and
-q.q_owner_user_id = so_user.su_id 
-	and
-q.q_site_id = so_user.su_site_id 
-	and
-so_user.su_reputation > 67 and
-account.ac_id = so_user.su_account_id and
-account.ac_website_url != '';"""
+        query = """select count(*) from
+site, post_link pl, question q1, question q2, comment1 c1, comment c2,
+tag, tag_question1 tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q_site_id and 
+pl_post_id_from = q1.q_id and pl_site_id = q2.q_site_id 
+and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q_site_id and c1.c1_post_id = q1.q_id 
+and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('gender', 'grammar', 'nouns', 'lyrics', 'quotes') 
+	and tag.t_id = tq1.tq1_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq1_site_id = q1.q_site_id and
+tq1.tq1_question_id = q1.q_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;;"""
         self.conn.config.detect_union = False
         self.conn.config.detect_or = False
         self.conn.config.detect_nep = False
         self.conn.config.detect_oj = False
         self.conn.config.use_cs2 = False
         self.do_test(query)
+
+    def test_stackQ8(self):
+        self.conn.config.detect_union = False
+        self.conn.config.detect_or = False
+        self.conn.config.detect_nep = False
+        self.conn.config.detect_oj = False
+        self.conn.config.use_cs2 = False
+        self.do_test("""select count(*) from 
+site, post_link pl, question1 q1, question q2, comment1 c1, comment c2,
+tag, tag_question1 tq1, tag_question tq2
+where s_site_name = 'german' and
+pl_site_id = s_site_id and pl_site_id = q1.q1_site_id and pl_post_id_from = q1.q1_id 
+	and pl_site_id = q2.q_site_id and pl_post_id_to = q2.q_id and
+c1.c1_site_id = q1.q1_site_id and c1.c1_post_id = q1.q1_id 
+and c2.c_site_id = q2.q_site_id and c2.c_post_id = q2.q_id and
+c1.c1_date < c2.c_date and tag.t_name in ('regional') 
+	and tag.t_id = tq1.tq1_tag_id and
+tag.t_id = tq2.tq_tag_id and
+tag.t_site_id = tq1.tq1_site_id and
+tag.t_site_id = pl_site_id and
+tq1.tq1_site_id = q1.q1_site_id and
+tq1.tq1_question_id = q1.q1_id and
+tq2.tq_site_id = q2.q_site_id and
+tq2.tq_question_id = q2.q_id;""")
+
+    def test_stack_q10(self):
+        self.conn.config.detect_union = False
+        self.conn.config.detect_or = False
+        self.conn.config.detect_nep = False
+        self.conn.config.detect_oj = False
+        self.conn.config.use_cs2 = False
+        self.do_test("""select count(*) from
+site, post_link1 pl1, post_link pl2, question1 q1, question2 q2, question q3 where
+
+site.s_site_name = 'german' and
+q1.q1_site_id = site.s_site_id and
+q1.q1_site_id = q2.q2_site_id and
+q2.q2_site_id = q3.q_site_id and
+
+pl1.pl1_site_id = q1.q1_site_id and
+pl1.pl1_post_id_from = q1.q1_id and
+pl1.pl1_post_id_to = q2.q2_id and
+
+pl2.pl_site_id = q1.q1_site_id and
+pl2.pl_post_id_from = q2.q2_id and
+pl2.pl_post_id_to = q3.q_id and
+
+exists ( select * from comment where comment.c_site_id = q3.q_site_id and comment.c_post_id = q3.q_id ) and
+exists ( select * from comment2 where comment2.c2_site_id = q2.q2_site_id and comment2.c2_post_id = q2.q2_id ) and
+exists ( select * from comment1 where comment1.c1_site_id = q1.q1_site_id and comment1.c1_post_id = q1.q1_id ) and
+
+q1.q1_score < q3.q_score;""")
 
     def test_stack_q7(self):
         query = """select count(distinct account.ac_display_name) 
