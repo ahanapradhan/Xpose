@@ -1,18 +1,21 @@
 
-set terminal pngcairo size 400,500 enhanced font 'Arial,20'
+set terminal pngcairo size 500,400 enhanced font 'Arial,24'
 set output 'stack_times.png'
 
 set xlabel "QID" font ", 24"
-set ylabel "Extraction Time (Minutes)" font ", 24"
-set key top left
+set ylabel "Extraction Time\n (Minutes)" font ", 24"
+set key font ",14"
+
+set key top right
 set style data histogram
 set style histogram rowstacked
 set style fill solid border -1
 set style fill pattern 4 border -1  # Set a texture for the first group
 set boxwidth 0.5
 set grid ytics
+set ytics 20
 
-set xtics rotate by -45
+set xtics rotate by 45 offset 0,-0.5
 set xtics nomirror
 set ytics nomirror
 
@@ -26,8 +29,8 @@ set style line 5 lc rgb "#FFD700"  # XFE-Comb (Yellow) - different texture
 # Define inline data
 $DATA << EOD
 7   1367  50
-8   1020   100
-9   180  200
+8   5520   100
+9   2569  200
 10  2400   100
 
 EOD

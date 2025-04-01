@@ -1,10 +1,10 @@
 # Set terminal to PNG format for saving the output as an image
-set terminal pngcairo size 400,500 enhanced font 'Arial,18'
+set terminal pngcairo size 500,400 enhanced font 'Arial,24'
 set output 'stack_calls.png'
 
 # Set title and labels
-set xlabel "QID"
-set ylabel "# Q_H Executions"
+set xlabel "QID" font ", 24"
+set ylabel "# Q_H Executions\n (Log Scale)" offset -2,0 font ", 24"
 
 # Set grid for better readability
 set grid
@@ -18,18 +18,18 @@ set style fill solid 1.0 border -1
 set boxwidth 0.5 relative
 
 # Set y-axis range and log scale
-set yrange [0:*]
+set yrange [1:*]
 set logscale y
-set format y "10^%T"
+set format y "%T"
 
 # Rotate x-axis labels
-set xtics rotate by 45 offset 0,-1
+set xtics rotate by 45 offset 0,-0.5
 
 # Define inline data block
 $DATA << EOD
 7   534
-8   3180
-9   789
+8   7935
+9   3316
 10  700
 EOD
 

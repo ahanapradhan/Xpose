@@ -1,10 +1,10 @@
 # Set terminal to PNG format for saving the output as an image
-set terminal pngcairo size 800,300 enhanced font 'Arial,18'
+set terminal pngcairo size 800,320 enhanced font 'Arial,18'
 set output 'calls_plot.png'
 
 # Set title and labels
 set xlabel "QID"
-set ylabel "# Q_H Executions"
+set ylabel "# Q_H Executions\n(Log Scale)" font ", 16"
 
 # Set grid for better readability
 set grid
@@ -17,11 +17,11 @@ set style fill solid 1.0 border -1
 set boxwidth 0.5 relative  # Use 0.8 relative to default, creating space between bars
 
 # Set y-axis range to start from 0
-set yrange [0:*]
+set yrange [1:*]
 set logscale y
-set format y "10^%T"
+set format y "^%T"
 # Rotate x-axis labels by 45 degrees and offset them downward
-set xtics rotate by 45 offset 0,-1
+set xtics rotate by -45
 
 # Plot the data with red-colored bars
 plot '-' using 2:xtic(1) title "Database Minimization"  with boxes ls 1
