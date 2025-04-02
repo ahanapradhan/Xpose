@@ -3,7 +3,7 @@ set terminal pngcairo size 500,400 enhanced font 'Arial,24'
 set output 'stack_calls.png'
 
 # Set title and labels
-set xlabel "QID" font ", 24"
+set xlabel "QID" font ", 24" offset 0,0.7
 set ylabel "# Q_H Executions\n (Log Scale)" offset -2,0 font ", 24"
 
 # Set grid for better readability
@@ -15,7 +15,7 @@ unset key
 # Set box width and style for bars
 set style data histograms
 set style fill solid 1.0 border -1
-set boxwidth 0.5 relative
+set boxwidth 0.4 relative
 
 # Set y-axis range and log scale
 set yrange [1:*]

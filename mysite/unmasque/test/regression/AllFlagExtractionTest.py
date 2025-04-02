@@ -253,7 +253,7 @@ c_acctbal > 30.04;"""
         self.do_test("""SELECT s_name AS name, s_phone as phone
 FROM supplier, web_lineitem, orders WHERE wl_orderkey = o_orderkey
 AND s_suppkey = wl_suppkey AND s_acctbal <= o_totalprice
-AND wl_commitdate = wl_receiptdate GROUP BY s_name, s_phone;""")
+AND wl_commitdate = wl_receiptdate and wl_shipmode = 'AIR' GROUP BY s_name, s_phone;""")
 
     def test_main_cmd_query(self):
         query = "Select ps_COMMENT, sum(ps_supplycost * ps_availqty) as value From partsupp, " \

@@ -986,3 +986,60 @@ AND wl_commitdate = wl_receiptdate GROUP BY s_name, s_phone;
  Where customer.c_custkey = orders.o_custkey
  and customer.c_acctbal <= 999.99;
  --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ SELECT s_name AS name, s_phone as phone
+FROM supplier, web_lineitem, orders WHERE wl_orderkey = o_orderkey
+AND s_suppkey = wl_suppkey AND s_acctbal <= o_totalprice
+AND wl_commitdate = wl_receiptdate and wl_shipmode = 'AIR' GROUP BY s_name, s_phone;
+ --- extracted query:
+  
+ Select s_name as name, s_phone as phone 
+ From orders, supplier, web_lineitem 
+ Where orders.o_orderkey = web_lineitem.wl_orderkey
+ and supplier.s_suppkey = web_lineitem.wl_suppkey
+ and web_lineitem.wl_commitdate = web_lineitem.wl_receiptdate
+ and supplier.s_acctbal <= orders.o_totalprice
+ and web_lineitem.wl_shipmode = 'AIR' 
+ Group By s_name, s_phone 
+ Order By name asc, phone asc;
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ SELECT s_name AS name, s_phone as phone
+FROM supplier, web_lineitem, orders WHERE wl_orderkey = o_orderkey
+AND s_suppkey = wl_suppkey AND s_acctbal <= o_totalprice
+AND wl_commitdate = wl_receiptdate and wl_shipmode = 'TRUCK' GROUP BY s_name, s_phone;
+ --- extracted query:
+  
+ Select s_name as name, s_phone as phone 
+ From orders, supplier, web_lineitem 
+ Where orders.o_orderkey = web_lineitem.wl_orderkey
+ and supplier.s_suppkey = web_lineitem.wl_suppkey
+ and web_lineitem.wl_commitdate = web_lineitem.wl_receiptdate
+ and supplier.s_acctbal <= orders.o_totalprice
+ and web_lineitem.wl_shipmode = 'TRUCK' 
+ Group By s_name, s_phone 
+ Order By name asc, phone asc;
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ SELECT s_name AS name, s_phone as phone
+FROM supplier, web_lineitem, orders WHERE wl_orderkey = o_orderkey
+AND s_suppkey = wl_suppkey AND s_acctbal <= o_totalprice
+AND wl_commitdate = wl_receiptdate and wl_shipmode = 'AIR' GROUP BY s_name, s_phone;
+ --- extracted query:
+  
+ Select s_name as name, s_phone as phone 
+ From orders, supplier, web_lineitem 
+ Where orders.o_orderkey = web_lineitem.wl_orderkey
+ and supplier.s_suppkey = web_lineitem.wl_suppkey
+ and web_lineitem.wl_commitdate = web_lineitem.wl_receiptdate
+ and supplier.s_acctbal <= orders.o_totalprice
+ and web_lineitem.wl_shipmode = 'AIR' 
+ Group By s_name, s_phone 
+ Order By name asc, phone asc;
+ --- END OF ONE EXTRACTION EXPERIMENT

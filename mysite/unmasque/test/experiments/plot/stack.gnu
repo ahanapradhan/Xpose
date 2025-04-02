@@ -1,8 +1,8 @@
 
-set terminal pngcairo size 500,400 enhanced font 'Arial,24'
+set terminal pngcairo size 600,400 enhanced font 'Arial,24'
 set output 'stack_times.png'
 
-set xlabel "QID" font ", 24"
+set xlabel "QID" font ", 24" offset 0,0.7
 set ylabel "Extraction Time\n (Minutes)" font ", 24"
 set key font ",14"
 
