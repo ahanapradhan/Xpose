@@ -1,0 +1,357 @@
+... Text Description:
+... "This query determines the distribution of customers by the number of orders they have made, including
+... customers who have no record of orders, in past or present. It counts and reports how many customers have no orders, how many have 1, 2,
+... 3, etc. A check is made to ensure that the orders counted do not fall into one of several special categories of orders. Special categories are
+... identified in the order comment column by looking for the pattern ’%special%requests%’."
+...
+...
+...
+<think>
+Okay, I need to write an SQL query based on the user's description. Let me break down what they want.
+
+First, the goal is to determine the distribution of customers by the number of orders they've made. This includes customers who have no order records, both past and present. So, I'll need to count all customers and then group them by their order counts.
+
+The user mentioned that a check should be done to ensure orders don't fall into special categories identified in the order comment. The pattern to look for is '%special%requests%'. This means any order with this phrase in its comment might not be valid, so we'll exclude
+those from our count.
+
+Looking at the schema, the relevant tables are ORDERS and CUSTOMER. Each customer has a C_CUSTKEY, which is unique, but orders link customers via their C_NATIONKEY (from the CUSTOMER table) to NATION, and then each order in ORDERS is linked back to a customer via
+O_CUSTKEY.
+
+So, I'll join ORDERS with CUSTOMER on C_CUSTKEY. But since we want to count how many orders each customer has, including those without any, maybe it's better to use a LEFT JOIN so that all customers are included, even if they have zero orders.
+
+Wait, but in the query plan, using LEFT JOIN will include all customers and default order counts as NULL. Then, I'll need to aggregate these into a distribution table.
+
+I think I should first get the count of customers with each number of orders. So, maybe use a Common Table Expression (CTE) that groups by customer key and sums the order quantities.
+
+Wait, no. Actually, for each customer, we can have multiple orders. Each order is in ORDERS, which has O_CUSTKEY. So, if I group all customers by their C_CUSTKEY and count how many times they appear in ORDERS, that gives me the number of orders per customer.
+
+But since the user wants to include those with no orders, perhaps it's better to use a CTE that lists all customers (from CUSTOMER) and counts their order occurrences from ORDERS. Then group by customer key and count the total orders.
+
+So, step 1: Get a list of all customers along with the number of orders they've made.
+
+Then, within this data, check if any of those orders are in the special category. So, for each order that's part of a customer's record, we need to see if the comment contains '%special%requests%'.
+
+Wait, but how do I associate the customer count with their orders? Maybe I can join ORDERS and CUSTOMER first, then apply the special condition on the comments.
+
+But since each order is linked to a customer via O_CUSTKEY, perhaps it's better to write:
+
+SELECT C.C_CUSTKEY, COUNT(O.O_ORDERKEY) AS total_orders
+FROM ORDERS O
+JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+GROUP BY C.C_CUSTKEY
+
+But then, this counts all orders. However, the user wants to exclude orders where the comment has the special pattern.
+
+So, perhaps I can modify the query to have a condition on the order's comment:
+
+COUNT(O.O_ORDERKEY) AS total_orders
+FROM ORDERS O
+JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+WHERE O.OrderComment LIKE '%special%requests%'
+GROUP BY C.C_CUSTKEY
+
+Wait, no. That would only count customers with orders that have the special comment. But the user wants to include all customers, whether or not they have any special comments.
+
+So, perhaps we need two steps: first get all customers and their order counts, then subtract those who have at least one order without the special comment? Or maybe it's better to calculate total orders and subtract those that are in the special category.
+
+Wait, but the user wants to report how many customers have 0 orders, 1, etc., excluding those special orders. Hmm.
+
+Alternatively, perhaps I should first find all customers who have any order (regardless of being special), then for each customer, count their non-special orders and see if they have zero or more.
+
+This might get complicated. Maybe it's better to calculate the total number of customers with a certain number of non-special orders, regardless of whether some of their orders are special.
+
+Wait, perhaps a better approach is:
+
+1. For all customers, find how many orders they've made in total (including any that may be special).
+2. Then, for each customer, subtract the number of special orders from their total to get the non-special count.
+3. If the result is zero or more, include them.
+
+But this might not be straightforward in a single query. Alternatively, perhaps it's acceptable to just exclude all customers who have at least one order that is special, but I don't think that's what the user wants because they want to report on non-special orders as
+well as those with no orders.
+
+Wait, actually, looking back: The user said "orders counted do not fall into several special categories". So maybe we need to exclude any order that is in a special category when counting towards the total. Or perhaps, the counts are based only on non-special orders.
+
+But I'm getting confused. Let me read again:
+
+"A check is made to ensure that the orders counted do not fall into one of several special categories of orders. Special categories are identified in the order comment column by looking for the pattern ’%special%requests%’."
+
+So, when counting an order towards a customer's count, if it contains '%special%requests%', we exclude it from the total.
+
+Therefore, for each customer, their count is the number of orders where the comment does NOT contain that pattern.
+
+Additionally, include customers who have no orders at all.
+
+But how do I handle this? Maybe:
+
+- First, get all customers with any order counts (including zero).
+- Then, subtract those orders which are special from each customer's total.
+- If a customer has some non-special orders, they contribute to the distribution. Customers with no orders also contribute as 0.
+
+Wait, but it's more efficient to calculate for each customer how many of their orders meet the criteria (non-special), and then group by that count.
+
+But in SQL, can I do something like:
+
+SELECT C.C_CUSTKEY,
+       SUM(CASE WHEN O.OrderComment LIKE '%special%requests%' THEN 0 ELSE 1 END) AS total_orders
+FROM ORDERS O
+JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+GROUP BY C.C_CUSTKEY;
+
+But this would count for each customer the number of non-special orders. Then, we can also include customers with zero orders.
+
+Wait, but if a customer has no orders, then their total_orders would be zero. If they have some orders, it's the sum of non-special ones.
+
+So, perhaps I should first create a list of all customers (from CUSTOMER) and then for each, count how many non-special orders they have.
+
+But that might involve an outer query or using a subquery with row_number or something else.
+
+Alternatively, in SQL, we can use a Common Table Expression to get the counts:
+
+WITH customer_orders AS (
+    SELECT C.C_CUSTKEY,
+           COUNT(O.O_ORDERKEY) AS total_orders
+    FROM ORDERS O
+    JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+    GROUP BY C.C_CUSTKEY
+)
+SELECT C.C_CUSTKEY, CO.total_orders - COUNT(O.OrderComment LIKE '%special%requests%') AS non_special_count
+FROM CUSTOMER C
+CROSS JOIN customer_orders CO ON C.C_CUSTKEY = CO.C_CUSTKEY;
+
+Wait, but this might not work because for each row in CUSTOMER, it would subtract the number of special orders from all customers. Maybe I'm overcomplicating.
+
+Alternatively, perhaps it's better to first count all possible customers (including those with zero) and then group by their total non-special order counts.
+
+But maybe a more straightforward approach is:
+
+- For each customer, find how many of their orders are not special.
+- Then, create a distribution table where we count how many customers have 0,1,2,... etc. non-special orders.
+
+So, the query could be:
+
+SELECT C.C_CUSTKEY,
+       SUM(CASE WHEN O.OrderComment LIKE '%special%requests%' THEN 0 ELSE 1 END) AS non_special_count
+FROM ORDERS O
+JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+GROUP BY C.C_CUSTKEY;
+
+But then, this will only give us the count of non-special orders per customer. However, we also need to include customers who have zero orders.
+
+Wait, but in the table above, if a customer has no orders, their non_special_count would be 0 because there are no orders at all (since they didn't place any). So maybe this approach works without explicitly joining on customers with zero orders.
+
+But perhaps it's better to include them. So, we can have:
+
+SELECT C.C_CUSTKEY,
+       SUM(CASE WHEN O.OrderComment LIKE '%special%requests%' THEN 0 ELSE 1 END) AS non_special_count
+FROM ORDERS O
+LEFT JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+GROUP BY C.C_CUSTKEY;
+
+This way, customers with no orders will have a row with non_special_count as 0.
+
+But then, the issue is that this would count all customers, but for some of them, there are zero orders. But since we're including LEFT JOIN, it's okay because they'll be included even if there are no matching orders.
+
+Then, once we have that table, we can create another step to group by non_special_count and count the number of customers in each group.
+
+So, putting it all together:
+
+1. Create a CTE (Common Table Expression) that for each customer, counts their non-special order count.
+2. Then, from this CTE, group by the non_special_count and count how many customers have each possible count.
+
+But I think SQL Server can do this without using subqueries if it's compatible with older versions, but using a Common Table Expression is more straightforward.
+
+Wait, in T-SQL, you can write:
+
+WITH customer_orders AS (
+    SELECT C.C_CUSTKEY,
+           COUNT(O.OrderComment) - COUNT(O.OrderComment LIKE '%special%requests%') AS non_special_count
+    FROM ORDERS O
+    LEFT JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+    GROUP BY C.C_CUSTKEY)
+SELECT
+    NON NULL(C.C_CUSTKEY),
+    CO.non_special_count,
+    COUNT(*) AS customer_count
+FROM CUSTOMER C
+CROSS JOIN customer_orders CO ON C.C_CUSTKEY = CO.C_CUSTKEY
+GROUP BY CO.non_special_count;
+
+But I'm not sure if that's the correct approach.
+
+Alternatively, perhaps:
+
+SELECT
+    C.C_CUSTKEY,
+    SUM(CASE WHEN O.OrderComment LIKE '%special%requests%' THEN 0 ELSE 1 END) AS non_special_order_count,
+    COUNT(*) OVER () AS total_customers
+FROM ORDERS O
+LEFT JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+GROUP BY C.C_CUSTKEY;
+
+But that doesn't directly give the distribution.
+
+Wait, maybe I'm overcomplicating. Let me try to structure it step by step:
+
+1. First, get all customers and their non-special order counts.
+   - Use LEFT JOIN on ORDERS with CUSTOMER to include all customers (even those with no orders).
+   - For each customer, count how many of their orders are not special.
+
+2. Then, create a frequency table for these counts.
+
+So, the first part would be:
+
+SELECT C.C_CUSTKEY,
+       SUM(CASE WHEN O.OrderComment LIKE '%special%requests%' THEN 0 ELSE 1 END) AS non_special_count
+FROM ORDERS O
+LEFT JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+GROUP BY C.C_CUSTKEY;
+
+But this gives for each customer, the number of non-special orders they have. Customers with no orders will have a count of 0.
+
+However, what if a customer has one special order? Their non_special_count would be 0 (assuming other orders may exist). Wait, but in their case, since there's at least one special order, so even if they have other orders that are not special, the sum could include
+them. No, because it's adding 1 only when OrderComment is NOT special.
+
+Wait no: The CASE statement adds 1 for each non-special order and 0 for each special order.
+
+So, a customer with one special order would contribute 0 to their count if they have zero non-special orders (which isn't possible since the special order reduces it). Hmm.
+
+But perhaps that's acceptable. Then, once we have this table:
+
+Customer C | non_special_count
+---------------------------
+A          | 2
+B          | 0
+C          | 3
+
+We can then group by non_special_count and count how many customers fall into each category.
+
+So the final part is to create a frequency distribution of these counts.
+
+In SQL, we can do this with another GROUP BY:
+
+SELECT
+    non_special_count AS order_count,
+    COUNT(C.C_CUSTKEY) AS customer_count
+FROM (
+    SELECT C.C_CUSTKEY,
+           SUM(CASE WHEN O.OrderComment LIKE '%special%requests%' THEN 0 ELSE 1 END) AS non_special_count
+    FROM ORDERS O
+    LEFT JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+    GROUP BY C.C_CUSTKEY
+)
+AS temp_table
+GROUP BY non_special_count;
+
+But this would require using a Common Table Expression (CTE).
+
+Alternatively, in newer versions of SQL Server, we can use Common Table Expressions without the AS temp_table.
+
+Putting it all together:
+
+WITH customer_orders AS (
+    SELECT C.C_CUSTKEY,
+           SUM(CASE WHEN O.OrderComment LIKE '%special%requests%' THEN 0 ELSE 1 END) AS non_special_count
+    FROM ORDERS O
+    LEFT JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+    GROUP BY C.C_CUSTKEY)
+SELECT
+    non_special_count,
+    COUNT(C.C_CUSTKEY) AS customer_count
+FROM customer_orders
+GROUP BY non_special_count;
+
+But wait, in this case, the CTE is 'customer_orders', which includes each customer's non_special_count. Then we group by that count and get how many customers have 0,1,2,... orders.
+
+But then, if a customer has multiple non-special orders (like 3), they would be counted under the 3 in this frequency table.
+
+This seems correct.
+
+Testing with some sample data:
+
+Sample Customer A:
+- Two orders: both not special. So their count is 2.
+Sample Customer B:
+- One order which is special, but no other orders? Wait, that can't happen because they have a special order and no non-special ones? No, wait: if their only order is special, then the sum would be zero for non_special_count.
+
+Wait no. Because in the CTE step:
+
+For each customer, we're adding 1 for each OrderComment that's not special.
+
+So Customer B has one order with comment 'special comment', so in this case, their non_special_count is 0 (since they have only a single special order). Therefore, in the CTE table, Customer B would be mapped to non_special_count=0. But there are customers who may have
+multiple orders: e.g., two non-special and one special.
+
+Thus, in that case, their sum for non_special_count is 2 + ... ?
+
+Wait no:
+
+In the CTE step, for each customer, it's adding all their non-special order counts regardless of other factors. So if a customer has three orders: two not special (like comment 'test1', 'test2'), and one special ('special'). Then in their row in the CTE table, their
+non_special_count would be 2.
+
+Another customer with four orders: three non-special, one special. Their count is 3.
+
+Thus, when we create a frequency table of these counts, each unique count will have an associated number of customers who fall into that category.
+
+This seems correct.
+
+Testing the sample:
+
+Suppose our data has:
+
+Customer A:
+- Order1: comment 'test' (non-special)
+- Order2: comment 'test' (non-special)
+
+Customer B:
+- Order1: comment 'special'
+- Order2: no other orders? Or wait, if a customer can have multiple orders.
+
+Wait, the sample shows Customer A has two orders. So each row in the CTE is per customer:
+
+If Customer B only has one order with a special comment, their non_special_count would be 0 (since they have zero non-special orders).
+
+If Customer C has three orders: two non-special and one special, then their count is 2.
+
+Thus, our frequency table would look like:
+
+order_count | customer_count
+-------------------
+0           | 1 (Customer B)
+2           | 1 (Customer A)
+...         ...
+
+Which seems correct.
+
+So the final SQL code would be something along these lines.
+</think>
+
+To solve this problem, we need to determine how many customers have a specific number of non-special orders. The key steps involve counting non-special orders per customer and then creating a frequency distribution of these counts.
+
+### Approach
+1. **Count Non-Special Orders**: For each customer, count the number of orders that do not contain the special comment "special%comments".
+2. **Frequency Distribution**: Group customers based on the count of their non-special orders and determine how many customers fall into each group.
+
+This approach involves using a Common Table Expression (CTE) to first compute the non-special order counts for each customer, followed by another grouping step to create the frequency distribution.
+
+### Solution Code
+
+```sql
+WITH customer_orders AS (
+    SELECT C.C_CUSTKEY,
+           SUM(CASE WHEN O.OrderComment LIKE '%special%requests%' THEN 0 ELSE 1 END) AS non_special_count
+    FROM ORDERS O
+    LEFT JOIN CUSTOMER C ON O.CUSTKEY = C.C_CUSTKEY
+    GROUP BY C.C_CUSTKEY)
+SELECT
+    non_special_count,
+    COUNT(C.C_CUSTKEY) AS customer_count
+FROM customer_orders
+GROUP BY non_special_count;
+```
+
+### Explanation
+1. **CTE for Non-Special Orders**: The `customer_orders` CTE calculates the number of non-special orders for each customer. This is done by summing 0 for each order that contains the special comment and 1 for all other orders.
+2. **Frequency Distribution**: After obtaining the counts, we group these counts to determine how many customers have exactly 0, 1, 2, etc., non-special orders.
+
+This solution efficiently processes the data in two steps: first computing individual customer metrics and then aggregating these into a final result set.
+
+>>> Send a me
