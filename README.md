@@ -2,7 +2,7 @@
 
 | QID  | GPT Output                          | Remarks on Diff                                |
 |------|-------------------------------------|-------------------------------------------------|
-| Q2 |   https://chatgpt.com/share/67ef8147-b3d4-8005-9bcd-21444bf63e26                                  |     https://www.diffchecker.com/zWuU3Apc/                                            |
+| Q2 |   https://chatgpt.com/share/67ef8147-b3d4-8005-9bcd-21444bf63e26                                  | Result is different.    https://www.diffchecker.com/zWuU3Apc/                                            |
 |Q7|https://chatgpt.com/share/67efa0ba-6aa0-8005-9720-4b33d7722529|On original TPCH schema, text-to-sql produces the benchmark schema. Now, on the synonymized schema, it includes spurious partupp table. It introduced 100 in the projection formula. Synonym mappings: region --> continent, nation --> country, orders --> bids, lineitem --> product, part --> item, partsupp --> itemven, supplier --> vendor, customer --> client.|
 |Q11|https://chatgpt.com/share/67ef97b9-f440-8005-9a8d-d2150dc7f6c4|Tables missing in the inner query.|
 |Q12|https://chatgpt.com/share/67ef95e4-900c-8005-a7ca-7f914246f78a|Query gives empty result. Because the constants are not correct. They are not specified in the text. This cannot be fixed only using the result and the text description. URGENT and HIGH constants can be corrected if the LLM is provided with few sample data. But the constants on l_shipmode predicate cannot be derived unless given.| 
