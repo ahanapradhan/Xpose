@@ -246,6 +246,8 @@ class InequalityPredicate(FilterHolder):
                 else get_max(self.constants_dict[datatype])
 
             if prev_ub != new_ub:
+                coeff = (val - dmin_val)/(prev_ub - new_ub)
+                print(f"{col_src}*{coeff} <= {col_sink}")
                 add_item_to_list((col_src, col_sink), E)
                 self.__absorb_variable_inbetween_bounds(col_src, col_sink, prev_ub)
 
@@ -284,6 +286,8 @@ class InequalityPredicate(FilterHolder):
 
             if prev_lb != new_lb:
                 aoa_confirm = True
+                coeff = (new_lb - prev_lb)/(val - dmin_val)
+                print(f"{col_src}*{coeff} <= {col_sink}")
                 if new_lb > val:
                     remove_item_from_list((col_src, col_sink), E)
                     add_item_to_list((col_src, col_sink), L)
