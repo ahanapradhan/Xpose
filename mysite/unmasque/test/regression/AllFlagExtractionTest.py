@@ -580,6 +580,14 @@ ORDER  BY d_week_seq1;"""
                   d_year);"""
         self.do_test(query)
 
+    def test_aoa_coeff(self):
+        query = """select p_name from part, supplier, partsupp where
+        p_partkey = ps_partkey and ps_suppkey = s_suppkey
+         and ps_supplycost*1.2 <= s_acctbal;
+        """
+        self.conn.config.detect_union = False
+        self.do_test(query)
+
     def test_Q76(self):
         query = """SELECT channel, 
                col_name, 

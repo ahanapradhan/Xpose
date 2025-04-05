@@ -246,14 +246,11 @@ class InequalityPredicate(FilterHolder):
                 else get_max(self.constants_dict[datatype])
 
             if prev_ub != new_ub:
-                coeff = (val - dmin_val)/(prev_ub - new_ub)
-                print(f"{col_src}*{coeff} <= {col_sink}")
                 add_item_to_list((col_src, col_sink), E)
                 self.__absorb_variable_inbetween_bounds(col_src, col_sink, prev_ub)
 
                 if new_ub < val:
-                    remove_item_from_list((col_src, col_sink), E)
-                    add_item_to_list((col_src, col_sink), L)
+                    self.__add_for_lessthan(E, L, col_sink, col_src, dmin_val, new_ub, prev_ub, val)
             else:
                 if not aoa_confirm:
                     self.logger.debug(f"no aoa due to fixed UB")
@@ -264,6 +261,14 @@ class InequalityPredicate(FilterHolder):
             if not aoa_confirm:
                 self.logger.debug(f"no aoa due to immutability of dmin val")
                 remove_item_from_list((col_src, col_sink), E)
+
+    def __add_for_lessthan(self, E, L, col_sink, col_src, dmin_val, new_ub, prev_ub, val):
+        remove_item_from_list((col_src, col_sink), E)
+        add_item_to_list((col_src, col_sink), L)
+        coeff = round((val - dmin_val) / (prev_ub - new_ub), 2)
+        print(f"{col_src}*{coeff} <= {col_sink}")
+        if (col_src, col_sink) not in self.coeff_dict:
+            self.coeff_dict[(col_src, col_sink)] = coeff
 
     def __absorb_variable_LBs(self, E, L, datatype, col_src, col_sink, query) -> bool:
         aoa_confirm = False
@@ -286,11 +291,9 @@ class InequalityPredicate(FilterHolder):
 
             if prev_lb != new_lb:
                 aoa_confirm = True
-                coeff = (new_lb - prev_lb)/(val - dmin_val)
-                print(f"{col_src}*{coeff} <= {col_sink}")
+
                 if new_lb > val:
-                    remove_item_from_list((col_src, col_sink), E)
-                    add_item_to_list((col_src, col_sink), L)
+                    self.__add_for_lessthan(E, L, col_sink, col_src, prev_lb, dmin_val, val, new_lb)
                 """
                 col_src now needs to be mutated with its LB. for extract_dormant_LBs next.
                 so, the bounds need to be adjusted accordingly.

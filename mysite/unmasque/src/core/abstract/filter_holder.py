@@ -8,6 +8,7 @@ class FilterHolder(UN2WhereClause):
                  core_relations,
                  global_min_instance_dict, filter_extractor, name):
         super().__init__(connectionHelper, core_relations, global_min_instance_dict, name)
+        self.coeff_dict = {}
         self.filter_extractor = filter_extractor
 
         # method from filter object

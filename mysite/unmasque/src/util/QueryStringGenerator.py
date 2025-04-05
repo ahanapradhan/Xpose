@@ -186,12 +186,26 @@ class QueryStringGenerator:
 
     @algebraic_predicates.setter
     def algebraic_predicates(self, aoa):
+        remove_attrib = []
+        coeffs_dict = aoa.coeff_dict
         self._workingCopy.eq_join_predicates = aoa.algebraic_eq_predicates
         for pred in aoa.aoa_less_thans:
-            self._workingCopy.all_aoa.append((pred[0], '<', pred[1]))
+            if (pred[0], pred[1]) in coeffs_dict.keys():
+                coeff = coeffs_dict[(pred[0], pred[1])]
+                self._workingCopy.all_aoa.append(((get_tab(pred[0]), get_attrib(pred[0]), coeff), '<=', pred[1]))
+                remove_attrib.append(pred[0])
+            else:
+                self._workingCopy.all_aoa.append((pred[0], '<', pred[1]))
         for pred in aoa.aoa_predicates:
             self._workingCopy.all_aoa.append((pred[0], '<=', pred[1]))
-        self._workingCopy.arithmetic_filters = aoa.arithmetic_eq_predicates + aoa.arithmetic_ineq_predicates
+        self._workingCopy.arithmetic_filters = aoa.arithmetic_eq_predicates  # + aoa.arithmetic_ineq_predicates
+        skip = []
+        for ar_pred in aoa.arithmetic_ineq_predicates:
+            if get_op(ar_pred) == '<=' and (get_tab(ar_pred), get_attrib(ar_pred)) in remove_attrib:
+                skip.append(ar_pred)
+        for ar_pred in aoa.arithmetic_ineq_predicates:
+            if ar_pred not in skip:
+                self._workingCopy.arithmetic_filters.append(ar_pred)
 
     @property
     def limit(self):
@@ -715,11 +729,14 @@ class QueryStringGenerator:
     def get_aoa_string(self, aoa):
         lesser, op, greater = aoa[0], aoa[1], aoa[2]
         tab_attrib = lesser if isinstance(lesser, tuple) else greater
-        datatype = self.get_datatype(tab_attrib)
+        datatype = self.get_datatype((get_tab(tab_attrib), get_attrib(tab_attrib)))
         f_str = ""
         for tup in aoa:
             if isinstance(tup, tuple):
-                f_str += f"{tup[0]}.{tup[1]}"
+                if len(tup) == 2:
+                    f_str += f"{tup[0]}.{tup[1]}"
+                else:
+                    f_str += f"{tup[0]}.{tup[1]}*{tup[2]}"
             elif tup in ['<', '<=']:
                 f_str += f" {tup} "
             else:

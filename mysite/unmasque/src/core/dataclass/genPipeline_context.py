@@ -120,6 +120,7 @@ class GenPipelineContext:
         self.filter_attrib_dict = {}
         self.joined_attribs = None
         self.__aoa_attribs = None
+        # self.aoa_coeffs = aoa_extractor.coeff_dict
         self.arithmetic_filters = aoa_extractor.arithmetic_filters
         self.global_min_instance_dict = copy.deepcopy(global_min_instance_dict)
         self.__or_predicates = or_predicates
