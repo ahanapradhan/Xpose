@@ -799,14 +799,14 @@ LIMIT 100; """
 # ========================================================================================================
 
 Q77_text = """Report the total sales, returns and profit for all three sales channels for a given 30 day period. Roll up the
-results by channel and a unique channel location identifier."""
+data by channel and a unique channel location identifier."""
 
 Q77_hint = """It is a union query of 3 subqueries, having following set of tables in their from clauses: {'web_sales', 'web_page', 'date_dim'}, {'catalog_sales', 'catalog_returns', 'date_dim'}, {'store_sales', 'store', 'date_dim'}
 """
 # ========================================================================================================
 # =====
 Q80_text = """Report extended sales, extended net profit and returns in the store, catalog, and web channels for a 30 day
-window for items with prices larger than $50 not promoted on television, rollup results by sales channel and
+window for items with prices larger than $50 not promoted on television, rollup data by sales channel and
 channel specific sales means (store for store sales, catalog page for catalog sales and web site for web sales)"""
 Q80_hqe_seed = """(Select 'catalog channel' as channel, cp_catalog_page_id as id, Sum(cs_ext_sales_price) as sales, 0.0 as returns1, Sum(cs_net_profit) as profit 
  From catalog_page, catalog_sales, date_dim, item, promotion 
@@ -896,14 +896,14 @@ Q56_full_text = "Compute the monthly sales amount for a specific month in a spec
 
 Q66_subquery_text = """The query retrieves the monthly sales revenue and net sales for warehouses in 1998, categorized by web and catalog sales. 
 It filters transactions processed by specific shipping carriers ("ZOUROS" and "ZHOU") within a given time window. 
-The results include warehouse details such as name, size, city, county, state, and country. Sales figures are aggregated 
+The data include warehouse details such as name, size, city, county, state, and country. Sales figures are aggregated 
 per warehouse for each month of the year, enabling performance analysis across different locations and time periods."""
 # ========================================================================================================
 
 
 tpcds_q7 = "Compute the average quantity, list price, discount, and sales price for promotional " \
            "items sold in stores where the " \
-           "promotion is not offered by mail or a special event. Restrict the results to a specific " \
+           "promotion is not offered by mail or a special event. Restrict the data to a specific " \
            "gender, marital and " \
            "educational status."
 

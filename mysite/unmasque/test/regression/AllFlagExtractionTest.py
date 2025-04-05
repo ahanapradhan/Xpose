@@ -128,8 +128,40 @@ LIMIT 100; """
         query = Q2_subquery
         self.do_test(query)
 
+    def test_Q1(self):
+        query = """
+SELECT c_customer_id 
+FROM   (SELECT sr1_customer_sk     AS ctr_customer_sk, 
+                sr1_store_sk        AS ctr_store_sk, 
+                Sum(sr1_return_amt) AS ctr_total_return 
+         FROM   store_returns1, 
+                date_dim 
+         WHERE  sr1_returned_date_sk = d_date_sk 
+                AND d_year = 2001 
+         GROUP  BY sr1_customer_sk, 
+                   sr1_store_sk) ctr1, 
+       store, 
+       customer 
+WHERE  ctr1.ctr_total_return > (SELECT Avg(ctr_total_return) * 1.2 
+                                FROM   (SELECT sr_customer_sk     AS ctr_customer_sk, 
+                sr_store_sk        AS ctr_store_sk, 
+                Sum(sr_return_amt) AS ctr_total_return 
+         FROM   store_returns, 
+                date_dim 
+         WHERE  sr_returned_date_sk = d_date_sk 
+                AND d_year = 2001 
+         GROUP  BY sr_customer_sk, 
+                   sr_store_sk) ctr2 
+                                WHERE  ctr1.ctr_store_sk = ctr2.ctr_store_sk) 
+       AND s_store_sk = ctr1.ctr_store_sk 
+       AND s_state = 'TN' 
+       AND ctr1.ctr_customer_sk = c_customer_sk 
+ORDER  BY c_customer_id
+LIMIT 100;"""
+        self.do_test(query)
+
     def test_Q2_full(self):
-        query = """-- start query 2 in stream 0 using template query2.tpl  
+        query = """  
 WITH wscs 
      AS (SELECT sold_date_sk, 
                 sales_price 

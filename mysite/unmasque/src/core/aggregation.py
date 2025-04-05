@@ -82,7 +82,7 @@ def get_k_value(attrib, filter_attrib_dict, groupby_key_flag, tabname, datatype,
             k_value = 1
             agg_array = [MIN, min(a, b), MAX, max(a, b)]
         elif datatype in NUMBER_TYPES:
-            # Combination which gives all different results for aggregation
+            # Combination which gives all different data for aggregation
             a = 5
             b = 8
             k_value = 2

@@ -117,7 +117,7 @@ class Cs2(AppExtractorBase):
             self.logger.debug(table, res)
             self.sample[table] = res
 
-        # check for null free rows and not just nonempty results
+        # check for null free rows and not just nonempty data
         new_result = self.app.doJob(query)
         # self.logger.debug(f"result after sampling: {new_result}")
         if not self.app.isQ_result_nonEmpty_nullfree(new_result):
