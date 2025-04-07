@@ -1,0 +1,104 @@
+... You are an expert in SQL. Using the above schema, write a SQL query that answers the following natural language description.
+... Please ensure the query is correct and optimized.
+...
+... Text Description:
+... "The query identifies suppliers, for nation ’ARGENTINA’, whose product was part of a multi-supplier
+...  order (with current status of ’F’) where they were the only supplier who failed to meet the committed delivery date."
+...
+...
+...
+<think>
+Okay, so I need to write an SQL query based on the description provided. Let me break it down step by step.
+
+First, the goal is to find suppliers from Argentina whose product was part of a multi-supplier order with status 'F', where they were the only ones who didn't meet the delivery date.
+
+Let's start with the tables involved. The main table for orders is ORDERS. The relevant fields are O_CUSTKEY (customer key), O_ORDERSTATUS (status), and O_ORDERDATE (delivery date).
+
+Each line item in an order is recorded in LINEITEM, which connects to ORDERS via O_ORDERKEY. So, I'll need to join ORDERS with LINEITEM on O_ORDERKEY.
+
+For each order, the specific supplier is linked through SUPPLIER via NATION. So, I'll need a JOIN between LINEITEM's L_SUPPKEY and SUPPLIER's S_SUPPKEY (via NATION). Similarly, the customer is connected through C_NATIONKEY to ensure they're from Argentina.
+
+Putting this together, the initial part of the query will involve joining ORDERS, LINEITEM, SUPPLIER, and CUSTOMER via their respective foreign keys. This will give me details about each line item in orders, including the supplier information.
+
+Next, I need to filter for orders with status 'F'. So, I'll add WHERE O_ORDERSTATUS = 'F'.
+
+Now, the tricky part is ensuring that these suppliers were the only ones who failed to meet the delivery date. This means two conditions:
+1. The supplier's order line (L_SHIPDATE) is not equal to the committed delivery date (O_COMMITDATE).
+2. All other suppliers in the same order must have met their delivery dates, i.e., L_SHIPDATE equals O_COMMITDATE.
+
+To handle condition 2, I'll use a subquery that checks all other suppliers in the order for any line items where L_SHIPDATE doesn't match O_COMMITDATE. This can be done with a LEFT JOIN on LINEITEM to capture all possible suppliers and then filter those who didn't meet
+the date.
+
+Putting it all together, the main query selects from the initial join result where status is 'F' AND the supplier's line didn't meet the date AND no other supplier in that order failed. The subquery ensures this by checking all line items against the main order, except
+the current one, and ensuring none have a different ship date.
+
+Finally, I'll use WHERE clauses to filter based on the criteria and ORDER BY to sort by customer key for consistency.
+</think>
+
+To identify suppliers from Argentina who were part of multi-supplier orders with status 'F' where they were the only ones to fail meeting the delivery date, we can construct an SQL query that follows these steps:
+
+1. **Identify the relevant tables**:
+   - `ORDERS` table contains order details.
+   - `LINEITEM` table details each item in an order.
+   - `SUPPLIER` and `NATION` tables provide supplier information (including nation).
+   - `PARTSUPP` is included to ensure we're considering all suppliers, but it's used here through the `SUPPLIER` join.
+
+2. **Set up a full outer join** between `ORDERS`, `LINEITEM`, `SUPPLIER`, and `CUSTOMER`:
+   - This allows us to access both customer nation (to filter by Argentina) and supplier information.
+   - The `FULL OUTER JOIN` is used because we need to capture all possible suppliers in the order, even if some lines are NULL.
+
+3. **Filter for orders with status 'F'** using a `WHERE` clause on `O_ORDERSTATUS`.
+
+4. **Subquery to ensure only this supplier failed delivery**:
+   - Use a `LEFT JOIN` on `LINEITEM` and `ORDERS` to get all line items in the order.
+   - Filter out lines where `L_SHIPDATE` doesn't match `O_COMMITDATE`, indicating failure.
+
+5. **Exclude other suppliers who may have failed** using a `WHERE` clause that excludes any other supplier entries:
+   - This ensures only the current supplier's line is considered for not meeting the date, while others are assumed to meet it based on no conflicting data.
+
+6. **Sort results by customer key** to ensure consistent ordering and eliminate duplicates.
+
+Here's the SQL query:
+
+```sql
+SELECT
+    s_suppliersupplkey AS suppkey,
+    c_custkey,
+    n_nationkey,
+    s_name AS suppliername
+FROM
+    ORDERS o
+JOIN
+    LINEITEM l ON o.orderkey = l.orderkey
+FULL OUTER JOIN
+    SUPPLIER s ON l.supplierkey = s.supppkey
+FULL OUTER JOIN
+    CUSTOMER c ON o.custkey = c.custkey
+WHERE
+    o.cus nationkey = 'ARGENTINA'
+    AND o.orderstatus = 'F'
+    AND (l.shipdate - o.commitdate) > 0
+    AND NOT EXISTS (
+        SELECT
+            l2.shipdate
+        FROM
+            LINEITEM l2
+        WHERE
+            l2.orderkey = o.orderkey
+            AND l2.supplierkey != l.supplierkey
+            AND (l2.shipdate - o.commitdate) > 0
+    )
+ORDER BY
+    c_custkey;
+```
+
+This query:
+- Joins orders with line items, suppliers, and customers.
+- Filters by order status 'F' and ARGENTINA nation.
+- Ensures only the current supplier's line item failed delivery.
+- Returns results sorted by customer key for consistency.
+
+The result will list each qualifying supplier from Argentina in multi-supplier orders where they were the sole supplier to fail meeting the delivery date.
+
+>>> Send a message (/? for help)
+
