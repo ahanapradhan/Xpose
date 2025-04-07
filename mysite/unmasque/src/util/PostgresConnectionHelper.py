@@ -81,8 +81,8 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
 
     def cus_execute_sql_with_params(self, cur, sql, params, logger=None):
         for param in params:
-            if logger is not None:
-                logger.debug(sql, param)
+            #if logger is not None:
+            #    logger.debug(sql, param)
             try:
                 cur.execute(sql, param)
             except Exception as e:
@@ -93,8 +93,8 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
 
     def execute_sql_fetchall(self, sql, logger=None):
         cur = self.get_cursor()
-        if logger is not None:
-            logger.debug("..cur execute.." + sql)
+        #if logger is not None:
+        #    logger.debug("..cur execute.." + sql)
         try:
             cur.execute(sql)
             res = cur.fetchall()
@@ -115,8 +115,8 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
     def cus_execute_sqls(self, cur, sqls, logger=None):
         # print(cur)
         for sql in sqls:
-            if logger is not None:
-               logger.debug("..cur execute.." + sql)
+           # if logger is not None:
+            #   logger.debug("..cur execute.." + sql)
             try:
                 cur.execute(sql)
             except psycopg2.ProgrammingError as e:
@@ -132,8 +132,8 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
 
     def cur_execute_sql_fetch_one_0(self, cur, sql, logger=None):
         prev = None
-        if logger is not None:
-            logger.debug(sql)
+        #if logger is not None:
+         #   logger.debug(sql)
         try:
             cur.execute(sql)
             prev = cur.fetchone()

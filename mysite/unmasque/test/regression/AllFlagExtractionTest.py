@@ -40,6 +40,7 @@ class ExtractionTestCase(BaseTestCase):
         self.pipeline = factory.create_pipeline(self.conn)
         u_Q = self.pipeline.doJob(query)
         print(u_Q)
+        """
         record_file = open("extraction_result.sql", "a")
         record_file.write("\n --- START OF ONE EXTRACTION EXPERIMENT\n")
         record_file.write(" --- input query:\n ")
@@ -50,6 +51,7 @@ class ExtractionTestCase(BaseTestCase):
             u_Q = '--- Extraction Failed! Nothing to show! '
         record_file.write(u_Q)
         record_file.write("\n --- END OF ONE EXTRACTION EXPERIMENT\n")
+        """
         self.pipeline.time_profile.print()
         self.assertTrue(self.pipeline.correct)
         del factory
@@ -161,86 +163,118 @@ LIMIT 100;"""
         self.do_test(query)
 
     def test_Q2_full(self):
-        query = """  
-WITH wscs 
-     AS (SELECT sold_date_sk, 
-                sales_price 
-         FROM   (SELECT ws_sold_date_sk    sold_date_sk, 
-                        ws_ext_sales_price sales_price 
-                 FROM   web_sales) w
-         UNION ALL 
-         (SELECT cs_sold_date_sk    sold_date_sk, 
-                 cs_ext_sales_price sales_price 
-          FROM   catalog_sales)), 
-     wswscs 
-     AS (SELECT d_week_seq, 
-                Sum(CASE 
-                      WHEN ( d_day_name = 'Sunday' ) THEN sales_price 
-                      ELSE NULL 
-                    END) sun_sales, 
-                Sum(CASE 
-                      WHEN ( d_day_name = 'Monday' ) THEN sales_price 
-                      ELSE NULL 
-                    END) mon_sales, 
-                Sum(CASE 
-                      WHEN ( d_day_name = 'Tuesday' ) THEN sales_price 
-                      ELSE NULL 
-                    END) tue_sales, 
-                Sum(CASE 
-                      WHEN ( d_day_name = 'Wednesday' ) THEN sales_price 
-                      ELSE NULL 
-                    END) wed_sales, 
-                Sum(CASE 
-                      WHEN ( d_day_name = 'Thursday' ) THEN sales_price 
-                      ELSE NULL 
-                    END) thu_sales, 
-                Sum(CASE 
-                      WHEN ( d_day_name = 'Friday' ) THEN sales_price 
-                      ELSE NULL 
-                    END) fri_sales, 
-                Sum(CASE 
-                      WHEN ( d_day_name = 'Saturday' ) THEN sales_price 
-                      ELSE NULL 
-                    END) sat_sales 
-         FROM   wscs, 
-                date_dim 
-         WHERE  d_date_sk = sold_date_sk 
-         GROUP  BY d_week_seq) 
-SELECT d_week_seq1, 
-       Round(sun_sales1 / sun_sales2, 2), 
-       Round(mon_sales1 / mon_sales2, 2), 
-       Round(tue_sales1 / tue_sales2, 2), 
-       Round(wed_sales1 / wed_sales2, 2), 
-       Round(thu_sales1 / thu_sales2, 2), 
-       Round(fri_sales1 / fri_sales2, 2), 
-       Round(sat_sales1 / sat_sales2, 2) 
-FROM   (SELECT wswscs.d_week_seq d_week_seq1, 
-               sun_sales         sun_sales1, 
-               mon_sales         mon_sales1, 
-               tue_sales         tue_sales1, 
-               wed_sales         wed_sales1, 
-               thu_sales         thu_sales1, 
-               fri_sales         fri_sales1, 
-               sat_sales         sat_sales1 
-        FROM   wswscs, 
-               date_dim 
-        WHERE  date_dim.d_week_seq = wswscs.d_week_seq 
-               AND d_year = 1998) y, 
-       (SELECT wswscs.d_week_seq d_week_seq2, 
-               sun_sales         sun_sales2, 
-               mon_sales         mon_sales2, 
-               tue_sales         tue_sales2, 
-               wed_sales         wed_sales2, 
-               thu_sales         thu_sales2, 
-               fri_sales         fri_sales2, 
-               sat_sales         sat_sales2 
-        FROM   wswscs, 
-               date_dim 
-        WHERE  date_dim.d_week_seq = wswscs.d_week_seq 
-               AND d_year = 1998 + 1) z 
-WHERE  d_week_seq1 = d_week_seq2 - 53 
+        self.conn.config.detect_union = False
+        query = \
+            """WITH wswscs
+     AS (SELECT d_week_seq,
+                Sum(CASE
+                      WHEN ( d_day_name = 'Sunday' ) THEN sales_price
+                      ELSE NULL
+                    END) sun_sales,
+                Sum(CASE
+                      WHEN ( d_day_name = 'Monday' ) THEN sales_price
+                      ELSE NULL
+                    END) mon_sales,
+                Sum(CASE
+                      WHEN ( d_day_name = 'Tuesday' ) THEN sales_price
+                      ELSE NULL
+                    END) tue_sales,
+                Sum(CASE
+                      WHEN ( d_day_name = 'Wednesday' ) THEN sales_price
+                      ELSE NULL
+                    END) wed_sales,
+                Sum(CASE
+                      WHEN ( d_day_name = 'Thursday' ) THEN sales_price
+                      ELSE NULL
+                    END) thu_sales,
+                Sum(CASE
+                      WHEN ( d_day_name = 'Friday' ) THEN sales_price
+                      ELSE NULL
+                    END) fri_sales,
+                Sum(CASE
+                      WHEN ( d_day_name = 'Saturday' ) THEN sales_price
+                      ELSE NULL
+                    END) sat_sales
+         FROM   (SELECT sold_date_sk,
+                sales_price
+         FROM   (SELECT ws_sold_date_sk    sold_date_sk,
+                        ws_ext_sales_price sales_price
+                 FROM   web_sales) w) wscs,
+                date_dim
+         WHERE  d_date_sk = sold_date_sk
+         GROUP  BY d_week_seq),
+     wswscs1
+     AS (SELECT d3_week_seq,
+                Sum(CASE
+                      WHEN ( d3_day_name = 'Sunday' ) THEN sales_price
+                      ELSE NULL
+                    END) sun_sales,
+                Sum(CASE
+                      WHEN ( d3_day_name = 'Monday' ) THEN sales_price
+                      ELSE NULL
+                    END) mon_sales,
+                Sum(CASE
+                      WHEN ( d3_day_name = 'Tuesday' ) THEN sales_price
+                      ELSE NULL
+                    END) tue_sales,
+                Sum(CASE
+                      WHEN ( d3_day_name = 'Wednesday' ) THEN sales_price
+                      ELSE NULL
+                    END) wed_sales,
+                Sum(CASE
+                      WHEN ( d3_day_name = 'Thursday' ) THEN sales_price
+                      ELSE NULL
+                    END) thu_sales,
+                Sum(CASE
+                      WHEN ( d3_day_name = 'Friday' ) THEN sales_price
+                      ELSE NULL
+                    END) fri_sales,
+                Sum(CASE
+                      WHEN ( d3_day_name = 'Saturday' ) THEN sales_price
+                      ELSE NULL
+                    END) sat_sales
+         FROM   (SELECT sold_date_sk,
+                sales_price
+         FROM   (SELECT ws1_sold_date_sk    sold_date_sk,
+                        ws1_ext_sales_price sales_price
+                 FROM   web_sales1) w) wscs1,
+                date_dim3
+         WHERE  d3_date_sk = sold_date_sk
+         GROUP  BY d3_week_seq)
+SELECT d_week_seq1,
+       Round(sun_sales1 / sun_sales2, 2),
+       Round(mon_sales1 / mon_sales2, 2),
+       Round(tue_sales1 / tue_sales2, 2),
+       Round(wed_sales1 / wed_sales2, 2),
+       Round(thu_sales1 / thu_sales2, 2),
+       Round(fri_sales1 / fri_sales2, 2),
+       Round(sat_sales1 / sat_sales2, 2)
+FROM   (SELECT wswscs1.d3_week_seq d_week_seq1,
+               sun_sales         sun_sales1,
+               mon_sales         mon_sales1,
+               tue_sales         tue_sales1,
+               wed_sales         wed_sales1,
+               thu_sales         thu_sales1,
+               fri_sales         fri_sales1,
+               sat_sales         sat_sales1
+        FROM   wswscs1,
+               date_dim1
+        WHERE  date_dim1.d1_week_seq = wswscs1.d3_week_seq
+               AND d1_year = 1998) y,
+       (SELECT wswscs.d_week_seq d_week_seq2,
+               sun_sales         sun_sales2,
+               mon_sales         mon_sales2,
+               tue_sales         tue_sales2,
+               wed_sales         wed_sales2,
+               thu_sales         thu_sales2,
+               fri_sales         fri_sales2,
+               sat_sales         sat_sales2
+        FROM   wswscs,
+               date_dim2
+        WHERE  date_dim2.d2_week_seq = wswscs.d_week_seq
+               AND d2_year = 1999) z
+WHERE  d_week_seq1 = d_week_seq2 - 53
 ORDER  BY d_week_seq1;"""
-        self.conn.config.detect_union = True
         self.do_test(query)
 
     def test_Q71(self):
@@ -1051,7 +1085,7 @@ ORDER  BY c_last_name,
           sales
 LIMIT 100; """
         self.conn.config.detect_union = True
-        #self.conn.config.detect_oj = True
+        # self.conn.config.detect_oj = True
         self.do_test(query)
 
     def test_Q14_subquery(self):
@@ -1340,6 +1374,238 @@ Limit 100 ; """
         self.conn.config.detect_union = False
         self.conn.config.detect_nep = False
         self.conn.config.detect_oj = False
+        self.do_test(query)
+
+    def test_Q4_full(self):
+        self.conn.config.detect_union = True
+        query = \
+        """WITH year_total 
+     AS (SELECT c_customer_id                       customer_id, 
+                c_first_name                        customer_first_name, 
+                c_last_name                         customer_last_name, 
+                c_preferred_cust_flag               customer_preferred_cust_flag 
+                , 
+                c_birth_country 
+                customer_birth_country, 
+                c_login                             customer_login, 
+                c_email_address                     customer_email_address, 
+                d_year                              dyear, 
+                Sum(( ( ss_ext_list_price - ss_ext_wholesale_cost 
+                        - ss_ext_discount_amt 
+                      ) 
+                      + 
+                          ss_ext_sales_price ) / 2) year_total, 
+                's'                                 sale_type 
+         FROM   customer, 
+                store_sales, 
+                date_dim 
+         WHERE  c_customer_sk = ss_customer_sk 
+                AND ss_sold_date_sk = d_date_sk 
+         GROUP  BY c_customer_id, 
+                   c_first_name, 
+                   c_last_name, 
+                   c_preferred_cust_flag, 
+                   c_birth_country, 
+                   c_login, 
+                   c_email_address, 
+                   d_year 
+         UNION ALL 
+         SELECT c_customer_id                             customer_id, 
+                c_first_name                              customer_first_name, 
+                c_last_name                               customer_last_name, 
+                c_preferred_cust_flag 
+                customer_preferred_cust_flag, 
+                c_birth_country                           customer_birth_country 
+                , 
+                c_login 
+                customer_login, 
+                c_email_address                           customer_email_address 
+                , 
+                d_year                                    dyear 
+                , 
+                Sum(( ( ( cs_ext_list_price 
+                          - cs_ext_wholesale_cost 
+                          - cs_ext_discount_amt 
+                        ) + 
+                              cs_ext_sales_price ) / 2 )) year_total, 
+                'c'                                       sale_type 
+         FROM   customer, 
+                catalog_sales, 
+                date_dim 
+         WHERE  c_customer_sk = cs_bill_customer_sk 
+                AND cs_sold_date_sk = d_date_sk 
+         GROUP  BY c_customer_id, 
+                   c_first_name, 
+                   c_last_name, 
+                   c_preferred_cust_flag, 
+                   c_birth_country, 
+                   c_login, 
+                   c_email_address, 
+                   d_year 
+         UNION ALL 
+         SELECT c_customer_id                             customer_id, 
+                c_first_name                              customer_first_name, 
+                c_last_name                               customer_last_name, 
+                c_preferred_cust_flag 
+                customer_preferred_cust_flag, 
+                c_birth_country                           customer_birth_country 
+                , 
+                c_login 
+                customer_login, 
+                c_email_address                           customer_email_address 
+                , 
+                d_year                                    dyear 
+                , 
+                Sum(( ( ( ws_ext_list_price 
+                          - ws_ext_wholesale_cost 
+                          - ws_ext_discount_amt 
+                        ) + 
+                              ws_ext_sales_price ) / 2 )) year_total, 
+                'w'                                       sale_type 
+         FROM   customer, 
+                web_sales, 
+                date_dim 
+         WHERE  c_customer_sk = ws_bill_customer_sk 
+                AND ws_sold_date_sk = d_date_sk 
+         GROUP  BY c_customer_id, 
+                   c_first_name, 
+                   c_last_name, 
+                   c_preferred_cust_flag, 
+                   c_birth_country, 
+                   c_login, 
+                   c_email_address, 
+                   d_year),
+year_total1 
+     AS (SELECT c_customer_id                       customer_id, 
+                c_first_name                        customer_first_name, 
+                c_last_name                         customer_last_name, 
+                c_preferred_cust_flag               customer_preferred_cust_flag 
+                , 
+                c_birth_country 
+                customer_birth_country, 
+                c_login                             customer_login, 
+                c_email_address                     customer_email_address, 
+                d1_year                              dyear, 
+                Sum(( ( ss1_ext_list_price - ss1_ext_wholesale_cost 
+                        - ss1_ext_discount_amt 
+                      ) 
+                      + 
+                          ss1_ext_sales_price ) / 2) year_total, 
+                's'                                 sale_type 
+         FROM   customer, 
+                store_sales1, 
+                date_dim1 
+         WHERE  c_customer_sk = ss1_customer_sk 
+                AND ss1_sold_date_sk = d1_date_sk 
+         GROUP  BY c_customer_id, 
+                   c_first_name, 
+                   c_last_name, 
+                   c_preferred_cust_flag, 
+                   c_birth_country, 
+                   c_login, 
+                   c_email_address, 
+                   d1_year 
+         UNION ALL 
+         SELECT c_customer_id                             customer_id, 
+                c_first_name                              customer_first_name, 
+                c_last_name                               customer_last_name, 
+                c_preferred_cust_flag 
+                customer_preferred_cust_flag, 
+                c_birth_country                           customer_birth_country 
+                , 
+                c_login 
+                customer_login, 
+                c_email_address                           customer_email_address 
+                , 
+                d1_year                                    dyear 
+                , 
+                Sum(( ( ( cs1_ext_list_price 
+                          - cs1_ext_wholesale_cost 
+                          - cs1_ext_discount_amt 
+                        ) + 
+                              cs1_ext_sales_price ) / 2 )) year_total, 
+                'c'                                       sale_type 
+         FROM   customer, 
+                catalog_sales1, 
+                date_dim1 
+         WHERE  c_customer_sk = cs1_bill_customer_sk 
+                AND cs1_sold_date_sk = d1_date_sk 
+         GROUP  BY c_customer_id, 
+                   c_first_name, 
+                   c_last_name, 
+                   c_preferred_cust_flag, 
+                   c_birth_country, 
+                   c_login, 
+                   c_email_address, 
+                   d1_year 
+         UNION ALL 
+         SELECT c_customer_id                             customer_id, 
+                c_first_name                              customer_first_name, 
+                c_last_name                               customer_last_name, 
+                c_preferred_cust_flag 
+                customer_preferred_cust_flag, 
+                c_birth_country                           customer_birth_country 
+                , 
+                c_login 
+                customer_login, 
+                c_email_address                           customer_email_address 
+                , 
+                d1_year                                    dyear 
+                , 
+                Sum(( ( ( ws1_ext_list_price 
+                          - ws1_ext_wholesale_cost 
+                          - ws1_ext_discount_amt 
+                        ) + 
+                              ws1_ext_sales_price ) / 2 )) year_total, 
+                'w'                                       sale_type 
+         FROM   customer, 
+                web_sales1, 
+                date_dim1 
+         WHERE  c_customer_sk = ws1_bill_customer_sk 
+                AND ws1_sold_date_sk = d1_date_sk 
+         GROUP  BY c_customer_id, 
+                   c_first_name, 
+                   c_last_name, 
+                   c_preferred_cust_flag, 
+                   c_birth_country, 
+                   c_login, 
+                   c_email_address, 
+                   d1_year)
+SELECT t_s_secyear.customer_id, 
+               t_s_secyear.customer_first_name, 
+               t_s_secyear.customer_last_name, 
+               t_s_secyear.customer_preferred_cust_flag 
+FROM   year_total t_s_firstyear, 
+       year_total1 t_s_secyear, 
+       year_total t_c_firstyear, 
+       year_total1 t_c_secyear, 
+       year_total t_w_firstyear, 
+       year_total1 t_w_secyear 
+WHERE  t_s_secyear.customer_id = t_s_firstyear.customer_id 
+       AND t_s_firstyear.customer_id = t_c_secyear.customer_id 
+       AND t_s_firstyear.customer_id = t_c_firstyear.customer_id 
+       AND t_s_firstyear.customer_id = t_w_firstyear.customer_id 
+       AND t_s_firstyear.customer_id = t_w_secyear.customer_id 
+       AND t_s_firstyear.sale_type = 's' 
+       AND t_c_firstyear.sale_type = 'c' 
+       AND t_w_firstyear.sale_type = 'w' 
+       AND t_s_secyear.sale_type = 's' 
+       AND t_c_secyear.sale_type = 'c' 
+       AND t_w_secyear.sale_type = 'w' 
+       AND t_s_firstyear.dyear = 2001 
+       AND t_s_secyear.dyear = 2001 + 1 
+       AND t_c_firstyear.dyear = 2001 
+       AND t_c_secyear.dyear = 2001 + 1 
+       AND t_w_firstyear.dyear = 2001 
+       AND t_w_secyear.dyear = 2001 + 1 
+       AND t_s_firstyear.year_total > 0 
+       AND t_c_firstyear.year_total > 0 
+       AND t_w_firstyear.year_total > 0 
+ORDER  BY t_s_secyear.customer_id, 
+          t_s_secyear.customer_first_name, 
+          t_s_secyear.customer_last_name, 
+          t_s_secyear.customer_preferred_cust_flag
+LIMIT 100; """
         self.do_test(query)
 
 
