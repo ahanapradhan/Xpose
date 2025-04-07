@@ -174,6 +174,8 @@ class Filter(UN2WhereClause):
             tab_attrib_set.add(tab_attrib)
             val = prev_val_list[i]
             datatype = self.get_datatype(tab_attrib)
+            if datatype == 'str':
+                val = val.replace("'", "\'")
             self.mutate_dmin_with_val(datatype, tab_attrib, val)
 
     def handle_precision_filter(self, filterAttribs, query, attrib_list, min_val_domain, max_val_domain):
