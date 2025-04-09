@@ -130,6 +130,127 @@ LIMIT 100; """
         query = Q2_subquery
         self.do_test(query)
 
+    def test_Q4_rewritten(self):
+        self.do_test("""WITH customer_base
+    AS  (SELECT c_customer_id                       customer_id,
+                c_first_name                        customer_first_name,
+                c_last_name                         customer_last_name,
+                c_preferred_cust_flag               customer_preferred_cust_flag
+                ,
+                c_birth_country
+                customer_birth_country,
+                c_login                             customer_login,
+                c_email_address                     customer_email_address,
+                c_customer_sk
+        FROM customer
+        GROUP  BY c_customer_id,
+                   c_first_name,
+                   c_last_name,
+                   c_preferred_cust_flag,
+                   c_birth_country,
+                   c_login,
+                   c_email_address,
+				c_customer_sk),
+    t_s_firstyear
+    AS (SELECT Sum(( ( ss_ext_list_price - ss_ext_wholesale_cost
+                        - ss_ext_discount_amt
+                      )
+                      +
+                          ss_ext_sales_price ) / 2) ss_year_total,
+               ss_customer_sk,
+               d_year                                       dyear
+       FROM store_sales, date_dim
+       WHERE ss_sold_date_sk = d_date_sk
+       and d_year = 2001
+       GROUP BY ss_customer_sk, dyear),
+    t_c_firstyear
+    AS (SELECT Sum(( ( cs_ext_list_price - cs_ext_wholesale_cost
+                        - cs_ext_discount_amt
+                      )
+                      +
+                          cs_ext_sales_price ) / 2) cs_year_total,
+               cs_bill_customer_sk,
+               d4_year                                       dyear
+       FROM catalog_sales, date_dim4
+       WHERE cs_sold_date_sk = d4_date_sk
+       and d4_year = 2001
+       GROUP BY cs_bill_customer_sk, dyear),
+    t_w_firstyear
+    AS (SELECT Sum(( ( ws_ext_list_price - ws_ext_wholesale_cost
+                        - ws_ext_discount_amt
+                      )
+                      +
+                          ws_ext_sales_price ) / 2) ws_year_total,
+               ws_bill_customer_sk,
+               d5_year                                       dyear
+       FROM web_sales, date_dim5
+       WHERE ws_sold_date_sk = d5_date_sk
+       and d5_year = 2001
+       GROUP BY ws_bill_customer_sk, dyear),
+    t_s_secyear
+    AS (SELECT Sum(( ( ss1_ext_list_price - ss1_ext_wholesale_cost
+                        - ss1_ext_discount_amt
+                      )
+                      +
+                          ss1_ext_sales_price ) / 2) ss_year_total,
+               ss1_customer_sk,
+               d1_year                                       dyear
+       FROM store_sales1, date_dim1
+       WHERE ss1_sold_date_sk = d1_date_sk
+       and d1_year = 2001+1
+       GROUP BY ss1_customer_sk, dyear),
+    t_c_secyear
+    AS (SELECT Sum(( ( cs1_ext_list_price - cs1_ext_wholesale_cost
+                        - cs1_ext_discount_amt
+                      )
+                      +
+                          cs1_ext_sales_price ) / 2) cs_year_total,
+               cs1_bill_customer_sk,
+               d2_year                                       dyear
+       FROM catalog_sales1, date_dim2
+       WHERE cs1_sold_date_sk = d2_date_sk
+       and d2_year = 2001+1
+       GROUP BY cs1_bill_customer_sk, dyear),
+    t_w_secyear
+    AS (SELECT Sum(( ( ws1_ext_list_price - ws1_ext_wholesale_cost
+                        - ws1_ext_discount_amt
+                      )
+                      +
+                          ws1_ext_sales_price ) / 2) ws_year_total,
+               ws1_bill_customer_sk,
+               d3_year                                       dyear
+       FROM web_sales1, date_dim3
+       WHERE ws1_sold_date_sk = d3_date_sk
+       and d3_year = 2001+1
+       GROUP BY ws1_bill_customer_sk, dyear)
+SELECT customer_id,
+               customer_first_name,
+               customer_last_name,
+               customer_preferred_cust_flag
+FROM   t_s_firstyear,
+       t_s_secyear,
+       t_c_firstyear,
+       t_c_secyear,
+       t_w_firstyear,
+       t_w_secyear,
+       customer_base
+WHERE c_customer_sk = t_s_firstyear.ss_customer_sk
+and   c_customer_sk = t_c_firstyear.cs_bill_customer_sk
+and   c_customer_sk = t_w_firstyear.ws_bill_customer_sk
+and   c_customer_sk = t_s_secyear.ss1_customer_sk
+and   c_customer_sk = t_c_secyear.cs1_bill_customer_sk
+and   c_customer_sk = t_w_secyear.ws1_bill_customer_sk
+AND t_s_firstyear.ss_year_total > 0
+AND t_c_firstyear.cs_year_total > 0
+AND t_w_firstyear.ws_year_total > 0
+--and t_c_secyear.cs_year_total / t_c_firstyear.cs_year_total > t_s_secyear.ss_year_total / t_s_firstyear.ss_year_total
+--and t_c_secyear.cs_year_total / t_c_firstyear.cs_year_total > t_w_secyear.ws_year_total / t_w_firstyear.ws_year_total
+ORDER  BY customer_id,
+          customer_first_name,
+          customer_last_name,
+          customer_preferred_cust_flag
+LIMIT 100;            """)
+
     def test_Q4_simple(self):
         query = \
         """
@@ -1591,6 +1712,138 @@ Limit 100 ; """
         self.conn.config.detect_oj = False
         self.do_test(query)
 
+    def test_Q5_full(self):
+        self.conn.config.detect_union = True
+        self.do_test("""WITH ssr AS 
+( 
+         SELECT   s_store_id, 
+                  Sum(sales_price) AS sales, 
+                  Sum(profit)      AS profit, 
+                  Sum(return_amt)  AS returns1, 
+                  Sum(net_loss)    AS profit_loss 
+         FROM     ( 
+                         SELECT ss_store_sk             AS store_sk, 
+                                ss_sold_date_sk         AS date_sk, 
+                                ss_ext_sales_price      AS sales_price, 
+                                ss_net_profit           AS profit, 
+                                Cast(0 AS DECIMAL(7,2)) AS return_amt, 
+                                Cast(0 AS DECIMAL(7,2)) AS net_loss 
+                         FROM   store_sales 
+                         UNION ALL 
+                         SELECT sr_store_sk             AS store_sk, 
+                                sr_returned_date_sk     AS date_sk, 
+                                Cast(0 AS DECIMAL(7,2)) AS sales_price, 
+                                Cast(0 AS DECIMAL(7,2)) AS profit, 
+                                sr_return_amt           AS return_amt, 
+                                sr_net_loss             AS net_loss 
+                         FROM   store_returns ) salesreturns, 
+                  date_dim, 
+                  store 
+         WHERE    date_sk = d_date_sk 
+         AND      d_date BETWEEN Cast('2002-08-22' AS DATE) AND      ( 
+                           Cast('2002-08-22' AS DATE) + INTERVAL '14' day) 
+         AND      store_sk = s_store_sk 
+         GROUP BY s_store_id) , csr AS 
+( 
+         SELECT   cp_catalog_page_id, 
+                  sum(sales_price) AS sales, 
+                  sum(profit)      AS profit, 
+                  sum(return_amt)  AS returns1, 
+                  sum(net_loss)    AS profit_loss 
+         FROM     ( 
+                         SELECT cs_catalog_page_sk      AS page_sk, 
+                                cs_sold_date_sk         AS date_sk, 
+                                cs_ext_sales_price      AS sales_price, 
+                                cs_net_profit           AS profit, 
+                                cast(0 AS decimal(7,2)) AS return_amt, 
+                                cast(0 AS decimal(7,2)) AS net_loss 
+                         FROM   catalog_sales 
+                         UNION ALL 
+                         SELECT cr_catalog_page_sk      AS page_sk, 
+                                cr_returned_date_sk     AS date_sk, 
+                                cast(0 AS decimal(7,2)) AS sales_price, 
+                                cast(0 AS decimal(7,2)) AS profit, 
+                                cr_return_amount        AS return_amt, 
+                                cr_net_loss             AS net_loss 
+                         FROM   catalog_returns ) salesreturns, 
+                  date_dim, 
+                  catalog_page 
+         WHERE    date_sk = d_date_sk 
+         AND      d_date BETWEEN cast('2002-08-22' AS date) AND      ( 
+                           cast('2002-08-22' AS date) + INTERVAL '14' day) 
+         AND      page_sk = cp_catalog_page_sk 
+         GROUP BY cp_catalog_page_id) , wsr AS 
+( 
+         SELECT   web_site_id, 
+                  sum(sales_price) AS sales, 
+                  sum(profit)      AS profit, 
+                  sum(return_amt)  AS returns1, 
+                  sum(net_loss)    AS profit_loss 
+         FROM     ( 
+                         SELECT ws_web_site_sk          AS wsr_web_site_sk, 
+                                ws_sold_date_sk         AS date_sk, 
+                                ws_ext_sales_price      AS sales_price, 
+                                ws_net_profit           AS profit, 
+                                cast(0 AS decimal(7,2)) AS return_amt, 
+                                cast(0 AS decimal(7,2)) AS net_loss 
+                         FROM   web_sales 
+                         UNION ALL 
+                         SELECT          ws_web_site_sk          AS wsr_web_site_sk, 
+                                         wr_returned_date_sk     AS date_sk, 
+                                         cast(0 AS decimal(7,2)) AS sales_price, 
+                                         cast(0 AS decimal(7,2)) AS profit, 
+                                         wr_return_amt           AS return_amt, 
+                                         wr_net_loss             AS net_loss 
+                         FROM            web_returns 
+                         LEFT OUTER JOIN web_sales 
+                         ON              ( 
+                                                         wr_item_sk = ws_item_sk 
+                                         AND             wr_order_number = ws_order_number) ) salesreturns,
+                  date_dim, 
+                  web_site 
+         WHERE    date_sk = d_date_sk 
+         AND      d_date BETWEEN cast('2002-08-22' AS date) AND      ( 
+                           cast('2002-08-22' AS date) + INTERVAL '14' day) 
+         AND      wsr_web_site_sk = web_site_sk 
+         GROUP BY web_site_id) 
+SELECT 
+         channel , 
+         id , 
+         sum(sales)   AS sales , 
+         sum(returns1) AS returns1 , 
+         sum(profit)  AS profit 
+FROM     ( 
+                SELECT 'store channel' AS channel , 
+                       'store' 
+                              || s_store_id AS id , 
+                       sales , 
+                       returns1 , 
+                       (profit - profit_loss) AS profit 
+                FROM   ssr 
+                UNION ALL 
+                SELECT 'catalog channel' AS channel , 
+                       'catalog_page' 
+                              || cp_catalog_page_id AS id , 
+                       sales , 
+                       returns1 , 
+                       (profit - profit_loss) AS profit 
+                FROM   csr 
+                UNION ALL 
+                SELECT 'web channel' AS channel , 
+                       'web_site' 
+                              || web_site_id AS id , 
+                       sales , 
+                       returns1 , 
+                       (profit - profit_loss) AS profit 
+                FROM   wsr ) x 
+GROUP BY --rollup (
+	channel, id
+	--) 
+ORDER BY channel , 
+         id 
+--LIMIT 100; 
+""")
+
     def test_Q4_full(self):
         self.conn.config.detect_union = True
         query = \
@@ -1689,42 +1942,118 @@ Limit 100 ; """
                    c_birth_country,
                    c_login,
                    c_email_address,
-                   d_year)
-SELECT t_s_secyear.customer_id,
-               t_s_secyear.customer_first_name,
-               t_s_secyear.customer_last_name,
-               t_s_secyear.customer_preferred_cust_flag
-FROM   year_total t_s_firstyear,
-       year_total t_s_secyear,
-       year_total t_c_firstyear,
-       year_total t_c_secyear,
-       year_total t_w_firstyear,
-       year_total t_w_secyear
-WHERE  t_s_secyear.customer_id = t_s_firstyear.customer_id
-       AND t_s_firstyear.customer_id = t_c_secyear.customer_id
-       AND t_s_firstyear.customer_id = t_c_firstyear.customer_id
-       AND t_s_firstyear.customer_id = t_w_firstyear.customer_id
-       AND t_s_firstyear.customer_id = t_w_secyear.customer_id
-       AND t_s_firstyear.sale_type = 's'
-       AND t_c_firstyear.sale_type = 'c'
-       AND t_w_firstyear.sale_type = 'w'
-       AND t_s_secyear.sale_type = 's'
-       AND t_c_secyear.sale_type = 'c'
-       AND t_w_secyear.sale_type = 'w'
-       AND t_s_firstyear.dyear = 2001
-       AND t_s_secyear.dyear = 2001 + 1
-       AND t_c_firstyear.dyear = 2001
-       AND t_c_secyear.dyear = 2001 + 1
-       AND t_w_firstyear.dyear = 2001
-       AND t_w_secyear.dyear = 2001 + 1
-       AND t_s_firstyear.year_total > 0
-       AND t_c_firstyear.year_total > 0
-       AND t_w_firstyear.year_total > 0
-ORDER  BY t_s_secyear.customer_id,
-          t_s_secyear.customer_first_name,
-          t_s_secyear.customer_last_name,
-          t_s_secyear.customer_preferred_cust_flag
-LIMIT 100;"""
+                   d_year),
+   year_total1
+     AS (SELECT c_customer_id                       customer_id,
+                c_first_name                        customer_first_name,
+                c_last_name                         customer_last_name,
+                c_preferred_cust_flag               customer_preferred_cust_flag
+                ,
+                c_birth_country
+                customer_birth_country,
+                c_login                             customer_login,
+                c_email_address                     customer_email_address,
+                d1_year                              dyear,
+                Sum(( ( ss1_ext_list_price - ss1_ext_wholesale_cost
+                        - ss1_ext_discount_amt
+                      )
+                      +
+                          ss1_ext_sales_price ) / 2) year_total,
+                's'                                 sale_type
+         FROM   customer,
+                store_sales1,
+                date_dim1
+         WHERE  c_customer_sk = ss1_customer_sk
+                AND ss1_sold_date_sk = d1_date_sk
+         GROUP  BY c_customer_id,
+                   c_first_name,
+                   c_last_name,
+                   c_preferred_cust_flag,
+                   c_birth_country,
+                   c_login,
+                   c_email_address,
+                   d1_year
+         UNION ALL
+         SELECT c_customer_id                             customer_id,
+                c_first_name                              customer_first_name,
+                c_last_name                               customer_last_name,
+                c_preferred_cust_flag
+                customer_preferred_cust_flag,
+                c_birth_country                           customer_birth_country
+                ,
+                c_login
+                customer_login,
+                c_email_address                           customer_email_address
+                ,
+                d1_year                                    dyear
+                ,
+                Sum(( ( ( cs1_ext_list_price
+                          - cs1_ext_wholesale_cost
+                          - cs1_ext_discount_amt
+                        ) +
+                              cs1_ext_sales_price ) / 2 )) year_total,
+                'c'                                       sale_type
+         FROM   customer,
+                catalog_sales1,
+                date_dim1
+         WHERE  c_customer_sk = cs1_bill_customer_sk
+                AND cs1_sold_date_sk = d1_date_sk
+         GROUP  BY c_customer_id,
+                   c_first_name,
+                   c_last_name,
+                   c_preferred_cust_flag,
+                   c_birth_country,
+                   c_login,
+                   c_email_address,
+                   d1_year
+         UNION ALL
+         SELECT c_customer_id                             customer_id,
+                c_first_name                              customer_first_name,
+                c_last_name                               customer_last_name,
+                c_preferred_cust_flag
+                customer_preferred_cust_flag,
+                c_birth_country                           customer_birth_country
+                ,
+                c_login
+                customer_login,
+                c_email_address                           customer_email_address
+                ,
+                d1_year                                    dyear
+                ,
+                Sum(( ( ( ws1_ext_list_price
+                          - ws1_ext_wholesale_cost
+                          - ws1_ext_discount_amt
+                        ) +
+                              ws1_ext_sales_price ) / 2 )) year_total,
+                'w'                                       sale_type
+         FROM   customer,
+                web_sales1,
+                date_dim1
+         WHERE  c_customer_sk = ws1_bill_customer_sk
+                AND ws1_sold_date_sk = d1_date_sk
+         GROUP  BY c_customer_id,
+                   c_first_name,
+                   c_last_name,
+                   c_preferred_cust_flag,
+                   c_birth_country,
+                   c_login,
+                   c_email_address,
+                   d1_year)
+SELECT t_secyear.customer_id,
+               t_secyear.customer_first_name,
+               t_secyear.customer_last_name,
+               t_secyear.customer_preferred_cust_flag
+FROM   year_total t_firstyear,
+       year_total1 t_secyear
+WHERE  t_secyear.customer_id = t_firstyear.customer_id
+       AND t_firstyear.dyear = 2001
+       AND t_secyear.dyear = 2001 + 1
+       AND t_firstyear.year_total > 0
+       AND t_firstyear.year_total > 0
+ORDER  BY t_secyear.customer_id,
+          t_secyear.customer_first_name,
+          t_secyear.customer_last_name,
+          t_secyear.customer_preferred_cust_flag;"""
         self.do_test(query)
 
 
