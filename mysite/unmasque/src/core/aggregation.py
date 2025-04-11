@@ -6,9 +6,9 @@ from frozenlist._frozenlist import FrozenList
 
 from .dataclass.genPipeline_context import GenPipelineContext
 from .projection import get_param_values_external
+from ..util.constants import NUMBER_TYPES
 from ..util.utils import is_number, get_dummy_val_for, get_val_plus_delta, get_format, get_char, get_format_for_agg
 from ...src.core.abstract.GenerationPipeLineBase import GenerationPipeLineBase, get_boundary_value
-from ..util.constants import NUMBER_TYPES
 from ...src.util.constants import SUM, AVG, MIN, MAX, COUNT, COUNT_STAR
 from ...src.util.constants import min_int_val, max_int_val
 
@@ -65,12 +65,15 @@ def get_k_value(attrib, filter_attrib_dict, groupby_key_flag, tabname, datatype,
             #b = ast.literal_eval(b)
         else:
             # string filter attribute
-            if '_' in filter_attrib_dict[(tabname, attrib)]:
-                a = filter_attrib_dict[(tabname, attrib)].replace('_', 'a')
-                b = filter_attrib_dict[(tabname, attrib)].replace('_', 'b')
+            filtered_val = filter_attrib_dict[(tabname, attrib)]
+            if isinstance(filtered_val, FrozenList):
+                filtered_val = filtered_val[0]
+            if '_' in filtered_val:
+                a = filtered_val.replace('_', 'a')
+                b = filtered_val.replace('_', 'b')
             else:
-                a = filter_attrib_dict[(tabname, attrib)].replace('%', 'a', 1)
-                b = filter_attrib_dict[(tabname, attrib)].replace('%', 'b', 1)
+                a = filtered_val.replace('%', 'a', 1)
+                b = filtered_val.replace('%', 'b', 1)
             a = a.replace('%', '')
             b = b.replace('%', '')
             k_value = 1
