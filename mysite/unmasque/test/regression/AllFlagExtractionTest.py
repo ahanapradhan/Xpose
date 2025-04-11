@@ -241,13 +241,27 @@ c_acctbal > 30.04;"""
                 "ON c_nationkey = n_nationkey GROUP BY c_name, n_name;"
         self.do_test(query)
 
+    def test_new_paper_query_u1(self):
+        self.conn.config.use_cs2 = False
+        self.conn.config.detect_union = False
+        self.do_test("""SELECT c_name, c_phone from customer, orders where
+            c_custkey = o_custkey and c_acctbal < 1000;""")
+
+    def test_new_paper_query(self):
+        self.conn.config.use_cs2 = False
+        self.conn.config.detect_union = False
+        self.do_test("""SELECT s_name AS name, s_phone as phone
+FROM supplier, web_lineitem, orders WHERE wl_orderkey = o_orderkey
+AND s_suppkey = wl_suppkey AND s_acctbal <= o_totalprice
+AND wl_commitdate = wl_receiptdate and wl_shipmode = 'AIR' GROUP BY s_name, s_phone;""")
+
     def test_main_cmd_query(self):
         query = "Select ps_COMMENT, sum(ps_supplycost * ps_availqty) as value From partsupp, " \
                 "supplier, nation         " \
                 "Where ps_suppkey = s_suppkey and s_nationkey = n_nationkey and n_name = " \
                 "'ARGENTINA' Group By " \
                 "ps_COMMENT         Order by value desc Limit 100;"
-        self.conn.config.use_cs2 = True
+        self.conn.config.use_cs2 = False
         self.do_test(query)
 
     def test_Q13(self):

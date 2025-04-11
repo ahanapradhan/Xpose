@@ -1,0 +1,439 @@
+You are an expert in writing SQL queries from text descriptions. I am amazed by your SQL skills.
+... Consider the following schema. You should write an SQL for the given text based on this schma. Below is the schema, after which the text appears.
+...
+... CREATE TABLE REGION (
+...     R_REGIONKEY INTEGER NOT NULL,
+...     R_NAME CHAR(25) NOT NULL,
+...     R_COMMENT VARCHAR(152),
+...     PRIMARY KEY (R_REGIONKEY)
+... );
+...
+... CREATE TABLE NATION (
+...     N_NATIONKEY INTEGER NOT NULL,
+...     N_NAME CHAR(25) NOT NULL,
+...     N_REGIONKEY INTEGER NOT NULL,
+...     N_COMMENT VARCHAR(152),
+...     PRIMARY KEY (N_NATIONKEY),
+...     FOREIGN KEY (N_REGIONKEY) REFERENCES REGION(R_REGIONKEY)
+... );
+...
+... CREATE TABLE PART (
+...     P_PARTKEY INTEGER NOT NULL,
+...     P_NAME VARCHAR(55) NOT NULL,
+...     P_MFGR CHAR(25) NOT NULL,
+...     P_BRAND CHAR(10) NOT NULL,
+...     P_TYPE VARCHAR(25) NOT NULL,
+...     P_SIZE INTEGER NOT NULL,
+...     P_CONTAINER CHAR(10) NOT NULL,
+...     P_RETAILPRICE DECIMAL(15,2) NOT NULL,
+...     P_COMMENT VARCHAR(23) NOT NULL,
+...     PRIMARY KEY (P_PARTKEY)
+... );
+...
+... CREATE TABLE SUPPLIER (
+...     S_SUPPKEY INTEGER NOT NULL,
+...     S_NAME CHAR(25) NOT NULL,
+...     S_ADDRESS VARCHAR(40) NOT NULL,
+...     S_NATIONKEY INTEGER NOT NULL,
+...     S_PHONE CHAR(15) NOT NULL,
+...     S_ACCTBAL DECIMAL(15,2) NOT NULL,
+...     S_COMMENT VARCHAR(101) NOT NULL,
+...     PRIMARY KEY (S_SUPPKEY),
+...     FOREIGN KEY (S_NATIONKEY) REFERENCES NATION(N_NATIONKEY)
+... );
+...
+... CREATE TABLE PARTSUPP (
+...     PS_PARTKEY INTEGER NOT NULL,
+...     PS_SUPPKEY INTEGER NOT NULL,
+...     PS_AVAILQTY INTEGER NOT NULL,
+...     PS_SUPPLYCOST DECIMAL(15,2) NOT NULL,
+...     PS_COMMENT VARCHAR(199) NOT NULL,
+...     PRIMARY KEY (PS_PARTKEY, PS_SUPPKEY),
+...     FOREIGN KEY (PS_PARTKEY) REFERENCES PART(P_PARTKEY),
+...     FOREIGN KEY (PS_SUPPKEY) REFERENCES SUPPLIER(S_SUPPKEY)
+... );
+...
+... CREATE TABLE CUSTOMER (
+...     C_CUSTKEY INTEGER NOT NULL,
+...     C_NAME VARCHAR(25) NOT NULL,
+...     C_ADDRESS VARCHAR(40) NOT NULL,
+...     C_NATIONKEY INTEGER NOT NULL,
+...     C_PHONE CHAR(15) NOT NULL,
+...     C_ACCTBAL DECIMAL(15,2) NOT NULL,
+...     C_MKTSEGMENT CHAR(10) NOT NULL,
+...     C_COMMENT VARCHAR(117) NOT NULL,
+...     PRIMARY KEY (C_CUSTKEY),
+...     FOREIGN KEY (C_NATIONKEY) REFERENCES NATION(N_NATIONKEY)
+... );
+...
+... CREATE TABLE ORDERS (
+...     O_ORDERKEY INTEGER NOT NULL,
+...     O_CUSTKEY INTEGER NOT NULL,
+...     O_ORDERSTATUS CHAR(1) NOT NULL,
+...     O_TOTALPRICE DECIMAL(15,2) NOT NULL,
+...     O_ORDERDATE DATE NOT NULL,
+...     O_ORDERPRIORITY CHAR(15) NOT NULL,
+...     O_CLERK CHAR(15) NOT NULL,
+...     O_SHIPPRIORITY INTEGER NOT NULL,
+...     O_COMMENT VARCHAR(79) NOT NULL,
+...     PRIMARY KEY (O_ORDERKEY),
+...     FOREIGN KEY (O_CUSTKEY) REFERENCES CUSTOMER(C_CUSTKEY)
+... );
+...
+... CREATE TABLE LINEITEM (
+...     L_ORDERKEY INTEGER NOT NULL,
+...     L_PARTKEY INTEGER NOT NULL,
+...     L_SUPPKEY INTEGER NOT NULL,
+...     L_LINENUMBER INTEGER NOT NULL,
+...     L_QUANTITY DECIMAL(15,2) NOT NULL,
+...     L_EXTENDEDPRICE DECIMAL(15,2) NOT NULL,
+...     L_DISCOUNT DECIMAL(15,2) NOT NULL,
+...     L_TAX DECIMAL(15,2) NOT NULL,
+...     L_RETURNFLAG CHAR(1) NOT NULL,
+...     L_LINESTATUS CHAR(1) NOT NULL,
+...     L_SHIPDATE DATE NOT NULL,
+...     L_COMMITDATE DATE NOT NULL,
+...     L_RECEIPTDATE DATE NOT NULL,
+...     L_SHIPINSTRUCT CHAR(25) NOT NULL,
+...     L_SHIPMODE CHAR(10) NOT NULL,
+...     L_COMMENT VARCHAR(44) NOT NULL,
+...     PRIMARY KEY (L_ORDERKEY, L_LINENUMBER),
+...     FOREIGN KEY (L_ORDERKEY) REFERENCES ORDERS(O_ORDERKEY),
+...     FOREIGN KEY (L_PARTKEY, L_SUPPKEY) REFERENCES PARTSUPP(PS_PARTKEY, PS_SUPPKEY)
+... );
+...
+...
+...
+... Text: The Query finds, in Europe, for each part made of Brass and of size 15, the supplier who can supply it
+... at minimum cost. If several European suppliers offer the desired part type and size at the same (minimum) cost, the query lists the parts from
+... suppliers with the 100 highest account balances. For each supplier, the query lists the supplier’s account balance, name and nation; the part’s
+... number and manufacturer; the supplier’s address, phone number and comment information.
+...
+... Now, give me an SQL query that matches the above text description.
+...
+<think>
+Okay, so I need to write an SQL query based on the given text. Let's break down what's needed step by step.
+
+First, the goal is to find in Europe parts made of Brass with a size of 15. Then, for each of these parts, determine which suppliers can provide them at the minimum cost. If there are multiple suppliers offering the same part at the same minimum cost, we need to list
+those suppliers who have the top 100 account balances.
+
+Looking at the schema, I see that Parts (P) and Part-Supp (PS) tables are involved. The parts table has P_PARTKEY, P_NAME, P_MANUFACTURER, and size is in P_SIZE. The PS table has PS_SUPPLYCOST which is the cost. So I'll need to join Parts and PS on their respective
+keys.
+
+Since we're dealing with Europe, NATION (N_REGIONKEY) will come into play. But since the query doesn't directly involve orders or line items, maybe I don't need to go through ORDERS or LINEITEM? Wait, no—the part is supplied by a supplier, so we do need PS. But perhaps
+it's okay.
+
+Let me outline the steps:
+
+1. Identify Brass parts with size 15: So filter P_MANUFACTURER = 'Brass' and P_SIZE = 15.
+2. For each of these parts, find all suppliers (from PS) where PS_SUPPKEY is their key.
+3. Find the minimum cost among these suppliers for each part. If multiple suppliers have the same min cost, include them all up to 100 with highest account balances.
+
+Wait, but the query needs to get supplier info only if they are in Europe? Or do I need to filter by NATION?
+
+Looking back at the text: "find... in Europe". So we need to ensure that the suppliers or parts are from Europe. Wait, the parts are made of Brass and size 15—maybe the region is determined elsewhere, but perhaps the part's manufacturer could be anywhere. But since the
+query specifies "in Europe", I think it refers to the customers? Or maybe the parts' regions.
+
+Wait, no—the text says for each part made of brass and size 15, so likely the part itself doesn't need to be from Europe, but the supplier is in Europe? Or perhaps the region isn't a factor here. Wait, looking at the schema, PARTSUPP has a PS NATIONKEY which references
+NATION. So if we have to find suppliers in Europe, that would mean their nation key must refer to a nation where the region is Europe.
+
+But wait, the parts are from any manufacturer but size 15 and made of brass. The query wants to find for each part (from any manufacturer) the suppliers who can supply it at min cost, but only those in Europe? Or perhaps not—since the text says "in Europe", maybe it's
+implying that the customer is in Europe.
+
+Wait, no—the customers are in Europe via C_NATIONKEY. But the query doesn't mention anything about the region of the order or line item, so perhaps the parts can be from any manufacturer, but we need to find suppliers who have a high account balance and are in Europe.
+
+But wait, the text says "in Europe"—I think it refers to the customer's location because the part is being ordered by them. So maybe I should include a WHERE clause on C_NATIONKEY for Europe?
+
+Wait no—the query doesn't specify customers; it just needs to find parts and their suppliers regardless of the customer's region, but perhaps in the context of the data.
+
+This might be getting too complicated. Let me see: the initial part is that we're looking at parts made of Brass with size 15—so P_MANUFACTURER = 'Brass' and P_SIZE=15.
+
+Then for each such part, find all suppliers (from PS) where their PS_SUPPKEY is linked to a supplier table. Then group by P_PARTKEY and get the minimum cost from PS_SUPPLYCOST. If multiple suppliers have that same min cost, we need to include those with the highest
+account balances up to 100.
+
+Wait, but how do I handle ties in cost? We can order by cost descending and take top 100.
+
+So perhaps:
+
+SELECT ... FROM P, PS WHERE ... ORDER BY PS_SUPPLYCOST DESC LIMIT 100;
+
+But also, for each part, we need to find the minimum cost from all suppliers. So maybe first get the min cost per part, then join with the suppliers having that cost.
+
+Alternatively, use Common Table Expressions (CTEs) to subquery and compute min cost.
+
+Putting it together:
+
+- From Parts table where P_MANUFACTURER is Brass and size 15.
+- For each of these parts, look at all PS where they supply them. So join on P.PARTKEY = PS.PARTKEY?
+Wait no—PS is the part-supplier relation, so PS.PARTKEY would be same as Parts' P_PARTKEY? Or wait: actually, in SQL Server, parts are referenced by P_PARTKEY and suppliers via PS.PARTKEY.
+
+Wait no—the schema might have:
+
+- P (Parts) has P_PARTKEY.
+- PS (Part-Supplier) has PS_PARTKEY which is foreign key to P's P_PARTKEY. So when you do a join between PS and Parts, you can get the supplier info for each part.
+
+But in SQL, it would be Join on P.PARTKEY = PS.PARTKEY? Or since PS has a foreign key on P's P_PARTKEY, perhaps it's an inner join.
+
+So first, I need to get all parts where MANUFACTURER is Brass and size 15. Then for each of these parts, find the minimum cost from all suppliers. Then filter those suppliers who have that min cost, sort them by account balance descending, take top 100.
+
+But also, per part.
+
+So perhaps:
+
+SELECT
+    P.PARTKEY AS PartKey,
+    P.Name as Name,
+    P.MANUFACTURER AS Manufacturer,
+    P.Size,
+    P.NATION as Nation,
+    S.SuppName,
+    S.BALANCE,
+    P.SUPPONDER as Comment
+FROM (
+    SELECT PS.PARTKEY, MIN(PS.SPEACE) AS MinCost
+    FROM PS
+    GROUP BY PS.PARTKEY
+)
+AS MinCostPerPart
+
+JOIN
+PS ON PS.PARTKEY = MinCostPerPart.PARTKEY AND PS.PARTSUPPKEY = S.PARTSUPPKEY?
+
+Wait, maybe not. Perhaps it's better to use a Common Table Expression (CTE) to get the minimum cost per part.
+
+So:
+
+WITH MinCostAS (
+    SELECT P.PARTKEY, MIN(PS.SPEACE) AS MinCost
+    FROM Parts P
+    JOIN PartSuppliers PS ON P.PARTKEY = PS.PARTKEY
+    GROUP BY P.PARTKEY
+)
+
+Then select from the CTE where PS's cost is equal to MinCost.
+
+Wait, maybe like this:
+
+SELECT
+    P.*,
+    S.*,
+    ...
+But perhaps I'm complicating it. Let me think of each step.
+
+1. Identify all parts made of Brass with size 15: (P_MANUFACTURER = 'Brass' AND P_SIZE=15)
+2. For each such part, find all suppliers via PS where they supply the part.
+3. For each part, get the minimum cost from these suppliers.
+4. Then for each supplier, if their cost is equal to the min cost for that part, include them in the result set along with other conditions.
+
+But we also need to consider account balance—so among those suppliers who have the same min cost as the lowest, we want to list the ones with highest account balances up to 100.
+
+So perhaps:
+
+- For each part (Brass size 15), get the minimum cost from PS.
+- Then join PS where PS.SPEACE = MinCost for that part and also ensure they have a region of Europe? Wait, no—the text doesn't specify the supplier's region. The query is about the parts made in Brass size 15, so perhaps it's any manufacturer.
+
+Wait, but in the schema, the supplier table (PS) has P.SUPPONDER, which includes address and phone number, as well as balance.
+
+So steps:
+
+- Filter parts where MANUFACTURER = 'Brass' AND SIZE=15.
+- For each such part, find all suppliers via PS where they supply it. So join on P.PARTKEY = PS.PARTKEY?
+Wait no: in SQL Server, the PartSuppliers table has columns like PS.PARTKEY and PS.SUPPONDER.
+
+But to get the cost, we need to join with P and NATION? No—the cost is in PS.SPEACE (cost), so perhaps:
+
+Let me try writing a CTE that for each part, gets the min cost from all suppliers. Then for each of those parts, get the supplier info where cost equals the min.
+
+So:
+
+WITH MinCostAS (
+    SELECT P.PARTKEY AS PartKey,
+           MIN(PS.SPEACE) AS MinCost
+    FROM Parts P
+    LEFT JOIN PS ON P.PARTKEY = PS.PARTKEY
+    GROUP BY P.PARTKEY
+)
+
+Then, in the main query:
+
+SELECT
+    P.Name as Name,
+    P.MANUFACTURER,
+    P.Size,
+    N.NATION as Nation,
+    S.SuppName,
+    S.BALANCE,
+    P.SUPPONDER as Comment
+FROM (
+    SELECT PartKey, MinCost
+    FROM MinCostAS
+) AS MC
+JOIN PS ON MC.PartKey = PS.PARTKEY AND PS.SPEACE = MC.MinCost
+AND ... something? Wait, I'm getting confused.
+
+Alternatively, perhaps it's better to:
+
+First get all parts that meet the criteria: MANUFACTURER is Brass and size 15. Then for each such part, find all suppliers (PS) who supply them. For each part, compute the min cost among those suppliers. Then select from PS where the cost equals the min cost of their
+respective part.
+
+But this can be done using a CTE:
+
+WITH MinCostAS (PartKey, MinCost) AS (
+    SELECT P.PARTKEY,
+           MIN(PS.SPEACE) as MinCost
+    FROM Parts P
+    JOIN PartSuppliers PS ON P.PARTKEY = PS.PARTKEY
+    GROUP BY P.PARTKEY
+)
+SELECT
+    PS.SupplierName,
+    PS.BALANCE,
+    P.Name,
+    P.MANUFACTURER,
+    P.Size,
+    P.NATION as SupplierNATION,
+    P.SUPPONDER as Comment
+FROM PartSuppliers PS
+JOIN MinCostAS MC ON PS.PARTKEY = MC.PartKey
+WHERE PS.SPEACE = MC.MinCost
+   AND P.MANUFACTURER = 'Brass'
+   AND P.Size = 15
+
+Wait, but I also need to ensure that the part is made by Brass and size 15. So perhaps:
+
+In the CTE, it's grouping by PartKey, so each PartKey has a min cost.
+
+Then in the main query, we join with PS on PartKey, where their cost equals the MinCost for that part, and then also filter the parts to be Brass and size 15.
+
+But how?
+
+Wait, perhaps I can modify the CTE to include additional filters:
+
+Change the CTE to select only parts made by Brass and size 15. Then compute min cost on them.
+
+So:
+
+WITH MinCostAS (
+    SELECT P.PARTKEY AS PartKey,
+           MIN(PS.SPEACE) AS MinCost
+    FROM Parts P
+    WHERE P.MANUFACTURER = 'Brass' AND P.Size=15
+    LEFT JOIN PS ON P.PARTKEY = PS.PARTKEY
+    GROUP BY P.PARTKEY
+)
+
+Then in the main query:
+
+SELECT
+    PS.SupplierName,
+    PS.BALANCE,
+    P.Name as Name,
+    P.MANUFACTURER,
+    P.Size,
+    P.NATION as SupplierNATION,
+    P.SUPPONDER as Comment
+FROM PartSuppliers PS
+JOIN MinCostAS MC ON PS.PARTKEY = MC.PartKey
+WHERE PS.SPEACE = MC.MinCost
+   AND P.MANUFACTURER = 'Brass'
+   AND P.Size=15
+
+But wait, in the CTE I have only selected parts where MANUFACTURER is Brass and size 15. So when doing the join on PS, which has PartKey, it will automatically match those.
+
+So then for each such part, get all suppliers with cost equal to min. Then order by balance descending, limit to top 100.
+
+But in SQL, I can use ORDER BY and LIMIT:
+
+So adding:
+
+ORDER BY PS.BALANCE DESC
+LIMIT 100
+
+At the end of the query.
+
+Putting it all together:
+
+WITH MinCostAS (
+    SELECT P.PARTKEY AS PartKey,
+           MIN(PS.SPEACE) AS MinCost
+    FROM Parts P
+    WHERE P.MANUFACTURER = 'Brass' AND P.Size=15
+    LEFT JOIN PS ON P.PARTKEY = PS.PARTKEY
+    GROUP BY P.PARTKEY
+)
+SELECT
+    PS.SupplierName,
+    PS.BALANCE,
+    P.Name as Name,
+    P.MANUFACTURER,
+    P.Size,
+    P.NATION as SupplierNATION,
+    P.SUPPONDER as Comment
+FROM PartSuppliers PS
+JOIN MinCostAS MC ON PS.PARTKEY = MC.PartKey
+WHERE PS.SPEACE = MC.MinCost
+   AND P.MANUFACTURER = 'Brass'
+   AND P.Size=15
+ORDER BY PS.BALANCE DESC
+LIMIT 100;
+
+Wait, but in the CTE, are we getting min cost per part? Yes.
+
+Then in the main query, for each part and its respective supplier(s), selecting those with cost equal to that min. Then ordering by balance descending and limiting to top 100.
+
+So this should give me the suppliers of Brass parts size 15 who have ordered them at the minimum price among all their orders. And only the top 100 are shown.
+
+Hmm, but in the query above, I think it's possible that some supplier might supply multiple parts (different part keys) and for each, if they're one of the min cost suppliers, then we include them here.
+
+Wait no, because the CTE is per part key. So when you have a supplier who supplies multiple part keys (like same supplier can provide different parts), in this case, their data will appear once per part key where they are the cheapest.
+
+But perhaps that's correct as per the problem statement: each part is considered separately.
+
+So I think this approach is solid.
+</think>
+
+To solve this problem, we need to identify the top suppliers who have provided Brass parts of size 15 at the lowest prices. The goal is to determine which suppliers are offering these parts at their minimum cost and list them in descending order of their purchasing
+balance, limiting the result to the top 100 suppliers.
+
+### Approach
+1. **Data Filtering**: First, we filter the parts to only include those made by Brass and with a size of 15.
+2. **Minimum Cost Calculation**: For each part (identified by its PartKey), calculate the minimum price at which it is supplied.
+3. **Supplier Selection**: Identify all suppliers who have provided these parts at the calculated minimum prices.
+4. **Sorting and Limiting Results**: Order the selected suppliers by their purchasing balance in descending order and limit the results to the top 100.
+
+### Solution Code
+```sql
+WITH MinCostAS (
+    SELECT P.PARTKEY AS PartKey,
+           MIN(PS.SPEACE) AS MinCost
+    FROM Parts P
+    WHERE P.MANUFACTURER = 'Brass' AND P.Size = 15
+    LEFT JOIN PartSuppliers PS ON P.PARTKEY = PS.PARTKEY
+    GROUP BY P.PARTKEY
+)
+SELECT
+    PS.SupplierName,
+    PS.BALANCE,
+    P.Name as Name,
+    P.MANUFACTURER,
+    P.Size,
+    P.NATION as SupplierNATION,
+    P.SUPPONDER as Comment
+FROM PartSuppliers PS
+JOIN MinCostAS MC ON PS.PARTKEY = MC.PartKey
+WHERE PS.SPEACE = MC.MinCost
+   AND P.MANUFACTURER = 'Brass'
+   AND P.Size = 15
+ORDER BY PS.BALANCE DESC
+LIMIT 100;
+```
+
+### Explanation
+- **Data Filtering**: The CTE (Common Table Expression) `MinCostAS` is used to filter parts made by Brass and of size 15. For each part key, it calculates the minimum price (`MinCost`) at which the part is supplied.
+- **Minimum Cost Calculation**: By grouping the filtered parts by their PartKey and taking the minimum value of `SPEACE`, we ensure that only the cheapest supplier for each part is considered.
+- **Supplier Selection**: The main query joins the PartSuppliers table with the results from the CTE to get the suppliers who provided these parts at the minimum price. It then filters these suppliers based on the calculated minimum costs and the criteria of Brass parts
+size 15.
+- **Sorting and Limiting Results**: The result is sorted by the supplier's balance in descending order and limited to the top 100 suppliers.
+
+This approach efficiently narrows down the required information, ensuring that we only consider relevant data and present it in a clear, ordered manner.
+

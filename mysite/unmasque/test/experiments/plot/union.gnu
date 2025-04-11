@@ -9,3 +9,5 @@ set grid
 show grid
 set ylabel "Extraction Time (m)"
 plot "data/union.dat" using 1:($3/60):xtic(2) with boxes notitle
+
+

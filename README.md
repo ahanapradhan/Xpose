@@ -1,5 +1,26 @@
+# Text2SQL on TPCH Benchmark Queries using GPT-4o (04-04-2025):
+
+| QID  | GPT Output                          | Remarks on Diff                                |
+|------|-------------------------------------|-------------------------------------------------|
+| Q2 |   https://chatgpt.com/share/67ef8147-b3d4-8005-9bcd-21444bf63e26                                  | Result is different.    https://www.diffchecker.com/zWuU3Apc/                                            |
+|Q7|https://chatgpt.com/share/67efa0ba-6aa0-8005-9720-4b33d7722529|On original TPCH schema, text-to-sql produces the benchmark query. Now, on the synonymized schema, it includes spurious partupp table. It introduced 100 in the projection formula. Synonym mappings: region --> continent, nation --> country, orders --> bids, lineitem --> product, part --> item, partsupp --> itemven, supplier --> vendor, customer --> client.|
+|Q8|https://chatgpt.com/share/67efa580-0874-8005-98cd-f18c5f4a0e16|On original TPCH schema, text-to-sql produces the benchmark query. Now, on the synonymized schema, it misses customer table, and one instance of nation table. It spuriously uses partsupp table. It uses l_shipdate for group by. Synonym mappings: region --> continent, nation --> country, orders --> bids, lineitem --> product, part --> item, partsupp --> itemven, supplier --> vendor, customer --> client.|
+|Q11|https://chatgpt.com/share/67ef97b9-f440-8005-9a8d-d2150dc7f6c4|Tables missing in the inner query.|
+|Q12|https://chatgpt.com/share/67ef95e4-900c-8005-a7ca-7f914246f78a|Query gives empty result. Because the constants are not correct. They are not specified in the text. This cannot be fixed only using the result and the text description. URGENT and HIGH constants can be corrected if the LLM is provided with few sample data. But the constants on l_shipmode predicate cannot be derived unless given.| 
+|Q13|https://chatgpt.com/share/67ef9487-7968-8005-93e8-5077b4d7eb5e|missing projection group by in both levels.|
+|Q16|https://chatgpt.com/share/67ef90f2-07d8-8005-8d08-7ed6beed5a2f|projection, group by missing.|
+|Q17|https://chatgpt.com/share/67ef8e4a-a63c-8005-8d57-c719d4abbb4d|2 instances of part. Extra filters inside.|
+|Q18|https://chatgpt.com/share/67ef8c4d-1968-8005-a5ae-cfb3cb8d4b41|Missing lineitem table. Incorrect inner aggregation. Semijoin on different attribute. Group by incorrect.|
+|Q20 |https://chatgpt.com/share/67ef644d-131c-8005-8a3d-ef14d8bb48a4|Orders table is spurious. o_orderdate is in filter instead of l_shipdate.|
+|Q21|https://chatgpt.com/share/67ef8b7d-4dec-8005-bdde-5e0573bd6e19|Missing projection and group by.|
+| Q22  | https://chatgpt.com/c/677fa7f2-3c2c-8005-88a7-e01896ed6c52 |Single instance of customer, projection is missing|
 
 
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Setting up the XRE Code:
+-------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Setting Up the Database
 ## PostgreSQL Installation  

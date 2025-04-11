@@ -1,0 +1,456 @@
+... You are an expert in SQL. Using the above schema, write a SQL query that answers the following natural language description.
+... Please ensure the query is correct and optimized.
+...
+... Text Description:
+... "This query counts how many customers within country codes among ’13’, ’31’, ’23’, ’29’, ’30’, ’18’, and
+... ’17’ have not placed orders for 7 years but who have a greater than average “positive" account balance. It also reflects the magnitude of that
+... balance. Country code is defined as the first two characters of c_phone."
+...
+...
+...
+<think>
+Okay, so I need to write an SQL query based on the given schema and the description provided. Let me break this down step by step.
+
+First, the problem is about counting customers in specific country codes who haven't placed orders for seven years but have a positive account balance higher than the average. The country code is defined as the first two characters of c_phone. The relevant country codes
+to consider are '13', '31', '23', '29', '30', '18', and '17'.
+
+I'll start by identifying the tables involved here. From the schema, I see that there's a CUSTOMER table with a C_NATIONKEY foreign key referencing NATION. The nation table has a phone number field (N_PHONE), which is stored as an integer because it's being used in
+foreign keys to PARTSUPP and another table. But wait, the customer table also has C_PHONE, which is a CHAR type. So, I need to extract the first two characters from this phone number to get the country code.
+
+So, for each customer, I'll take the first two digits of their phone number as the country code. That can be done using a substring function in SQL, probably using substr or similar, but since SQL Server uses functions like SUBSTRING, I'll use that.
+
+Next, I need to find customers from these specific country codes ('13', '31', etc.). So, after extracting the country code from C_PHONE, I can filter where this extracted value is in the set of those country codes. But wait, since the country codes are stored as
+integers (from NATION table), maybe it's better to store them as strings? Or do I have a mapping between the first two digits and string representations?
+
+Wait, looking back, the NATION table has N_PHONE as an integer. So, in the data, each nation would have its phone number stored as an integer. But for customers, C_PHONE is a CHAR(15), so extracting the first two characters will give us a two-digit country code as a
+string. Therefore, to match them, I need to compare this extracted string with the string representations of the desired country codes.
+
+So, perhaps in SQL Server, using STR(C_PHONE, 2) or something similar would extract the first two digits as a string. Then, I can use that in a WHERE clause to check against '13', '31', etc., but since these are strings, I need to ensure they match exactly.
+
+Now, for the condition of not placing orders for seven years. That means checking if the customer's last order date is more than seven years ago from the current date. So, I'll get the maximum order date a customer has and compare it with the current date minus seven
+years.
+
+The formula would be: Customer's max_order_date > (current_date - 7 years). But in SQL, using DATEADD to calculate that. So something like:
+
+MAX(C CUSTOMER.C_ORDER_DATES) > DATEADD(YY, 7, CURRENT_DATE)
+
+But I need to make sure this is calculated for each customer individually.
+
+Next, the account balance condition: greater than the average positive balance. Since it's an average, I'll have to calculate it per country code and then compare individual customers' balances against that average.
+
+Wait, but averages can change over time as more data comes in, so perhaps it's better to precompute the average once and store it? Or maybe compute it on the fly for each customer. But since the average is specific to their country group, I'll need to calculate the average
+per country code before applying it.
+
+So here's a plan:
+
+1. Extract the first two digits of C_PHONE as the country code.
+2. Group customers by this country code and calculate the average account balance where the balance is positive (i.e., greater than zero).
+3. Then, for each customer in these groups, check if their account balance is above this precomputed average and whether they haven't placed orders for more than seven years.
+
+But how do I handle grouping and subqueries efficiently? Perhaps using Common Table Expressions (CTEs) to first calculate the averages and then join them with the customers.
+
+Alternatively, I can use window functions or aggregate functions within a single query. But since the average is per country code group, maybe I should precompute it.
+
+Wait, but this might complicate things because each customer's data would need to reference the average of their specific country group after they've been grouped.
+
+Let me outline the steps:
+
+a) Extract the first two digits from C_PHONE as the country code for each customer.
+b) For each of these country codes (specific ones), compute the average of the positive account balances. This needs to be done per country code, so it's an aggregate function over a subset of customers.
+c) Then, join this average back with the individual customer records where the customer is from one of the target country codes and their balance exceeds that average AND they haven't ordered for more than seven years.
+
+So, structuring this in SQL:
+
+1. Create a subquery or CTE to calculate the average positive account balance per country code.
+2. Then, join this with the main CUSTOMER table where:
+   - Customer's country code matches one of the target codes
+   - Customer's account balance is > 0 and > average
+
+But wait, in the description, it says "greater than average that balance," so I think they mean greater than their own average. But perhaps it's phrased as 'balance greater than average' which could be ambiguous.
+
+Wait, maybe the intended meaning is that each customer has a positive account balance greater than the overall average of all customers in their country code group.
+
+So to do this:
+
+Firstly, for each target country code (e.g., 13, 31), we need to compute the average of the positive account balances. Then, for each customer from those countries, check if their account balance is greater than that specific average.
+
+But how can I do that in SQL?
+
+I think using a Common Table Expression would help here. Let's create a CTE that calculates the averages and then joins with the main table.
+
+Alternatively, perhaps use an aggregate function with OVER clause to calculate the average per country code on the fly.
+
+Wait, let me try structuring this step by step.
+
+First, get all customers whose phone number starts with one of the target two-digit codes:
+
+SELECT c.cust_id, c.country_code (extracted as first two digits), c.account_balance
+FROM CUSTOMER c
+WHERE c.country_code IN ('13', '31', ...)
+
+But how to compute country_code?
+
+Using substr(c.phone, 0, 2). But phone is a string, so in SQL Server, it's better to use SUBSTRING or similar function.
+
+So perhaps:
+
+SELECT substr(c_phone, 0, 2) AS country_code
+
+But wait, the phone number is stored as an integer? Because in the schema, NATION has N_PHONE as integer. So for customers, C_PHONE is a string (CHAR(15)), so extracting two characters would give us '13' as a string.
+
+So to get the country code:
+
+country_code = substr(c_phone, 0, 2)
+
+But then I need to make sure that these are exactly the two-digit strings in uppercase? Or does it matter?
+
+Assuming that phone numbers are consistent and stored as strings without leading zeros or different cases, but perhaps better to handle them as case-sensitive.
+
+Once we have the country_code extracted, filter where country_code is in the target list.
+
+Now, for each of these customers, calculate whether their account balance is positive and greater than some average per their country group. But since this involves grouping by country_code and calculating an average, which depends on all other customers in that group, it's
+better to compute this as a subquery or CTE.
+
+So perhaps I can create a CTE that groups the customers by country_code and computes the average positive balance for each group:
+
+WITH CountryAverages AS (
+    SELECT
+        c.country_code,
+        AVG(CASE WHEN c.account_balance > 0 THEN c.account_balance ELSE 0 END) as avg_positive_balance
+    FROM CUSTOMER c
+    WHERE substr(c_phone, 0, 2) IN ('13', '31', '23', '29', '30', '18', '17')
+    GROUP BY c.country_code
+)
+
+Then, in the main query, select customers where:
+
+- They are from one of the target country codes.
+- Their account_balance is greater than 0 AND greater than the avg_positive_balance from CountryAverages.
+
+But wait, I have to make sure that Customer's account_balance is greater than their group average. However, if a customer has an account balance higher than average in their own group but lower than another group's average, we need to exclude them. So each customer must be
+compared only against the average of their specific country group.
+
+But using the CTE as above would aggregate all customers from those groups and calculate their averages correctly.
+
+So putting it together:
+
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE
+    substr(c_phone, 0, 2) IN ('13', '31', '23', '29', '30', '18', '17')
+    AND c.account_balance > 0
+    AND c.account_balance > (SELECT avg_positive_balance FROM CountryAverages WHERE country_code = substr(c_phone, 0, 2))
+    AND (
+        -- Ensure that the customer's last order is more than seven years old.
+        -- So get maximum order date from ORDERS where c.cust_id is in the orders
+        -- But wait, how do we get this? Because for each customer, we need to check their own latest order.
+
+Wait a minute. This complicates things further because now, for each customer, we have to find if they have any orders at all and whether that order date is older than seven years ago.
+
+So the original query must also include checking that the customer has not made an order in the past seven years.
+
+Therefore, perhaps another CTE:
+
+WITH RecentOrders AS (
+    SELECT c.cust_id
+    FROM CUSTOMER c
+    LEFT JOIN ORDERS o ON o.cust_id = c.cust_id AND (datepart(yyyymmdd, date) >= '2016-01-01') -- Assuming seven years ago is 2015. So if no orders in last seven years?
+)
+
+Wait, perhaps it's better to join on the condition that there are no orders from this customer in the past seven years.
+
+Alternatively:
+
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE NOT EXISTS (
+    SELECT
+        c2.cust_id
+    FROM ORDERS o
+    WHERE o.cust_id = c2.cust_id
+    AND datepart(yyyy, o.date) >= (datepart(yyyy, current_date) - 7)
+)
+
+But perhaps that's getting too complex.
+
+Alternatively, let me structure it step by step:
+
+1. For each customer in the target country codes, check if they have made any orders within the last seven years.
+
+So first, get a list of customers from target countries who haven't ordered in the past seven years.
+
+Then, for those customers, check if their account balance is positive and greater than their group's average.
+
+But perhaps it's better to compute this as:
+
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE substr(c_phone, 0, 2) IN ('13', '31', ...) AND
+    (c.account_balance > 0) AND
+    (c.account_balance > (SELECT avg_positive_balance FROM CountryAverages WHERE country_code = substr(c_phone, 0, 2))) AND
+    (NOT EXISTS (
+        SELECT o.cust_id from ORDERS o where o.cust_id = c.cust_id and date >= 'YYYY--MM-DD' (seven years ago)
+    ))
+
+But how to get the seven years from current date?
+
+So perhaps:
+
+WITH CountryAverages AS (...)
+
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE substr(c_phone, 0,2) in target_codes AND
+c.account_balance > 0 AND
+c.account_balance > (SELECT avg_positive_balance FROM CountryAverages where country_code = substr(c_phone, 0,2)) AND
+NOT EXISTS (
+    SELECT o.cust_id from ORDERS o where o.cust_id = c.cust_id and date >= DATEADD(y,-7,GETDATE())
+)
+
+But this could be inefficient because for each customer being checked, it does a subquery to see if they have any orders in the last seven years.
+
+Alternatively, perhaps precompute a list of customers without recent orders:
+
+WITH NoRecentOrders AS (
+    SELECT c.cust_id
+    FROM CUSTOMER c
+    WHERE NOT EXISTS(
+        SELECT o.cust_id from ORDERS o where o.cust_id = c.cust_id AND date >= DATEADD(y,-7,GETDATE())
+    )
+)
+
+Then merge this with CountryAverages and the positive account balance condition.
+
+But perhaps it's getting too convoluted. Maybe it's better to structure all these conditions in one CTE or query.
+
+Alternatively, use a subquery directly in the WHERE clause:
+
+WHERE substr(c_phone, 0,2) in target_codes
+AND c.account_balance > (SELECT avg_positive FROM CountryAverages ca WHERE ca.country_code = substr(c_phone,0,2))
+AND c.account_balance >0
+AND NOT EXISTS (
+    SELECT o.cust_id from ORDERS where o.cust_id =c.cust_id AND date >= DATEADD(y,-7,GETDATE())
+)
+
+But perhaps combining all these conditions is manageable.
+
+So putting it together:
+
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE substr(c_phone, 0,2) IN ('13', '31', '23', '29', '30', '18', '17')
+AND c.account_balance > (
+    SELECT avg_positive FROM
+        (SELECT substr(c_phone, 0,2), AVG(CASE WHEN account_balance>0 THEN account_balance ELSE 0 END) as avg_positive
+         FROM CUSTOMER
+         WHERE substr(c_phone, 0,2) IN ('13', '31', '23', '29', '30', '18', '17')
+         GROUP BY substr(c_phone, 0,2))
+    WHERE country_code = substr(c_phone, 0,2)
+)
+AND c.account_balance > 0
+AND NOT EXISTS (
+    SELECT o.cust_id from ORDERS where o.cust_id =c.cust_id AND date >= DATEADD(y,-7,GETDATE())
+)
+
+But wait, in the subquery for avg_positive, we are grouping by substr(c_phone,0,2), which is country_code. So for each such customer in this group, it's correct.
+
+This should work but may be slow if there are many customers as it joins multiple tables.
+
+Alternatively, using a Common Table Expression (CTE) might make the code more readable.
+
+So perhaps:
+
+WITH CountryAverages AS (
+    SELECT substr(c_phone, 0,2) AS country_code,
+        AVG(CASE WHEN account_balance >0 THEN account_balance ELSE 0 END) as avg_positive
+    FROM CUSTOMER
+    WHERE substr(c_phone, 0,2) IN ('13', '31', '23', '29', '30', '18', '17')
+    GROUP BY country_code
+)
+,
+RecentOrders AS (
+    SELECT cust_id
+    FROM ORDERS
+    WHERE date >= DATEADD(y,-7,GETDATE())
+)
+
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE
+    substr(c_phone, 0,2) IN ('13', '31', '23', '29', '30', '18', '17')
+    AND c.account_balance > (SELECT avg_positive FROM CountryAverages where country_code = substr(c_phone,0,2))
+    AND c.account_balance > 0
+    AND c.cust_id NOT IN (SELECT cust_id from RecentOrders where customer_id =c.cust_id)
+
+Wait, but in the 'RecentOrders' CTE, it's just selecting cust_id. But how is 'customer_id' handled?
+
+Alternatively:
+
+WITH NoRecentOrders AS (
+    SELECT cust_id
+    FROM CUSTOMER c
+    WHERE NOT EXISTS(
+        SELECT o.cust_id from ORDERS o where o.cust_id =c.cust_id AND date >= DATEADD(y,-7,GETDATE())
+    )
+)
+
+But this may not be as efficient.
+
+Perhaps the initial approach is acceptable. Maybe it's better to use a query that combines all these conditions directly.
+
+Alternatively, perhaps using window functions could help compute the average without CTEs.
+
+For example:
+
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE substr(c_phone,0,2) in target_codes
+AND c.account_balance > (
+    SELECT avg_balance
+    FROM (
+        SELECT substr(c_phone, 0,2), AVG(CASE WHEN account_balance>0 THEN account_balance ELSE 0 END) as avg_balance
+        FROM CUSTOMER
+        WHERE substr(c_phone, 0,2) = substr(c.c_phone, 0,2)
+         -- Wait, but how to reference c in the subquery.
+         Hmm, perhaps using Common Table Expressions.
+
+Maybe it's better to use a CTE for CountryAverages as I did earlier.
+
+So summarizing:
+
+- Create a CTE that groups by country_code (based on substr(c_phone,0,2)) and calculates the average positive account balance.
+- Then, in the main SELECT, check if c.account_balance > 0 AND greater than the country's avg_positive.
+- Also, ensure that c.cust_id has no recent orders.
+
+But perhaps to handle all these conditions correctly, let me outline step by step:
+
+1. For each customer, determine their account balance and whether it is positive.
+
+2. Check if this account_balance is greater than the average of their country group (based on phone number).
+
+3. Ensure that the customer has not made any orders in the past seven years.
+
+4. Only include customers from target countries.
+
+So step 1: For each customer, compute substr(c_phone,0,2) as country_code.
+
+Step 2: Compute for each such group (country_code), the average of account_balance where account_balance > 0.
+
+But how to get that? Perhaps using a Common Table Expression.
+
+So:
+
+WITH CountryAverages AS (
+    SELECT substr(c_phone,0,2) AS cc,
+        avg_bal = AVG(CASE WHEN ab > 0 THEN ab ELSE 0 END)
+    FROM CUSTOMER c
+    WHERE substr(c_phone,0,2) IN target_codes
+    GROUP BY substr(c_phone,0,2))
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE substr(c_phone,0,2) in target_codes AND
+      c.account_balance > 0 AND
+      c.account_balance > CountryAverages.avg_bal WHERE CountryAverages.cc = substr(c_phone,0,2)
+      AND c.cust_id NOT IN (SELECT cust_id FROM ORDERS where date >= seven_years_ago)
+
+But perhaps the part about 'NOT IN' can be represented as 'has no orders in last 7 years'.
+
+Alternatively, combining all conditions.
+
+Another approach is to compute whether the customer has any recent orders:
+
+CREATE A TABLE RecentOrdersAS (
+    SELECT cust_id
+    FROM ORDERS
+    WHERE date >= seven_years_ago)
+
+But perhaps it's easier within the main query.
+
+Wait, but in the main query, we can write:
+
+WHERE c.cust_id NOT IN (SELECT cust_id FROM ORDERS o WHERE o.cust_id = c.cust_id AND o.date >= seven_years_ago)
+
+This would exclude customers who have orders in the past seven years.
+
+Putting it all together:
+
+The final SQL could be as follows:
+
+WITH CountryAverages AS (
+    SELECT substr(c_phone, 0, 2) AS country_code,
+        avg_bal = AVG(CASE WHEN account_balance > 0 THEN account_balance ELSE 0 END)
+    FROM CUSTOMER c
+    WHERE substr(c_phone, 0, 2) IN ('13', '31', '23', '29', '30', '18')
+    GROUP BY country_code)
+,
+RecentOrders AS (
+    SELECT cust_id
+    FROM ORDERS o
+    WHERE date >= DATEADD(y,-7,GETDATE())
+)
+
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE
+    substr(c_phone, 0, 2) IN ('13', '31', '23', '29', '30', '18')
+    AND account_balance > (SELECT avg_bal FROM CountryAverages WHERE country_code = substr(c_phone, 0, 2))
+    AND account_balance > 0
+    AND c.cust_id NOT IN (SELECT cust_id FROM RecentOrders)
+
+This query does the following:
+
+- Uses a CTE to compute the average positive balance per country.
+
+- Then in the main SELECT, it filters customers whose phone number's first two digits are in the target countries.
+
+- For each such customer, check if their account_balance is greater than 0 and also greater than the country's avg_bal (from CountryAverages).
+
+- Also ensures that they haven't made any orders in the past seven years by excluding those in RecentOrders.
+
+This should give the desired result. I'll need to test whether this logic covers all conditions correctly, especially with regards to handling NULLs or ensuring that the CTE is properly scoped within the target countries.
+</think>
+
+To solve this problem, we need to identify customers from specific countries who have a positive account balance greater than their respective country's average and have not made any orders in the past seven years.
+
+### Approach
+1. **Identify Target Countries**: We are interested in customers whose phone numbers start with specific two-digit codes: '13', '31', '23', '29', '30', '18'.
+2. **Compute Average Positive Balance**: For each target country, compute the average of positive account balances.
+3. **Check Recent Orders**: Ensure that customers do not have any orders in the past seven years.
+
+The solution involves:
+1. Using a Common Table Expression (CTE) to calculate the average positive balance for each target country.
+2. Filtering out customers who have not made any recent orders within the last seven years.
+3. Selecting only those customers whose account balance is both positive and greater than their respective country's average.
+
+### Solution Code
+```sql
+WITH CountryAverages AS (
+    SELECT substr(c_phone, 0, 2) AS country_code,
+        avg_bal = AVG(CASE WHEN account_balance > 0 THEN account_balance ELSE 0 END)
+    FROM CUSTOMER c
+    WHERE substr(c_phone, 0, 2) IN ('13', '31', '23', '29', '30', '18')
+    GROUP BY country_code
+),
+RecentOrders AS (
+    SELECT cust_id
+    FROM ORDERS o
+    WHERE date >= DATEADD(y, -7, GETDATE())
+)
+SELECT c.cust_id
+FROM CUSTOMER c
+WHERE
+    substr(c_phone, 0, 2) IN ('13', '31', '23', '29', '30', '18')
+    AND account_balance > 0
+    AND account_balance > (SELECT avg_bal FROM CountryAverages WHERE country_code = substr(c_phone, 0, 2))
+    AND c.cust_id NOT IN (SELECT cust_id FROM RecentOrders)
+```
+
+### Explanation
+- **CountryAverages CTE**: This calculates the average of positive `account_balance` values for each customer whose phone number starts with one of the specified two-digit codes. It groups these averages by country.
+- **RecentOrders CTE**: This identifies customers who have made orders in the past seven years. By excluding these from our results, we ensure that only customers without recent orders are considered.
+- **Main Query**: The final query combines all conditions: it selects customers from target countries with a positive balance greater than their country's average and ensures they have not made any recent purchases.
+
+This approach efficiently narrows down the customer list to those meeting all specified criteria.
+
+>>> Send a message (/? for help)
+
