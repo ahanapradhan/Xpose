@@ -33,13 +33,16 @@ class Translator:
     def doJob(self, text):
         pass
 
+    def give_filename(self, qkey):
+        return f"{self.name}_{qkey}_{self.output_filename}"
+
     def doJob_write(self, question, qkey, sql, append=False):
         print(question)
         working_dir = self.working_dir_path
         if not os.path.exists(working_dir):
             os.makedirs(working_dir)
 
-        outfile = f"{working_dir}{self.name}_{qkey}_{self.output_filename}"
+        outfile = f"{working_dir}{self.give_filename(qkey)}"
 
         orig_out = sys.stdout
         mode = 'a' if append else 'w'
@@ -97,8 +100,8 @@ class Gpt4OTranslator(Translator):
         )
         reply = response.choices[0].message.content
         print(reply)
-        c_token = self.count_tokens(text)
-        print(f"\n-- Prompt Token count = {c_token}\n")
+        # c_token = self.count_tokens(text)
+        # print(f"\n-- Prompt Token count = {c_token}\n")
         return reply
 
 
@@ -132,5 +135,3 @@ if __name__ == '__main__':
                 f.writelines(lines)
 
             print(f"Processed: {filename}")
-
-

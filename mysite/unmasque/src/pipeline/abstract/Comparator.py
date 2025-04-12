@@ -86,7 +86,7 @@ class Comparator(AppExtractorBase):
         return len1, len2
 
     def create_table_from_Qh(self, Q_h):
-        #self.app.data_schema = self.connectionHelper.config.user_schema
+        # self.app.data_schema = self.connectionHelper.config.user_schema
         self.connectionHelper.execute_sql(
             [self.connectionHelper.queries.drop_table(self.get_fully_qualified_table_name(self.r_h)),
              f"Create unlogged table {self.get_fully_qualified_table_name(self.r_h)} "
