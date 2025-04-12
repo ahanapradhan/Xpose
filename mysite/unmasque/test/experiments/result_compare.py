@@ -37,11 +37,12 @@ if __name__ == '__main__':
                     qh_query = ' '.join(line.strip() for line in qh if line.strip())  # removes newlines and empty lines
                     print("QH Query:")
                     print(qh_query)
+                    res = conn.execute_sql_fetchall(qh_query)
                     qe_query = ' '.join(line.strip() for line in xfe_qe if line.strip())  # removes newlines and empty lines
                     print("QE Query:")
                     print(qe_query)
 
                     check = rc.match(qh_query, qe_query)
                     with open(output_filepath, 'a', encoding='utf-8') as fo:
-                        fo.writelines(f"{qkey} {str(check)}\n")
+                        fo.writelines(f"{qkey} {str(len(res) >= 2)} {str(check)}\n")
             break
