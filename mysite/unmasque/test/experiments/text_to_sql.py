@@ -5,9 +5,6 @@ from abc import abstractmethod
 import tiktoken
 from openai import OpenAI
 
-# gets API Key from environment variable OPENAI_API_KEY
-client = OpenAI()
-
 
 def create_query_translator(gpt_model):
     if gpt_model == "o3":
@@ -24,6 +21,7 @@ class Translator:
         self.working_dir_path = "../gpt_sql/"
         self.output_filename = "gpt_sql.sql"
         self.qfolder_path = '../gpt_text'
+        self.client = None
 
     @abstractmethod
     def count_tokens(self, text):
@@ -31,7 +29,8 @@ class Translator:
 
     @abstractmethod
     def doJob(self, text):
-        pass
+        # gets API Key from environment variable OPENAI_API_KEY
+        self.client = OpenAI()
 
     def give_filename(self, qkey):
         return f"{self.name}_{qkey}_{self.output_filename}"
@@ -64,7 +63,8 @@ class GptO3MiniTranslator(Translator):
         raise NotImplementedError
 
     def doJob(self, text):
-        response = client.chat.completions.create(
+        super().doJob(text)
+        response = self.client.chat.completions.create(
             model=self.name,
             messages=[
                 {
@@ -89,7 +89,8 @@ class Gpt4OTranslator(Translator):
         return len(tokens)
 
     def doJob(self, text):
-        response = client.chat.completions.create(
+        super().doJob(text)
+        response = self.client.chat.completions.create(
             model=self.name,
             messages=[
                 {
