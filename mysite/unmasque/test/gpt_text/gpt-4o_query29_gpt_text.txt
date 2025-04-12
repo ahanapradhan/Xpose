@@ -1,0 +1,4 @@
+"This SQL query is designed to provide a business manager with a detailed analysis of item sales and returns across different stores for the month of April 1998. It retrieves the average quantities of items sold in stores, returned, and sold through catalogs, grouped by item ID and description, as well as store ID and name. The data is filtered to include sales and returns within a specific timeframe, and the results are sorted by item and store details, with a limit of 100 records for review."
+
+-- Prompt Token count = 509
+

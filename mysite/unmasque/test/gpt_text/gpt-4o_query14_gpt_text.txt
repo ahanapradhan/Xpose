@@ -1,0 +1,4 @@
+"These SQL queries are designed to analyze sales data across different channels (store, catalog, and web) for items that were sold consistently across all channels between 1999 and 2001. The first query calculates the total sales and number of sales transactions for each item brand, class, and category in November 2001, filtering for those with sales exceeding the average sales value calculated over the three-year period. The results are grouped by channel and item attributes, with a limit of 100 records. The second query compares sales performance for the same set of items during the week of December 25th in 2000 and 1999, focusing on store sales and identifying items with sales above the average. The results are ordered by channel and item attributes, also limited to 100 records."
+
+-- Prompt Token count = 2903
+

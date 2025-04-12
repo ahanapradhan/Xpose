@@ -1,0 +1,4 @@
+"This SQL query is designed to compare weekly sales data from web and catalog sales channels for each day of the week between two consecutive years, 1998 and 1999. It aggregates sales prices by day of the week for each week in both years, then calculates the ratio of sales for each day of the week in 1998 to the corresponding day in 1999, offset by 53 weeks to align the weeks from both years. The result is a week-by-week comparison of sales performance for each day of the week, providing insights into sales trends and growth or decline patterns over the two-year period."
+
+-- Prompt Token count = 1001
+

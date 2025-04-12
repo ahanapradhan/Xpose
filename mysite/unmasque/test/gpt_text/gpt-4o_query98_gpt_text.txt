@@ -1,0 +1,4 @@
+"This SQL query generates a report that provides insights into the sales performance of items in the 'Men', 'Home', and 'Electronics' categories over a specified 30-day period starting from May 18, 2000. It lists each item's ID, description, category, class, and current price, along with the total revenue generated from sales. Additionally, it calculates the revenue ratio of each item within its class, allowing for a comparison of each item's contribution to the total sales revenue of its class. The results are organized by category, class, item ID, item description, and revenue ratio, offering a detailed view of sales distribution and performance across different product segments."
+
+-- Prompt Token count = 380
+

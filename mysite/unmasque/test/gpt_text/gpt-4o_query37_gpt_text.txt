@@ -1,0 +1,4 @@
+"This SQL query retrieves a list of up to 100 items from a database, including their IDs, descriptions, and current prices, where the price is between $20 and $50. The items are selected based on specific criteria: they must have been in inventory with a quantity on hand between 100 and 500 units during a 60-day period starting from March 6, 1999, and must be associated with certain manufacturer IDs (843, 815, 850, 840). The results are grouped by item ID, description, and price, and are ordered by item ID."
+
+-- Prompt Token count = 297
+

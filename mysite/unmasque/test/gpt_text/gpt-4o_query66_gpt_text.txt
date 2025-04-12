@@ -1,0 +1,4 @@
+"Based on the SQL query provided, the business operation involves generating a comprehensive report of sales performance for various warehouses in the year 1998. The report includes details such as warehouse name, size in square feet, location (city, county, state, country), and the shipping carriers used. It aggregates monthly sales and net sales data, both in total and per square foot, for each warehouse. The data is sourced from web and catalog sales, filtered for specific shipping carriers ('ZOUROS' and 'ZHOU') and a particular time range. The results are grouped by warehouse and year, and the top 100 records are ordered by warehouse name for easy analysis and comparison."
+
+-- Prompt Token count = 3796
+

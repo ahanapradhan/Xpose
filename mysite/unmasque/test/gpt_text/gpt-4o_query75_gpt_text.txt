@@ -1,0 +1,4 @@
+"Analyzing sales data for men's category products, this SQL query compares sales performance across different sales channels (catalog, store, and web) for the years 2001 and 2002. It calculates the total sales count and sales amount for each brand, class, category, and manufacturer, accounting for returns. The query identifies the top 100 instances where there is a significant decrease in sales count (more than 10%) from 2001 to 2002, providing insights into declining product performance for business managers to address potential issues in the men's product line."
+
+-- Prompt Token count = 1168
+

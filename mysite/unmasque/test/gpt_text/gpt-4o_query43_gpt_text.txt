@@ -1,0 +1,4 @@
+"This SQL query is designed to generate a report that summarizes the total sales for each day of the week for various stores in a specific time zone (GMT offset -5) for the year 2002. It retrieves the store name and ID, and calculates the total sales for each day from Sunday to Saturday. The results are grouped by store name and ID, and then ordered by store name, store ID, and sales for each day of the week. The query limits the output to the top 100 records, providing a concise view of weekly sales performance across different stores."
+
+-- Prompt Token count = 547
+

@@ -1,0 +1,4 @@
+"This SQL query provides a summary report of catalog sales performance by analyzing the shipping times from various warehouses. It categorizes the sales based on the time taken to ship products after they were sold, dividing them into five time brackets: within 30 days, 31-60 days, 61-90 days, 91-120 days, and over 120 days. The report is grouped by the first 20 characters of the warehouse name, the type of shipping mode, and the call center name, and it is limited to the top 100 results. This analysis helps in understanding the efficiency of shipping operations and identifying potential areas for improvement in logistics and customer service."
+
+-- Prompt Token count = 633
+

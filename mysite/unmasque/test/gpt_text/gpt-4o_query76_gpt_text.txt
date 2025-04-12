@@ -1,0 +1,4 @@
+"This SQL query aggregates sales data from three different sales channels—store, web, and catalog—by year, quarter, and item category, where certain demographic or warehouse keys are null. It calculates the total number of sales transactions and the total sales amount for each combination of channel, year, quarter, and category. The results are then sorted by channel, column name, year, quarter, and category, and the output is limited to the top 100 records. This analysis helps in understanding sales performance across different channels and time periods, focusing on specific product categories."
+
+-- Prompt Token count = 606
+

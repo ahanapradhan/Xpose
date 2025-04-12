@@ -1,0 +1,4 @@
+"This SQL query identifies the top 100 customers who have shown a greater increase in their web sales compared to their store sales from the year 1999 to 2000. It calculates the total sales for each customer for both store and web sales for the years 1999 and 2000, and then compares the growth rates of web sales against store sales. The query selects customers whose web sales growth rate surpasses their store sales growth rate, providing their customer ID, first name, and last name, and orders the results by these fields."
+
+-- Prompt Token count = 894
+

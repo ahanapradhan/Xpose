@@ -1,0 +1,4 @@
+"This SQL query is designed to generate a report that lists the last names, first names, and city of residence (up to 30 characters) of customers, along with their ticket numbers, total coupon amounts, and net profits from store sales. The data is filtered to include only sales made on Sundays (day of the week = 1) during the years 2000, 2001, and 2002, in stores with 200 to 295 employees. Additionally, it focuses on households with either eight dependents or more than four vehicles. The results are sorted by customer last name, first name, city, and profit, and the output is limited to the top 100 entries."
+
+-- Prompt Token count = 447
+

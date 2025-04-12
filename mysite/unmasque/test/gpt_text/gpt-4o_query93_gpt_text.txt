@@ -1,0 +1,4 @@
+"This SQL query calculates the total actual sales for each customer, considering any returns, from a store sales database. It does this by joining sales and returns data, adjusting sales figures by subtracting the value of returned items when applicable. The query specifically filters for transactions associated with a particular return reason, labeled 'reason 38'. The results are grouped by customer and ordered by total sales and customer identifier, with the top 100 customers by sales being displayed."
+
+-- Prompt Token count = 272
+

@@ -1,0 +1,4 @@
+"This SQL query identifies and retrieves detailed information about customers in Texas who returned items purchased from catalogs in 1999 and whose total return amount, including tax, exceeds 120% of the average return amount for their state. The information includes customer identification, name, address details, and the total return amount. The results are ordered by customer details and limited to the top 100 entries."
+
+-- Prompt Token count = 631
+

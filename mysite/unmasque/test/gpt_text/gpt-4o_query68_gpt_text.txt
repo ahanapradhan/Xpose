@@ -1,0 +1,4 @@
+"This SQL query retrieves a list of up to 100 customers who made purchases in stores located in either Fairview or Midway during the first two days of any month in the years 1998, 1999, or 2000. The customers are selected based on specific household demographics, such as having eight dependents or owning three vehicles. The query provides details including the customer's last and first names, their current city of residence, the city where the purchase was made, the sales ticket number, the total extended sales price, the total extended tax, and the list price of the items purchased. The results are ordered by the customer's last name and the sales ticket number, and only include customers whose current city of residence is different from the city where the purchase was made."
+
+-- Prompt Token count = 524
+

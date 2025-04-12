@@ -1,0 +1,4 @@
+"This SQL query identifies and retrieves a list of up to 100 customers who have shown a significant increase in their total sales from store, catalog, and web channels between the years 2001 and 2002. It calculates the total sales for each customer by summing up the adjusted sales prices from each channel, and then compares the growth rates of these sales across the different channels. The query specifically selects customers whose catalog sales growth rate surpasses both their store and web sales growth rates, ensuring that only those with positive sales in 2001 are considered. The results are ordered by customer ID, first name, last name, and preferred customer flag."
+
+-- Prompt Token count = 1802
+

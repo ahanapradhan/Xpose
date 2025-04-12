@@ -1,0 +1,4 @@
+"This SQL query is designed to analyze sales performance by manufacturer for specific product categories and brands over a one-year period. It calculates the total sales and average quarterly sales for each manufacturer, focusing on items in the 'Books', 'Children', 'Electronics', 'Women', 'Music', and 'Men' categories with specific classes and brands. The query filters results to include only those manufacturers whose sales deviate by more than 10% from their average quarterly sales, indicating significant sales fluctuations. The results are sorted by average quarterly sales, total sales, and manufacturer ID, and the top 100 records are returned for further business analysis."
+
+-- Prompt Token count = 664
+

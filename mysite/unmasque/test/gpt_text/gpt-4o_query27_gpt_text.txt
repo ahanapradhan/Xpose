@@ -1,0 +1,4 @@
+"This SQL query is designed to generate a report that provides insights into the average sales performance of items sold in stores located in Tennessee during the year 2000. It specifically focuses on male customers who are divorced and have a college education. The report includes the average quantity sold, list price, coupon amount, and sales price for each item, grouped by item ID and state, with a rollup to include subtotals. The results are ordered by item ID and state, and the output is limited to the top 100 records."
+
+-- Prompt Token count = 351
+

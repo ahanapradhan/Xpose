@@ -1,0 +1,4 @@
+"This SQL query is designed to generate a report that provides insights into the sales performance of a specific manufacturer's brands during the month of November across different years. It aggregates the total discount amounts applied to store sales for each brand, identified by brand ID and name, and filters the data to include only those items manufactured by the manufacturer with ID 427. The results are grouped by year and brand, sorted by year and the total discount amount in descending order, and limited to the top 100 entries. This report can help business managers understand which brands are most successful in terms of discount-driven sales during November."
+
+-- Prompt Token count = 240
+

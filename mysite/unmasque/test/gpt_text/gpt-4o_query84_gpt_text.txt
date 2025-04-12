@@ -1,0 +1,4 @@
+"This SQL query retrieves a list of up to 100 customers who reside in the city of Green Acres and have a household income within a specified range. The results include each customer's ID and full name, formatted as 'last name, first name'. The query filters data by joining multiple tables, including customer, customer address, customer demographics, household demographics, income band, and store returns, to ensure that only customers meeting the specified income criteria and demographic details are selected. The final list is ordered by customer ID."
+
+-- Prompt Token count = 268
+

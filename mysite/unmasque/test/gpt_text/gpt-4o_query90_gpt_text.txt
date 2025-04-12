@@ -1,0 +1,4 @@
+"This SQL query calculates the ratio of web sales transactions that occur during the afternoon (12 PM to 1 PM) to those that occur in the evening (8 PM to 9 PM) for households with exactly eight dependents and web pages with a character count between 5000 and 5200. The result, which is ordered by the calculated ratio, provides insights into the time-based purchasing behavior of a specific demographic segment, helping to understand peak sales periods and potentially guide marketing strategies. The query limits the output to the top 100 results based on the calculated ratio."
+
+-- Prompt Token count = 434
+

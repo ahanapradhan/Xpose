@@ -1,0 +1,4 @@
+"Based on the SQL query provided, the business operation involves identifying customers from the state of Indiana who returned products purchased online in the year 2000 and whose total return amount exceeds 120% of the average return amount for that state. The query retrieves detailed customer information, including their ID, name, salutation, preferred customer status, birth details, country of birth, login, email address, and last review date, along with their total return amount. The results are ordered by customer details and limited to the top 100 entries, providing insights into high-return customers for targeted business strategies."
+
+-- Prompt Token count = 561
+

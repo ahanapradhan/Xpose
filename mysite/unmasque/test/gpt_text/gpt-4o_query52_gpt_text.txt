@@ -1,0 +1,4 @@
+"This SQL query is designed to generate a report for a business manager that summarizes the total sales revenue (ext_price) for different brands managed by a specific manager (manager_id = 1) during November 1999. The report groups the sales data by year, brand, and brand ID, and orders the results by year, descending sales revenue, and brand ID. The output is limited to the top 100 results, providing insights into the most successful brands in terms of sales for that specific time period."
+
+-- Prompt Token count = 251
+

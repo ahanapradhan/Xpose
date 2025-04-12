@@ -1,0 +1,4 @@
+"During a specified 60-day period starting from March 1, 2000, this query analyzes online sales data for a company named 'pri' to identify unique orders shipped to customers in Montana. It calculates the total number of distinct orders, the total shipping costs, and the total net profit for these orders. The orders considered are those that were shipped from multiple warehouses and have not been returned. The results are sorted by the number of distinct orders and limited to the top 100 entries."
+
+-- Prompt Token count = 404
+

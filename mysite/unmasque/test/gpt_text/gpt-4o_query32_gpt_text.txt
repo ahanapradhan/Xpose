@@ -1,0 +1,4 @@
+"To provide insights into potential over-discounting, this SQL query calculates the total excess discount amount for items manufactured by a specific manufacturer (with ID 610) that were sold through catalog sales within a 90-day period starting from March 4, 2001. It identifies sales transactions where the discount amount exceeds 130% of the average discount amount for the same period, highlighting instances of unusually high discounts. The result is limited to the first 100 records, offering a focused view of significant discount deviations for managerial review."
+
+-- Prompt Token count = 315
+

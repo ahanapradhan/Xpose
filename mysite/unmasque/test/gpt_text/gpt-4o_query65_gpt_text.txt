@@ -1,0 +1,4 @@
+"Based on the SQL query provided, the business analysis identifies underperforming items in various stores by comparing their sales revenue to the average revenue of all items in the same store over a specified year-long period. The query retrieves the store name, item description, revenue, current price, wholesale cost, and brand for items whose sales revenue is less than or equal to 10% of the average revenue for that store. The results are sorted by store name and item description, and the output is limited to the top 100 entries, providing a focused view of potentially low-performing products that may require strategic attention or inventory adjustments."
+
+-- Prompt Token count = 452
+

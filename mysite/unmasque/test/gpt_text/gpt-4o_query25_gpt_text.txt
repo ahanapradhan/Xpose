@@ -1,0 +1,4 @@
+"This SQL query is designed to generate a report that provides a summary of the maximum net profit from store sales, the maximum net loss from store returns, and the maximum net profit from catalog sales for each item sold in stores during April 2001. The report includes details such as item ID, item description, store ID, and store name. The data is filtered to include only transactions and returns that occurred between April and October 2001. The results are grouped by item and store, and the output is limited to the top 100 records, sorted by item and store identifiers."
+
+-- Prompt Token count = 508
+

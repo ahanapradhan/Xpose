@@ -1,0 +1,4 @@
+"This SQL query is designed to generate a list of customers who have made between one and five purchases, specifically targeting those with high or low buying potential and at least one vehicle, in Williamson County stores during the first two days of any month in the years 2000, 2001, or 2002. The output includes the customer's last name, first name, salutation, preferred customer status, and the ticket number of the sales transaction, sorted by the number of purchases in descending order and then by last name in ascending order."
+
+-- Prompt Token count = 508
+

@@ -1,0 +1,4 @@
+"This SQL query is designed to analyze item return data across three sales channels: store, catalog, and web, for specific dates in 1999. It calculates the total quantity of items returned in each channel and determines the percentage contribution of each channel to the total returns. The query then computes an average return quantity across the channels for each item. The results are sorted by item ID and store return quantity, and the output is limited to the top 100 items. This analysis helps in understanding the distribution and impact of returns across different sales channels for strategic decision-making."
+
+-- Prompt Token count = 916
+

@@ -1,0 +1,4 @@
+"Based on the SQL query provided, the business report aims to analyze the shipping performance of web sales by categorizing the delivery times into different time frames: within 30 days, 31-60 days, 61-90 days, 91-120 days, and over 120 days. The data is aggregated and grouped by warehouse name (limited to the first 20 characters), shipping mode type, and website name, for a specific 12-month period. The report will provide insights into the efficiency of shipping operations across different warehouses, shipping modes, and websites, helping the business manager to identify areas for improvement in the logistics and supply chain processes. The results are sorted and limited to the top 100 entries for concise analysis."
+
+-- Prompt Token count = 608
+

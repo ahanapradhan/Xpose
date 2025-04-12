@@ -1,0 +1,4 @@
+"This SQL query is designed to generate a report that identifies U.S. states where there are at least 10 sales transactions in July 1998, involving items priced significantly higher than the average price within their category. The report lists these states along with the count of such transactions, sorted in ascending order of transaction count, and displays up to 100 states. This analysis helps in understanding regional sales performance for premium-priced items during the specified period."
+
+-- Prompt Token count = 308
+

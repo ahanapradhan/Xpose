@@ -1,0 +1,4 @@
+"This SQL query retrieves a list of up to 100 items from a database, focusing on those with a current price between $63 and $93, manufactured by specific manufacturers (IDs 57, 293, 427, 320), and having an inventory quantity on hand between 100 and 500 units. The data is filtered for items that were in stock during a 60-day period starting from April 27, 1998. The results are grouped by item ID, description, and current price, and are ordered by item ID."
+
+-- Prompt Token count = 316
+

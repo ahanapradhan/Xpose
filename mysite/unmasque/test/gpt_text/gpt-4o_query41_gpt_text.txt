@@ -1,0 +1,4 @@
+"Identify and list up to 100 unique product names from a database of items, specifically focusing on products manufactured by companies with IDs ranging from 765 to 805. The selection criteria include products categorized under 'Women' or 'Men' with specific combinations of color, unit, and size attributes. The query ensures that only products meeting these detailed attribute conditions are considered, and the results are ordered alphabetically by product name."
+
+-- Prompt Token count = 931
+

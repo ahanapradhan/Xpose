@@ -1,0 +1,4 @@
+"These SQL queries are designed to analyze sales data from both store and online channels for the years 1998 to 2001, focusing on identifying frequently sold items and top-performing customers. The first query calculates the total sales for June 1998 from catalog and web sales, specifically for items that were frequently sold in stores and purchased by the best customers, defined as those whose sales exceed 95% of the maximum store sales. The second query retrieves the names and sales figures of these top customers for the same period, providing a detailed view of customer performance and item popularity. This analysis helps in understanding customer behavior and product demand, aiding in strategic decision-making for marketing and inventory management."
+
+-- Prompt Token count = 1697
+

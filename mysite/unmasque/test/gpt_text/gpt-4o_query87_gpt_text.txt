@@ -1,0 +1,4 @@
+"Identify the number of unique customers who made purchases in-store over a specific one-year period but did not make any purchases through catalog or online sales channels during the same timeframe."
+
+-- Prompt Token count = 320
+

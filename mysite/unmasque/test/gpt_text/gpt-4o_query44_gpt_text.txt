@@ -1,0 +1,4 @@
+"Based on the provided SQL query, the business analysis identifies the top 10 best and worst performing products in terms of average net profit from a specific store (store_sk = 4). The query ranks products by their average net profit, both in ascending and descending order, and then matches these rankings to provide a comparative list of the best and worst performing products. The results are limited to the top 100 entries, and the product names are retrieved from the 'item' table for both best and worst performers. This analysis helps in understanding product performance and making informed decisions on inventory and sales strategies."
+
+-- Prompt Token count = 615
+
