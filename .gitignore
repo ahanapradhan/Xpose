@@ -22,5 +22,5 @@ mysite/unmasque/src/pipeline/abstract/__init__.py
 *.ini
 mysite/unmasque/test/regression/extraction_result.sql
 *.csv
-*.sql
 mysite/extraction_result.sql
+/mysite/unmasque/test/tpcds-queries/.idea/
