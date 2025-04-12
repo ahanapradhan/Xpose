@@ -24,7 +24,7 @@ def generate_random_dates():
 class ExtractionTestCase(BaseTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.conn.config.detect_union = True
+        self.conn.config.detect_union = False
         self.conn.config.detect_nep = False
         self.conn.config.detect_oj = False
         self.conn.config.detect_or = False
@@ -117,6 +117,40 @@ ORDER  BY cd_gender,
           cd_dep_count, 
           cd_dep_employed_count, 
           cd_dep_college_count
+LIMIT 100; """
+        self.conn.config.detect_union = False
+        self.conn.config.detect_or = True
+        self.do_test(query)
+
+    def test_Q12(self):
+        query = """SELECT
+         i_item_id , 
+         i_item_desc , 
+         i_category , 
+         i_class , 
+         i_current_price , 
+         Sum(ws_ext_sales_price)                                                              AS itemrevenue ,
+         Sum(ws_ext_sales_price)*100/Sum(Sum(ws_ext_sales_price)) OVER (partition BY i_class) AS revenueratio
+FROM     web_sales , 
+         item , 
+         date_dim 
+WHERE    ws_item_sk = i_item_sk 
+AND      i_category IN ('Home', 
+                        'Men', 
+                        'Women') 
+AND      ws_sold_date_sk = d_date_sk 
+AND      d_date BETWEEN Cast('2000-05-11' AS DATE) AND      ( 
+                  Cast('2000-05-11' AS DATE) + INTERVAL '30' day) 
+GROUP BY i_item_id , 
+         i_item_desc , 
+         i_category , 
+         i_class , 
+         i_current_price 
+ORDER BY i_category , 
+         i_class , 
+         i_item_id , 
+         i_item_desc , 
+         revenueratio 
 LIMIT 100; """
         self.conn.config.detect_union = False
         self.conn.config.detect_or = True
@@ -466,6 +500,113 @@ LIMIT 100;
         self.conn.config.detect_union = True
         self.do_test(query)
 
+    def test_Q13(self):
+        query = """SELECT Avg(ss_quantity), 
+       Avg(ss_ext_sales_price), 
+       Avg(ss_ext_wholesale_cost), 
+       Sum(ss_ext_wholesale_cost) 
+FROM   store_sales, 
+       store, 
+       customer_demographics, 
+       household_demographics, 
+       customer_address, 
+       date_dim 
+WHERE  s_store_sk = ss_store_sk 
+       AND ss_sold_date_sk = d_date_sk 
+       AND d_year = 2001 
+       AND ( ( ss_hdemo_sk = hd_demo_sk 
+               AND cd_demo_sk = ss_cdemo_sk 
+               AND cd_marital_status = 'U' 
+               AND cd_education_status = 'Advanced Degree' 
+               AND ss_sales_price BETWEEN 100.00 AND 150.00 
+               AND hd_dep_count = 3 ) 
+              OR ( ss_hdemo_sk = hd_demo_sk 
+                   AND cd_demo_sk = ss_cdemo_sk 
+                   AND cd_marital_status = 'M' 
+                   AND cd_education_status = 'Primary' 
+                   AND ss_sales_price BETWEEN 50.00 AND 100.00 
+                   AND hd_dep_count = 1 ) 
+              OR ( ss_hdemo_sk = hd_demo_sk 
+                   AND cd_demo_sk = ss_cdemo_sk 
+                   AND cd_marital_status = 'D' 
+                   AND cd_education_status = 'Secondary' 
+                   AND ss_sales_price BETWEEN 150.00 AND 200.00 
+                   AND hd_dep_count = 1 ) ) 
+       AND ( ( ss_addr_sk = ca_address_sk 
+               AND ca_country = 'United States' 
+               AND ca_state IN ( 'AZ', 'NE', 'IA' ) 
+               AND ss_net_profit BETWEEN 100 AND 200 ) 
+              OR ( ss_addr_sk = ca_address_sk 
+                   AND ca_country = 'United States' 
+                   AND ca_state IN ( 'MS', 'CA', 'NV' ) 
+                   AND ss_net_profit BETWEEN 150 AND 300 ) 
+              OR ( ss_addr_sk = ca_address_sk 
+                   AND ca_country = 'United States' 
+                   AND ca_state IN ( 'GA', 'TX', 'NJ' ) 
+                   AND ss_net_profit BETWEEN 50 AND 250 ) ); """
+        self.conn.config.detect_or = True
+        self.conn.config.detect_union = False
+        self.do_test(query)
+
+    def test_Q15(self):
+        query = """SELECT ca_zip, 
+               Sum(cs_sales_price) 
+FROM   catalog_sales, 
+       customer, 
+       customer_address, 
+       date_dim 
+WHERE  cs_bill_customer_sk = c_customer_sk 
+       AND c_current_addr_sk = ca_address_sk 
+       AND ( Substr(ca_zip, 1, 5) IN ( '85669', '86197', '88274', '83405', 
+                                       '86475', '85392', '85460', '80348', 
+                                       '81792' ) 
+              OR ca_state IN ( 'CA', 'WA', 'GA' ) 
+              OR cs_sales_price > 500 ) 
+       AND cs_sold_date_sk = d_date_sk 
+       AND d_qoy = 1 
+       AND d_year = 1998 
+GROUP  BY ca_zip 
+ORDER  BY ca_zip
+LIMIT 100; """
+        self.conn.config.detect_or = True
+        self.conn.config.detect_union = False
+        self.do_test(query)
+
+    def test_Q16(self):
+        query = """SELECT
+         Count(DISTINCT cs_order_number) AS order_count ,
+         Sum(cs_ext_ship_cost)           AS total_shipping_cost ,
+         Sum(cs_net_profit)              AS total_net_profit
+FROM     catalog_sales cs1 ,
+         date_dim ,
+         customer_address ,
+         call_center
+WHERE    d_date BETWEEN '2002-3-01' AND      (
+                  Cast('2002-3-01' AS DATE) + INTERVAL '60' day)
+AND      cs1.cs_ship_date_sk = d_date_sk
+AND      cs1.cs_ship_addr_sk = ca_address_sk
+AND      ca_state = 'IA'
+AND      cs1.cs_call_center_sk = cc_call_center_sk
+AND      cc_county IN ('Williamson County',
+                       'Williamson County',
+                       'Williamson County',
+                       'Williamson County',
+                       'Williamson County' )
+AND      EXISTS
+         (
+                SELECT *
+                FROM   catalog_sales cs2
+                WHERE  cs1.cs_order_number = cs2.cs_order_number
+                AND    cs1.cs_warehouse_sk <> cs2.cs_warehouse_sk)
+AND      NOT EXISTS
+         (
+                SELECT *
+                FROM   catalog_returns cr1
+                WHERE  cs1.cs_order_number = cr1.cr_order_number)
+ORDER BY count(DISTINCT cs_order_number)
+LIMIT 100;"""
+        self.do_test(query)
+
     def test_Q1(self):
         query = """
 SELECT c_customer_id 
@@ -696,6 +837,7 @@ ORDER  BY d_week_seq1;"""
         self.do_test(query)
 
     def test_Q6(self):
+        # out of scope due to having clause. Customer table is not getting D1.
         self.conn.config.detect_union = False
         query = \
             """SELECT a.ca_state state, 
@@ -710,9 +852,9 @@ WHERE  a.ca_address_sk = c.c_current_addr_sk
        AND s.ss_sold_date_sk = d.d_date_sk 
        AND s.ss_item_sk = i.i_item_sk 
        AND d.d_month_seq = (SELECT DISTINCT ( d_month_seq ) 
-                            FROM   date_dim 
-                            WHERE  d_year = 1998 
-                                   AND d_moy = 7) 
+                            FROM   date_dim1 
+                            WHERE  d1_year = 1998 
+                                   AND d1_moy = 7) 
        AND i.i_current_price > 1.2 * (SELECT Avg(j.i_current_price) 
                                       FROM   item j 
                                       WHERE  j.i_category = i.i_category) 
@@ -720,6 +862,71 @@ GROUP  BY a.ca_state
 HAVING Count(*) >= 10 
 ORDER  BY cnt;"""
         self.do_test(query)
+
+    def test_Q9(self):
+        self.conn.config.detect_union = False
+        self.do_test("""SELECT CASE 
+         WHEN (SELECT Count(*) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 1 AND 20) > 3672 THEN 
+         (SELECT Avg(ss_ext_list_price) 
+          FROM   store_sales 
+          WHERE 
+         ss_quantity BETWEEN 1 AND 20) 
+         ELSE (SELECT Avg(ss_net_profit) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 1 AND 20) 
+       END bucket1, 
+       CASE 
+         WHEN (SELECT Count(*) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 21 AND 40) > 3392 THEN 
+         (SELECT Avg(ss_ext_list_price) 
+          FROM   store_sales 
+          WHERE 
+         ss_quantity BETWEEN 21 AND 40) 
+         ELSE (SELECT Avg(ss_net_profit) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 21 AND 40) 
+       END bucket2, 
+       CASE 
+         WHEN (SELECT Count(*) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 41 AND 60) > 32784 THEN 
+         (SELECT Avg(ss_ext_list_price) 
+          FROM   store_sales 
+          WHERE 
+         ss_quantity BETWEEN 41 AND 60) 
+         ELSE (SELECT Avg(ss_net_profit) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 41 AND 60) 
+       END bucket3, 
+       CASE 
+         WHEN (SELECT Count(*) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 61 AND 80) > 26032 THEN 
+         (SELECT Avg(ss_ext_list_price) 
+          FROM   store_sales 
+          WHERE 
+         ss_quantity BETWEEN 61 AND 80) 
+         ELSE (SELECT Avg(ss_net_profit) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 61 AND 80) 
+       END bucket4, 
+       CASE 
+         WHEN (SELECT Count(*) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 81 AND 100) > 23982 THEN 
+         (SELECT Avg(ss_ext_list_price) 
+          FROM   store_sales 
+          WHERE 
+         ss_quantity BETWEEN 81 AND 100) 
+         ELSE (SELECT Avg(ss_net_profit) 
+               FROM   store_sales 
+               WHERE  ss_quantity BETWEEN 81 AND 100) 
+       END bucket5 
+FROM   reason 
+WHERE  r_reason_sk = 1; """)
 
     def test_Q66(self):
         self.conn.config.detect_or = True
