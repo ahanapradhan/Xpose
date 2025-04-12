@@ -1,7 +1,10 @@
 import os
+import sys
 
-from ....unmasque.src.core.result_comparator import ResultComparator
-from ....unmasque.src.util.ConnectionFactory import ConnectionHelperFactory
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
+
+from mysite.unmasque.src.core.result_comparator import ResultComparator
+from mysite.unmasque.src.util.ConnectionFactory import ConnectionHelperFactory
 from text_to_sql import create_query_translator
 
 # Set your folder path here
@@ -37,7 +40,6 @@ for filename in os.listdir(qh_folder_path):
                 print("QE Query:")
                 print(qe_query)
 
-                check = True #rc.match(qh_query, qe_query)
+                check = True  # rc.match(qh_query, qe_query)
                 with open(output_filepath, 'a', encoding='utf-8') as fo:
                     fo.writelines(f"{qkey} {str(check)}\n")
-
