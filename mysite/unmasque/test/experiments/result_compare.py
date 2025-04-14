@@ -11,6 +11,14 @@ from text_to_sql import create_query_translator
 qh_folder_path = '../tpcds-queries'
 xfe_folder_path = '../gpt_sql'
 check_list = './xfe_checklist.txt'
+conn = ConnectionHelperFactory().createConnectionHelper()
+conn.config.schema = conn.config.user_schema
+conn.data_schema = conn.config.user_schema
+conn.schema = conn.config.user_schema
+print(conn.config.user_schema)
+print(conn.data_schema)
+print(conn.schema)
+print(conn.config.schema)
 
 
 def do_for_a_pair():
@@ -46,17 +54,17 @@ if __name__ == '__main__':
 
     # Loop through all files in the folder
     gpt_agent = create_query_translator("4o")
-    conn = ConnectionHelperFactory().createConnectionHelper()
     conn.connectUsingParams()
     rc = ResultComparator(conn, False)
 
     y_counter = 0
     n_counter = 0
     err_counter = 0
+    qh_error = 0
     output_filepath = os.path.join(check_list)
 
     for filename in os.listdir(qh_folder_path):
-        if filename.endswith('.sql') and filename == 'query23.sql':
+        if filename.endswith('.sql') and filename == 'q0.sql':
             keys = filename.split('.')
             qkey = keys[0]
             qh_file_path = os.path.join(qh_folder_path, filename)
@@ -67,21 +75,23 @@ if __name__ == '__main__':
                 qh = fh.readlines()
                 with open(xfe_file_path, 'r', encoding='utf-8') as fe:
                     xfe_qe = fe.readlines()
-                    #conn.begin_transaction()
+                    # conn.begin_transaction()
                     res, check = do_for_a_pair()
-                    #conn.rollback_transaction()
+                    # conn.rollback_transaction()
                     if check == "Error":
                         err_counter = err_counter + 1
                     elif check == "QH Error":
                         print(f"Check QH for {qkey}")
+                        qh_error = qh_error + 1
                     elif not check:
                         n_counter = n_counter + 1
                     else:
                         y_counter = y_counter + 1
                     with open(output_filepath, 'a', encoding='utf-8') as fo:
-                        fo.writelines(f"{qkey}\t\t{str(len(res) >= 2)}\t\t{str(check)}\n")
+                        fo.writelines(f"\n{qkey}\t\t{str(len(res) >= 2)}\t\t{str(check)}\n")
 
             # break
     with open(output_filepath, 'a', encoding='utf-8') as fo:
-        fo.writelines(f"\n\nOverall Stats\nillegal: {err_counter}\nmatch: {y_counter}\nmismatch: {n_counter}")
+        fo.writelines(
+            f"\n\nOverall Stats\nillegal QH: {qh_error}\nillegal QE: {err_counter}\nmatch: {y_counter}\nmismatch: {n_counter}")
     conn.closeConnection()

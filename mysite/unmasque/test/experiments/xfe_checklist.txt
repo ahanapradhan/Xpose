@@ -1,166 +1,62 @@
-query76		True		Error
-query15		True		Error
-query96		True		Error
-query46		True		Error
-query35		True		Error
-query19		True		Error
-query84		True		Error
-query63		True		Error
-query87		True		Error
-query23		False		QH Error
-query72		True		Error
-query97		False		QH Error
-query5		True		Error
-query90		False		QH Error
-query31		True		Error
-query80		True		Error
-query1		True		Error
-query77		False		QH Error
-query57		True		Error
-query11		True		Error
-query91		True		Error
-query51		True		Error
-query32		False		QH Error
-query29		True		Error
-query4		True		Error
-query22		True		Error
-query64		True		Error
-query66		True		Error
-query18		True		Error
-query67		False		QH Error
-query83		True		Error
-query78		True		Error
-query10		True		Error
-query70		False		QH Error
-query24		True		Error
-query36		False		QH Error
-query8		True		Error
-query34		True		Error
-query59		True		Error
-query39		True		Error
-query48		True		Error
-query56		True		Error
-query3		True		Error
-query12		True		Error
-query88		True		Error
-query89		True		Error
-query58		True		Error
-query75		True		Error
-query37		True		Error
-query98		False		QH Error
-query7		True		Error
-query30		False		QH Error
-query47		True		Error
-query38		True		Error
-query21		True		Error
-query33		True		Error
-query6		True		Error
-query27		True		Error
-query71		True		Error
-query52		True		Error
-query43		True		Error
-query81		False		QH Error
-query86		False		QH Error
-query44		True		Error
-query42		True		Error
-query26		True		Error
-query82		False		QH Error
-query92		False		QH Error
-query99		False		QH Error
-query69		True		Error
-query68		True		Error
-query61		True		Error
-query95		False		QH Error
-query41		True		Error
-query28		True		Error
-query65		True		Error
-q0		False		QH Error
-query60		True		Error
-query85		True		Error
-query53		True		Error
-query55		True		Error
-query16		False		QH Error
-query45		True		Error
-query25		True		Error
-query73		True		None
-query74		True		Error
-query62		False		QH Error
-query13		True		Error
-query2		False		QH Error
-query50		False		QH Error
-query40		True		Error
-query20		True		Error
-query49		True		Error
-query79		True		Error
-query54		True		Error
-query93		True		Error
-query9		True		Error
-query14		False		QH Error
-query17		True		Error
-query94		False		QH Error
-
-
-Overall Stats
-illegal: 76
-match: 0
-mismatch: 1query23		False		QH Error
+q0		True		True
 
 
 Overall Stats
 illegal: 0
-match: 0
-mismatch: 0query23		False		QH Error
+match: 1
+mismatch: 0q0		True		Error
 
 
 Overall Stats
-illegal: 0
+illegal QH: 0
+illegal QE: 1
 match: 0
-mismatch: 0query23		False		QH Error
+mismatch: 0
+q0		True		Error
 
 
 Overall Stats
-illegal: 0
+illegal QH: 0
+illegal QE: 1
 match: 0
-mismatch: 0query23		False		QH Error
+mismatch: 0
+q0		True		Error
 
 
 Overall Stats
-illegal: 0
+illegal QH: 0
+illegal QE: 1
 match: 0
-mismatch: 0query23		False		QH Error
+mismatch: 0
+q0		True		Error
 
 
 Overall Stats
-illegal: 0
+illegal QH: 0
+illegal QE: 1
 match: 0
-mismatch: 0query23		False		QH Error
+mismatch: 0
+q0		True		Error
 
 
 Overall Stats
-illegal: 0
+illegal QH: 0
+illegal QE: 1
 match: 0
-mismatch: 0query23		False		QH Error
+mismatch: 0
+q0		True		Error
 
 
 Overall Stats
-illegal: 0
+illegal QH: 0
+illegal QE: 1
 match: 0
-mismatch: 0query23		True		Error
+mismatch: 0
+q0		True		True
 
 
 Overall Stats
-illegal: 1
-match: 0
-mismatch: 0query23		True		Error
-
-
-Overall Stats
-illegal: 1
-match: 0
-mismatch: 0query23		True		Error
-
-
-Overall Stats
-illegal: 1
-match: 0
+illegal QH: 0
+illegal QE: 0
+match: 1
 mismatch: 0

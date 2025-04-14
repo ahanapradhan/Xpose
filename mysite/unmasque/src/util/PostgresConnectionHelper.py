@@ -24,7 +24,7 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
     def reset_timeout(self):
         return "set statement_timeout to DEFAULT;"
 
-    #def get_all_tables_for_restore(self):
+    # def get_all_tables_for_restore(self):
     #    res, desc = self.execute_sql_fetchall(
     #        self.get_sanitization_select_query(["SPLIT_PART(table_name, '_', 1) as original_name"],
     #                                           ["table_name like '%_backup'"]))
@@ -81,7 +81,7 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
 
     def cus_execute_sql_with_params(self, cur, sql, params, logger=None):
         for param in params:
-            #if logger is not None:
+            # if logger is not None:
             #    logger.debug(sql, param)
             try:
                 cur.execute(sql, param)
@@ -93,7 +93,7 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
 
     def execute_sql_fetchall(self, sql, logger=None):
         cur = self.get_cursor()
-        #if logger is not None:
+        # if logger is not None:
         #    logger.debug("..cur execute.." + sql)
         try:
             cur.execute(sql)
@@ -115,12 +115,12 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
     def cus_execute_sqls(self, cur, sqls, logger=None):
         # print(cur)
         for sql in sqls:
-           # if logger is not None:
-            #   logger.debug("..cur execute.." + sql)
+            if logger is not None:
+                logger.debug("..cur execute.." + sql)
             try:
                 cur.execute(sql)
             except psycopg2.ProgrammingError as e:
-                #print(e)
+                # print(e)
                 if logger is not None:
                     logger.error(e)
                     logger.error(e.diag.message_detail)
@@ -132,8 +132,8 @@ class PostgresConnectionHelper(AbstractConnectionHelper):
 
     def cur_execute_sql_fetch_one_0(self, cur, sql, logger=None):
         prev = None
-        #if logger is not None:
-         #   logger.debug(sql)
+        # if logger is not None:
+        #   logger.debug(sql)
         try:
             cur.execute(sql)
             prev = cur.fetchone()
