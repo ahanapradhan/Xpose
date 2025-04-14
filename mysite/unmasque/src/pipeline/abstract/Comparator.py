@@ -52,7 +52,7 @@ class Comparator(AppExtractorBase):
                                                self.connectionHelper.queries.create_view_as(
                                                    self.get_fully_qualified_table_name(self.r_e), Q_E)], self.logger)
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(f"Syntax error in Q_E: {str(e)}")
             return None
 
         # Size of the table
