@@ -3,7 +3,6 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
-from mysite.unmasque.src.core.result_comparator import ResultComparator
 from mysite.unmasque.src.util.ConnectionFactory import ConnectionHelperFactory
 from text_to_sql import create_query_translator
 

@@ -1,4 +1,1 @@
 "Retrieve all records and details from the 'nation' table, which likely contains information about different countries or regions, such as their names, identifiers, and possibly other attributes relevant to the business context."
-
--- Prompt Token count = 51
-

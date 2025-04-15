@@ -1,3 +1,1 @@
-SELECT * FROM nation;
-
-
+OK
