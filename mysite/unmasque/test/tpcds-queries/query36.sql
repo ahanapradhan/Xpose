@@ -22,9 +22,10 @@ WHERE  d1.d_year = 2000
        AND s_state IN ( 'TN', 'TN', 'TN', 'TN', 
                         'TN', 'TN', 'TN', 'TN' ) 
 GROUP  BY rollup( i_category, i_class ) 
-ORDER  BY lochierarchy DESC, 
-          CASE 
-            WHEN lochierarchy = 0 THEN i_category 
-          END, 
+ORDER BY
+  GROUPING(i_category) + GROUPING(i_class) DESC,
+  CASE
+    WHEN GROUPING(i_category) + GROUPING(i_class) = 0 THEN i_category
+  END,
           rank_within_parent
 LIMIT 100; 
