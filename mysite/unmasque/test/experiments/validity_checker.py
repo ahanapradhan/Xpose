@@ -3,8 +3,9 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
-from mysite.unmasque.test.experiments.utils import create_text2SQL_agent, give_conn, load_config, BENCHMARK_SQL, \
+from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, \
     XFE_DIR
+from mysite.unmasque.test.experiments.text_to_sql import create_text2SQL_agent
 
 # Set your folder path here
 config = load_config()
@@ -54,7 +55,7 @@ if __name__ == '__main__':
     output_filepath = os.path.join(check_list)
 
     for filename in os.listdir(qh_folder_path):
-        if filename.endswith('.sql'):
+        if filename.endswith('.sql') and filename == 'query1.sql':
             keys = filename.split('.')
             qkey = keys[0]
             qh_file_path = os.path.join(qh_folder_path, filename)

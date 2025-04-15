@@ -1,10 +1,7 @@
 
 import configparser
-import os
 
 from mysite.unmasque.src.util.ConnectionFactory import ConnectionHelperFactory
-from mysite.unmasque.test.experiments.sql_to_text import GptO3MiniSQL2TextTranslator, Gpt4OSQL2TextTranslator
-from mysite.unmasque.test.experiments.text_to_sql import GptO3MiniText2SQLTranslator, Gpt4OText2SQLTranslator
 
 
 def give_conn():
@@ -19,28 +16,6 @@ def give_conn():
     return conn
 
 
-ORIGINAL = "original"
-GPT = "gpt"
-
-
-def create_text2SQL_agent(gpt_model):
-    if gpt_model == "o3":
-        return GptO3MiniText2SQLTranslator()
-    elif gpt_model == "4o":
-        return Gpt4OText2SQLTranslator()
-    else:
-        raise ValueError("Model not supported!")
-
-
-def create_SQL2text_agent(gpt_model):
-    if gpt_model == "o3":
-        return GptO3MiniSQL2TextTranslator()
-    elif gpt_model == "4o":
-        return Gpt4OSQL2TextTranslator()
-    else:
-        raise ValueError("Model not supported!")
-
-
 def load_config():
     config = configparser.ConfigParser()
     config.read('./config.ini')
@@ -52,14 +27,14 @@ def load_config():
     if text_type not in config:
         raise ValueError(f"Section [{text_type}] not found in config.")
 
-    text_dir = config[text_type]['text_dir']
-    xfe_dir = config[text_type]['xfe_dir']
+    text_dir = config[text_type][TEXT_DIR]
+    xfe_dir = config[text_type][XFE_DIR]
 
     return {
-        'benchmark_sql': config['source']['benchmark_sql'],
+        BENCHMARK_SQL: config['source'][BENCHMARK_SQL],
         'text_type': text_type,
-        'text_dir': text_dir,
-        'xfe_dir': xfe_dir
+        TEXT_DIR: text_dir,
+        XFE_DIR: xfe_dir
     }
 
 

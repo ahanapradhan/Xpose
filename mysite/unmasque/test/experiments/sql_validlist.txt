@@ -210,3 +210,17 @@ Overall Stats
 illegal QH: 1
 illegal QE: 71
 
+query1				Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 1
+
+query1				Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 1
+

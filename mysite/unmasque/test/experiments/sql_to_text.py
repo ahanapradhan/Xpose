@@ -5,7 +5,7 @@ from abc import abstractmethod
 import tiktoken
 from openai import OpenAI
 
-from mysite.unmasque.test.experiments.utils import create_SQL2text_agent, load_config, TEXT_DIR, BENCHMARK_SQL
+from mysite.unmasque.test.experiments.utils import load_config, TEXT_DIR, BENCHMARK_SQL
 
 # gets API Key from environment variable OPENAI_API_KEY
 client = OpenAI()
@@ -94,6 +94,15 @@ class Gpt4OSQL2TextTranslator(SQL2TextTranslator):
         c_token = self.count_tokens(text)
         print(f"\n-- Prompt Token count = {c_token}\n")
         return reply
+
+
+def create_SQL2text_agent(gpt_model):
+    if gpt_model == "o3":
+        return GptO3MiniSQL2TextTranslator()
+    elif gpt_model == "4o":
+        return Gpt4OSQL2TextTranslator()
+    else:
+        raise ValueError("Model not supported!")
 
 
 if __name__ == '__main__':

@@ -2,10 +2,10 @@ import os
 import sys
 from abc import abstractmethod
 
-from mysite.unmasque.test.experiments.utils import give_conn, ORIGINAL, GPT, create_text2SQL_agent, load_config, \
-    XFE_DIR, TEXT_DIR
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
+
+from mysite.unmasque.test.experiments.utils import give_conn, load_config, \
+    XFE_DIR, TEXT_DIR
 
 import tiktoken
 from openai import OpenAI
@@ -166,6 +166,15 @@ class Gpt4OText2SQLTranslator(Text2SQLTranslator):
         return reply
 
 
+def create_text2SQL_agent(gpt_model):
+    if gpt_model == "o3":
+        return GptO3MiniText2SQLTranslator()
+    elif gpt_model == "4o":
+        return Gpt4OText2SQLTranslator()
+    else:
+        raise ValueError("Model not supported!")
+
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         model_name = '4o'
@@ -180,12 +189,8 @@ if __name__ == '__main__':
              "Only give the SQL, do not add any explanation. " \
              "Please ensure the SQL query is correct and optimized. Text: "
     for filename in os.listdir(translator.qfolder_path):
-        if filename.endswith('.txt'):
-            keys = filename.split("_")
-            if len(keys) == 1:
-                key = keys[0]
-            else:
-                key = keys[1]
+        if filename.endswith('.txt') and filename == 'query1.txt':
+            key = filename.split('_')[0].split('.')[0]
             file_path = os.path.join(translator.qfolder_path, filename)
 
             # Read lines from the file
