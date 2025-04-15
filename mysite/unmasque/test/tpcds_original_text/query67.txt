@@ -1,0 +1,1 @@
+Find top stores for each category based on store sales in a specific year.

@@ -1,0 +1,1 @@
+Report the total sales, returns and profit for all three sales channels for a given 30 day period. Roll up the results by channel and a unique channel location identifier.

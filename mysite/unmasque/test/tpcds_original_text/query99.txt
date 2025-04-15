@@ -1,0 +1,3 @@
+For catalog sales, create a report showing the counts of orders shipped within 30 days, from 31 to 60 days, from
+61 to 90 days, from 91 to 120 days and over 120 days within a given year, grouped by warehouse, call center
+and shipping mode.

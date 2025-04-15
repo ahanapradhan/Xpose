@@ -1,0 +1,1 @@
+Report the increase of weekly web and catalog sales from one year to the next year for each week. That is, compute the increase of Monday, Tuesday, ... Sunday sales from one year to the following.

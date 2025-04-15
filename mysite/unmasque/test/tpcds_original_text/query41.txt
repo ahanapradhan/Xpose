@@ -1,0 +1,1 @@
+How many items do we carry with specific combinations of color, units, size and category.

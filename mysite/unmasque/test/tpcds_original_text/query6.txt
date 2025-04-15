@@ -1,0 +1,1 @@
+List all the states with at least 10 customers who during a given month bought items with the price tag at least 20% higher than the average price of items in the same category.

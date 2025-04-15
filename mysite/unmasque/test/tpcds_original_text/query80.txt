@@ -1,0 +1,1 @@
+Report extended sales, extended net profit and returns in the store, catalog, and web channels for a 30 day window for items with prices larger than $50 not promoted on television, rollup results by sales channel and channel specific sales means (store for store sales, catalog page for catalog sales and web site for web sales)

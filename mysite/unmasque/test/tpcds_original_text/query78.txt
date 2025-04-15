@@ -1,0 +1,1 @@
+Report the top customer / item combinations having the highest ratio of store channel sales to all other channel sales (minimum 2 to 1 ratio), for combinations with at least one store sale and one other channel sale. Order the output by highest ratio.

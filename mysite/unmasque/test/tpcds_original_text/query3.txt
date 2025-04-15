@@ -1,0 +1,1 @@
+Report the total extended sales price per item brand of a specific manufacturer for all sales in a specific month of the year.

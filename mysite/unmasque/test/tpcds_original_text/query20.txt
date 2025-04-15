@@ -1,0 +1,2 @@
+Compute the total revenue and the ratio of total revenue to revenue by item class for specified item categories
+and time periods.

@@ -1,0 +1,1 @@
+Report the total web sales for customers in specific zip codes, cities, counties or states, or specific items for a given year and quarter. .

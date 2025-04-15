@@ -1,0 +1,1 @@
+This query contains multiple, related iterations: Iteration 1: Calculate the coefficient of variation and mean of every item and warehouse of two consecutive months Iteration 2: Find items that had a coefficient of variation in the first months of 1.5 or large

@@ -1,0 +1,1 @@
+Select the top revenue generating products, sold during breakfast or dinner time for one month managed by a given manager across all three sales channels.

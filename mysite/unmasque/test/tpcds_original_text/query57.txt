@@ -1,0 +1,1 @@
+Find the item brands and categories for each call center and their monthly sales figures for a specified year, where the monthly sales figure deviated more than 10% of the average monthly sales for the year, sorted by deviation and call center. Report the sales deviation from the previous and following month.

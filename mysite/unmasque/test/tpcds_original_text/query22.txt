@@ -1,0 +1,1 @@
+For each product name, brand, class, category, calculate the average quantity on hand. Rollup data by product name, brand, class and category.

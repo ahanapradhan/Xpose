@@ -1,0 +1,1 @@
+For two consecutive years track the sales of items by brand, class and category.

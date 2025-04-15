@@ -1,0 +1,1 @@
+Compute store sales net profit ranking by state and county for a given year and determine the five most profitable states.

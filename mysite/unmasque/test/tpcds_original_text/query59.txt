@@ -1,0 +1,1 @@
+Report the increase of weekly store sales from one year to the next year for each store and day of the week.

@@ -1,0 +1,1 @@
+Display count of customers with purchases from all 3 channels in a given year.

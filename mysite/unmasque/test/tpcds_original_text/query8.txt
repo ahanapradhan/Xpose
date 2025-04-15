@@ -1,0 +1,1 @@
+Compute the net profit of stores located in 400 Metropolitan areas with more than 10 preferred customers.

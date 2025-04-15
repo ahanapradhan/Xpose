@@ -1,0 +1,3 @@
+Retrieve the items with the highest number of returns where the number of returns was approximately
+equivalent across all store, catalog and web channels (within a tolerance of +/- 10%), within the week ending a
+given date.

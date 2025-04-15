@@ -1,0 +1,1 @@
+Report the sum of all sales from Sunday to Saturday for stores in a given data range by stores.

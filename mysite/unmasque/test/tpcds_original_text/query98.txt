@@ -1,0 +1,1 @@
+Report on items sold in a given 30 day period, belonging to the specified category.

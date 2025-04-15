@@ -1,0 +1,1 @@
+For each item, warehouse and week combination count the number of sales with and without promotion.

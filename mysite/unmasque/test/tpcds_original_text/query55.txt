@@ -1,0 +1,1 @@
+For a given year, month and store manager calculate the total store sales of any combination all brands.

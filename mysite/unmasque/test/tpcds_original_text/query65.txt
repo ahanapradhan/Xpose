@@ -1,0 +1,1 @@
+In a given period, for each store, report the list of items with revenue less than 10% the average revenue for all the items in that store.

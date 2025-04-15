@@ -1,0 +1,1 @@
+Find all customers who purchased items of a given category and class on the web or through catalog in a given month and year that was followed by an in-store purchase at a store near their residence in the three consecutive months. Calculate a histogram of the revenue by these customers in $50 segments showing the number of customers in each of these revenue generated segments.
