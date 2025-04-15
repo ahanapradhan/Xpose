@@ -196,7 +196,7 @@ if __name__ == '__main__':
              "Only give the SQL, do not add any explanation. " \
              "Please ensure the SQL query is correct and optimized. Text: "
     for filename in os.listdir(translator.qfolder_path):
-        if filename.endswith('.txt') and filename == 'gpt-4o_query1_gpt_text.txt':
+        if filename.endswith('.txt'):
             keys = filename.split("_")
             key = keys[1]
             file_path = os.path.join(translator.qfolder_path, filename)
