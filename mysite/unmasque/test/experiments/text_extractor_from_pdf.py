@@ -2,9 +2,12 @@ import os
 import re
 from pdfminer.high_level import extract_text
 
+from mysite.unmasque.test.experiments.utils import load_config, TEXT_DIR
+
 # === Config ===
+config = load_config()
 pdf_path = "tpc-ds_v2.1.0.pdf"
-output_dir = "../tpcds_original_text"
+output_dir = f"../{config[TEXT_DIR]}"
 
 # === Create output folder if it doesn't exist ===
 os.makedirs(output_dir, exist_ok=True)

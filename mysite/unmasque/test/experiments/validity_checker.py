@@ -3,21 +3,14 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
-from mysite.unmasque.src.util.ConnectionFactory import ConnectionHelperFactory
-from text_to_sql import create_query_translator
+from mysite.unmasque.test.experiments.utils import create_text2SQL_agent, give_conn, load_config, BENCHMARK_SQL, \
+    XFE_DIR
 
 # Set your folder path here
-qh_folder_path = '../tpcds-queries'
-xfe_folder_path = '../gpt_sql'
+config = load_config()
+qh_folder_path = f"../{config[BENCHMARK_SQL]}"
+xfe_folder_path = f"../{config[XFE_DIR]}"
 check_list = './sql_validlist.txt'
-conn = ConnectionHelperFactory().createConnectionHelper()
-conn.config.schema = conn.config.user_schema
-conn.data_schema = conn.config.user_schema
-conn.schema = conn.config.user_schema
-print(conn.config.user_schema)
-print(conn.data_schema)
-print(conn.schema)
-print(conn.config.schema)
 
 
 def do_for_a_pair():
@@ -52,7 +45,8 @@ def do_for_a_pair():
 if __name__ == '__main__':
 
     # Loop through all files in the folder
-    gpt_agent = create_query_translator("4o")
+    gpt_agent = create_text2SQL_agent("4o")
+    conn = give_conn()
     conn.connectUsingParams()
 
     err_counter = 0

@@ -5,25 +5,19 @@ from abc import abstractmethod
 import tiktoken
 from openai import OpenAI
 
+from mysite.unmasque.test.experiments.utils import create_SQL2text_agent, load_config, TEXT_DIR, BENCHMARK_SQL
+
 # gets API Key from environment variable OPENAI_API_KEY
 client = OpenAI()
 
 
-def create_query_translator(gpt_model):
-    if gpt_model == "o3":
-        return GptO3MiniTranslator()
-    elif gpt_model == "4o":
-        return Gpt4OTranslator()
-    else:
-        raise ValueError("Model not supported!")
-
-
-class Translator:
+class SQL2TextTranslator:
     def __init__(self, name):
+        config = load_config()
         self.name = name
-        self.working_dir_path = "../gpt_text/"
+        self.working_dir_path = f"../{config[TEXT_DIR]}/"
         self.output_filename = "gpt_text.txt"
-        self.qfolder_path = '../tpcds-queries'
+        self.qfolder_path = f"../{config[BENCHMARK_SQL]}"
 
     @abstractmethod
     def count_tokens(self, text):
@@ -53,7 +47,7 @@ class Translator:
         return reply
 
 
-class GptO3MiniTranslator(Translator):
+class GptO3MiniSQL2TextTranslator(SQL2TextTranslator):
     def __init__(self):
         super().__init__("o3-mini")
 
@@ -75,7 +69,7 @@ class GptO3MiniTranslator(Translator):
         return reply
 
 
-class Gpt4OTranslator(Translator):
+class Gpt4OSQL2TextTranslator(SQL2TextTranslator):
 
     def __init__(self):
         super().__init__("gpt-4o")
@@ -108,7 +102,7 @@ if __name__ == '__main__':
         exit()
     model_name = sys.argv[1]
 
-    translator = create_query_translator(model_name)
+    translator = create_SQL2text_agent(model_name)
 
     prompt = "Give a high-level business description of the following SQL. " \
              "Give the descrption in a single English paragraph, suitable for a business manager. " \

@@ -1,0 +1,1 @@
+SELECT s.s_manager AS store_manager, SUM(ss.ss_net_paid) AS total_store_sales FROM store_sales ss JOIN date_dim d ON ss.ss_sold_date_sk = d.d_date_sk JOIN store s ON ss.ss_store_sk = s.s_store_sk WHERE d.d_year = ? AND d.d_moy = ? AND s.s_manager = ? GROUP BY s.s_manager;

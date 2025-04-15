@@ -2,13 +2,13 @@ import os
 import sys
 from abc import abstractmethod
 
+from mysite.unmasque.test.experiments.utils import give_conn, ORIGINAL, GPT, create_text2SQL_agent, load_config, \
+    XFE_DIR, TEXT_DIR
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
 import tiktoken
 from openai import OpenAI
-
-from mysite.unmasque.src.util.ConnectionFactory import ConnectionHelperFactory
-from mysite.unmasque.src.util.constants import OK
 
 TPCDS_Schema = """CREATE TABLE call_center(cc_call_center_sk INTEGER, cc_call_center_id VARCHAR, cc_rec_start_date DATE, cc_rec_end_date DATE, cc_closed_date_sk INTEGER, cc_open_date_sk INTEGER, cc_name VARCHAR, cc_class VARCHAR, cc_employees INTEGER, cc_sq_ft INTEGER, cc_hours VARCHAR, cc_manager VARCHAR, cc_mkt_id INTEGER, cc_mkt_class VARCHAR, cc_mkt_desc VARCHAR, cc_market_manager VARCHAR, cc_division INTEGER, cc_division_name VARCHAR, cc_company INTEGER, cc_company_name VARCHAR, cc_street_number VARCHAR, cc_street_name VARCHAR, cc_street_type VARCHAR, cc_suite_number VARCHAR, cc_city VARCHAR, cc_county VARCHAR, cc_state VARCHAR, cc_zip VARCHAR, cc_country VARCHAR, cc_gmt_offset DECIMAL(5,2), cc_tax_percentage DECIMAL(5,2));
 CREATE TABLE catalog_page(cp_catalog_page_sk INTEGER, cp_catalog_page_id VARCHAR, cp_start_date_sk INTEGER, cp_end_date_sk INTEGER, cp_department VARCHAR, cp_catalog_number INTEGER, cp_catalog_page_number INTEGER, cp_description VARCHAR, cp_type VARCHAR);
@@ -36,31 +36,14 @@ CREATE TABLE web_sales(ws_sold_date_sk INTEGER, ws_sold_time_sk INTEGER, ws_ship
 CREATE TABLE web_site(web_site_sk INTEGER, web_site_id VARCHAR, web_rec_start_date DATE, web_rec_end_date DATE, web_name VARCHAR, web_open_date_sk INTEGER, web_close_date_sk INTEGER, web_class VARCHAR, web_manager VARCHAR, web_mkt_id INTEGER, web_mkt_class VARCHAR, web_mkt_desc VARCHAR, web_market_manager VARCHAR, web_company_id INTEGER, web_company_name VARCHAR, web_street_number VARCHAR, web_street_name VARCHAR, web_street_type VARCHAR, web_suite_number VARCHAR, web_city VARCHAR, web_county VARCHAR, web_state VARCHAR, web_zip VARCHAR, web_country VARCHAR, web_gmt_offset DECIMAL(5,2), web_tax_percentage DECIMAL(5,2));
 """
 
-conn = ConnectionHelperFactory().createConnectionHelper()
-conn.config.schema = conn.config.user_schema
-conn.data_schema = conn.config.user_schema
-conn.schema = conn.config.user_schema
-print(conn.config.user_schema)
-print(conn.data_schema)
-print(conn.schema)
-print(conn.config.schema)
 
-
-def create_query_translator(gpt_model):
-    if gpt_model == "o3":
-        return GptO3MiniTranslator()
-    elif gpt_model == "4o":
-        return Gpt4OTranslator()
-    else:
-        raise ValueError("Model not supported!")
-
-
-class Translator:
+class Text2SQLTranslator:
     def __init__(self, name):
+        config = load_config()
         self.name = name
-        self.working_dir_path = "../gpt_sql/"
+        self.working_dir_path = f"../{config[XFE_DIR]}/"
+        self.qfolder_path = f"../{config[TEXT_DIR]}/"
         self.output_filename = "gpt_sql.sql"
-        self.qfolder_path = '../gpt_text'
         self.client = None
 
     @abstractmethod
@@ -76,6 +59,7 @@ class Translator:
         return f"{self.name}_{qkey}_{self.output_filename}"
 
     def post_process(self, reply):
+        conn = give_conn()
         rlines = reply.strip().splitlines()
         nlines = [line for line in rlines if not line.strip().startswith('--')]
         new_lines1 = [line for line in nlines if not line.strip().startswith('```')]
@@ -97,7 +81,7 @@ class Translator:
 
     def doJob_loop(self, question, qkey, sql, append=False):
         sql_text = " ".join(sql)
-        original_question = f"{question} {sql_text}\n\n Consider the following schema while formulating SQL.\n " \
+        original_question = f"{question} \"{sql_text}\"\n\n Consider the following schema while formulating SQL.\n " \
                             f"Schema: \"{TPCDS_Schema}\""
         print(original_question)
         reply = self.doJob(original_question)
@@ -131,7 +115,7 @@ class Translator:
         return check
 
 
-class GptO3MiniTranslator(Translator):
+class GptO3MiniText2SQLTranslator(Text2SQLTranslator):
     def __init__(self):
         super().__init__("o3-mini")
 
@@ -154,7 +138,7 @@ class GptO3MiniTranslator(Translator):
         return reply
 
 
-class Gpt4OTranslator(Translator):
+class Gpt4OText2SQLTranslator(Text2SQLTranslator):
 
     def __init__(self):
         super().__init__("gpt-4o")
@@ -189,7 +173,7 @@ if __name__ == '__main__':
     else:
         model_name = sys.argv[1]
 
-    translator = create_query_translator(model_name)
+    translator = create_text2SQL_agent(model_name)
 
     prompt = "You are an expert in SQL. " \
              "Formulate SQL query that suits the following natural language text description in English." \
@@ -198,7 +182,10 @@ if __name__ == '__main__':
     for filename in os.listdir(translator.qfolder_path):
         if filename.endswith('.txt'):
             keys = filename.split("_")
-            key = keys[1]
+            if len(keys) == 1:
+                key = keys[0]
+            else:
+                key = keys[1]
             file_path = os.path.join(translator.qfolder_path, filename)
 
             # Read lines from the file
