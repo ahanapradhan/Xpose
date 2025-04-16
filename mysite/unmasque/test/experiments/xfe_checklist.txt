@@ -104,4 +104,27 @@ Overall Stats
 illegal QH: 2
 illegal QE: 55
 match: 0
-mismatch: 43
+mismatch: 43query76		True		Error
+query15		True		Error
+query96		True		Error
+query46		True		False
+query35		True		False
+query19		True		False
+query84		True		False
+query63		True		False
+query87		True		Error
+query23		True		False
+query72		True		Error
+query97		True		Error
+query5		True		False
+query90		False		QH Error
+query31		True		False
+query80		True		False
+query1		True		False
+query77		True		False
+query57		True		False
+query11		True		False
+query91		True		Error
+query51		True		Error
+query32		True		Error
+query29		True		Error
