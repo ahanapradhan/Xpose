@@ -46,6 +46,9 @@ class SQL2TextTranslator:
 
 
 class GptO3MiniSQL2TextTranslator(TalkToGptO3Mini, SQL2TextTranslator):
+    def count_tokens(self, text):
+        pass
+
     def __init__(self):
         TalkToGptO3Mini.__init__(self)
         SQL2TextTranslator.__init__(self, self.name)
