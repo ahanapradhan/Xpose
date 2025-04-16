@@ -3,5 +3,3 @@ Query Constants:
 VEHCNT.01 = 2
 YEAR.01 = 1999
 DEPCNT.01 = 6
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 117 of 135

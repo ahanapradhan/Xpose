@@ -1,1 +1,8 @@
-Compute the revenue ratios across item classes: For each item in a list of given categories, during a 30 day time period, sold through the web channel compute the ratio of sales of that item to the sum of all of the sales in that item's class. Qualification Substitution Parameters  CATEGORY.01 = Sports  CATEGORY.02 = Books  CATEGORY.03 = Home  SDATE.01 = 1999-02-22 TPC Benchmark™ DS - Standard Specification, Version 2.1.0 Page 101 of 135  YEAR.01 = 1999
+Compute the revenue ratios across item classes: For each item in a list of given categories, during a 30 day time period, sold through the web channel compute the ratio of sales of that item to the sum of all of the sales in that item's class.
+Query Constants:
+CATEGORY.01 = Sports
+CATEGORY.02 = Books
+CATEGORY.03 = Home
+SDATE.01 = 1999-02-22
+YEAR.01 = 1999
+

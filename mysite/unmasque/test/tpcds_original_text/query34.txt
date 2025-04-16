@@ -6,8 +6,6 @@ COUNTY_F.01 = Williamson County
 COUNTY_E.01 = Williamson County
 COUNTY_D.01 = Williamson County
 COUNTY_C.01 = Williamson County
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 107 of 135
 COUNTY_B.01 = Williamson County
 COUNTY_A.01 = Williamson County
 YEAR.01 = 1999

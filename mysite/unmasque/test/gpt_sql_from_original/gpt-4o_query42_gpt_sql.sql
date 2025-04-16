@@ -1,1 +1,1 @@
-SELECT i.i_item_id, SUM(ss.ss_ext_sales_price) AS total_extended_sales_price FROM store_sales ss JOIN item i ON ss.ss_item_sk = i.i_item_sk JOIN date_dim d ON ss.ss_sold_date_sk = d.d_date_sk WHERE d.d_year = 2023 AND d.d_moy = 10 GROUP BY i.i_item_id;
+SELECT i.i_item_id, SUM(ss.ss_ext_sales_price) AS total_sales FROM store_sales ss JOIN item i ON ss.ss_item_sk = i.i_item_sk JOIN date_dim d ON ss.ss_sold_date_sk = d.d_date_sk WHERE d.d_year = 2000 AND d.d_moy = 11 GROUP BY i.i_item_id;

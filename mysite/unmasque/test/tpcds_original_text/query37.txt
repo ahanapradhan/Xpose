@@ -6,5 +6,3 @@ MANUFACT_ID.02 = 940
 MANUFACT_ID.03 = 694
 MANUFACT_ID.04 = 808
 INVDATE.01 = 2000-02-01
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 108 of 135

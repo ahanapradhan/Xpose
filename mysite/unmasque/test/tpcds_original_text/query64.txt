@@ -8,5 +8,3 @@ COLOR.03 = indian
 COLOR.04 = spring
 COLOR.05 = floral
 COLOR.06 = medium
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 114 of 135

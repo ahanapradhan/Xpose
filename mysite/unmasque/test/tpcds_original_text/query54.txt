@@ -3,6 +3,4 @@ Query Constants:
 CLASS.01 = maternity
 CATEGORY.01 = Women
 MONTH.01 = 12
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 112 of 135
 YEAR.01 = 1998

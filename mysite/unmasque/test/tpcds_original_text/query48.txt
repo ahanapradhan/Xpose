@@ -16,12 +16,3 @@ STATE.7=VA
 STATE.8=CA
 STATE.9=MS
 YEAR.1=2000
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 111 of 135
-B.49  Query49.tpl
-Report the worst return ratios (sales to returns) of all items for each channel by quantity and currency sorted by
-ratio. Quantity ratio is defined as total number of sales to total number of returns. Currency ratio is defined as
-sum of return amount to sum of net paid.
-Qualification Substitution Parameters:
-MONTH.01 = 12
-YEAR.01 = 2001

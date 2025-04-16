@@ -3,7 +3,5 @@ Query Constants:
 STATE.01 = KY
 STATE.02 = GA
 STATE.03 = NM
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 115 of 135
 YEAR.01 = 2001
 MONTH.01 = 4

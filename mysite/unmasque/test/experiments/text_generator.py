@@ -118,6 +118,10 @@ def __prepare_content(desc, params, qnum):
         for line in params.strip().splitlines():
             line = line.strip()
             line = re.sub(r"^[•\-\*\u2022\uF0B7]+", "", line)  # Remove bullets like •, *, -, etc.
+            line = re.sub(
+                r'TPC Benchmark.*?Standard Specification, Version [\d\.]+ Page \d+ of \d+',
+                '', line, flags=re.IGNORECASE
+            )
             if line:
                 param_lines.append(line.strip())
         if param_lines:

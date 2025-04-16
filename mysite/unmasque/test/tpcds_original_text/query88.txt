@@ -4,5 +4,3 @@ STORE.01=Unknown
 HOUR.01=4
 HOUR.02=2
 HOUR.03=0
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 119 of 135

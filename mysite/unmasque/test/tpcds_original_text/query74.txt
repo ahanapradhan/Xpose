@@ -3,5 +3,3 @@ Query Constants:
 YEAR.01 = 2001
 AGGONE.01 = sum
 ORDERC.01 = 1 1 1
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 116 of 135

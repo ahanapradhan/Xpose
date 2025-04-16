@@ -2,5 +2,3 @@ Report sales, profit, return amount, and net loss in the store, catalog, and web
 Query Constants:
 SALES_DATE.01=2000-08-23
 YEAR.01=2000
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 98 of 135

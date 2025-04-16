@@ -1,1 +1,4 @@
-List all customers living in a specified city, with an income between 2 values. Qualification Substitution Parameters  INCOME.01 = 38128  CITY.01 = Edgewood TPC Benchmark™ DS - Standard Specification, Version 2.1.0 Page 118 of 135
+List all customers living in a specified city, with an income between 2 values.
+Query Constants:
+INCOME.01 = 38128
+CITY.01 = Edgewood

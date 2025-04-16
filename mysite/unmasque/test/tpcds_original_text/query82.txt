@@ -1,1 +1,8 @@
- Find customers who tend to spend more money (net-paid) on-line than in stores. Qualification Substitution Parameters  MANUFACT_ID.01 = 129  MANUFACT_ID.02 = 270  MANUFACT_ID.03 = 821  MANUFACT_ID.04 = 423  INVDATE.01 = 2000-05-25  PRICE.01 = 62
+Find customers who tend to spend more money (net-paid) on-line than in stores.
+Query Constants:
+MANUFACT_ID.01 = 129
+MANUFACT_ID.02 = 270
+MANUFACT_ID.03 = 821
+MANUFACT_ID.04 = 423
+INVDATE.01 = 2000-05-25
+PRICE.01 = 62

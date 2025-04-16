@@ -1,1 +1,5 @@
-Retrieve the items with the highest number of returns where the number of returns was approximately equivalent across all store, catalog and web channels (within a tolerance of +/- 10%), within the week ending a given date. Qualification Substitution Parameters  RETURNED_DATE_THREE.01 = 2000-11-17  RETURNED_DATE_TWO.01 = 2000-09-27  RETURNED_DATE_ONE.01 = 2000-06-30
+Retrieve the items with the highest number of returns where the number of returns was approximately equivalent across all store, catalog and web channels (within a tolerance of +/- 10%), within the week ending a given date.
+Query Constants:
+RETURNED_DATE_THREE.01 = 2000-11-17
+RETURNED_DATE_TWO.01 = 2000-09-27
+RETURNED_DATE_ONE.01 = 2000-06-30

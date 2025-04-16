@@ -3,5 +3,3 @@ Query Constants:
 MONTH.01 = 2
 YEAR.01 = 2000
 TOPPERCENT=50
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 104 of 135

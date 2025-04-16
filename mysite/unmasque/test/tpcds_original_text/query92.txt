@@ -2,5 +2,3 @@ Compute the total discount on web sales of items from a given manufacturer over 
 Query Constants:
 IMID.01 = 350
 WSDATE.01 = 2000-01-27
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 120 of 135

@@ -1,1 +1,1 @@
-SELECT s_state, SUM(ss_net_profit) AS total_net_profit FROM store_sales JOIN store ON store_sales.ss_store_sk = store.s_store_sk JOIN date_dim ON store_sales.ss_sold_date_sk = date_dim.d_date_sk WHERE d_year = 2022 GROUP BY s_state ORDER BY total_net_profit DESC LIMIT 5;
+SELECT s.s_state, SUM(ss.ss_net_profit) AS total_net_profit FROM store_sales ss JOIN store s ON ss.ss_store_sk = s.s_store_sk JOIN date_dim d ON ss.ss_sold_date_sk = d.d_date_sk WHERE d.d_year = 2023 GROUP BY s.s_state ORDER BY total_net_profit DESC LIMIT 5;

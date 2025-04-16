@@ -1,1 +1,5 @@
-Select the top revenue generating products bought by out of zip code customers for a given year, month and manager. Qualification Substitution Parameters  MANAGER.01 = 8 TPC Benchmark™ DS - Standard Specification, Version 2.1.0 Page 103 of 135  MONTH.01 = 11  YEAR.01 = 1998
+Select the top revenue generating products bought by out of zip code customers for a given year, month and manager.
+Query Constants:
+MANAGER.01 = 8
+MONTH.01 = 11
+YEAR.01 = 1998

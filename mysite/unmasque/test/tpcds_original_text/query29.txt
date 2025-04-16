@@ -3,5 +3,3 @@ Query Constants:
 MONTH.01 = 9
 YEAR.01 = 1999
 AGG.01 = 29
-TPC Benchmark™ DS - Standard Specification, Version 2.1.0
-Page 106 of 135
