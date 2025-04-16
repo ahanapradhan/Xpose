@@ -1,13 +1,13 @@
 WITH order_line_item AS (
     WITH buyer_costs AS (
         SELECT
-            wl_orderkey AS order_id,
-            wl_linenumber AS line_id,
-            wl_suppkey AS supplier_id,
-            wl_partkey AS part_id,
-            wl_returnflag AS item_status,
-            ROUND(wl_extendedprice * (1 - wl_discount), 2) AS item_cost
-        FROM web_lineitem    
+            l_orderkey AS order_id,
+            l_linenumber AS line_id,
+            l_suppkey AS supplier_id,
+            l_partkey AS part_id,
+            l_returnflag AS item_status,
+            ROUND(l_extendedprice * (1 - l_discount), 2) AS item_cost
+        FROM lineitem    
     )
     SELECT 
         o.o_custkey AS customer_id,
