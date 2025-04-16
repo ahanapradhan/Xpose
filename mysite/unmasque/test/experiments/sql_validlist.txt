@@ -18,6 +18,187 @@ query1				True
 query77				True
 query57				True
 query11				True
+query91				Error
+query51				True
+query32				True
+query29				Error
+query4				True
+query22				True
+query64				Error
+query66				True
+query18				True
+query67				True
+query83				True
+query78				True
+query10				True
+query70				True
+query24				True
+query36				True
+query8				True
+query34				True
+query59				True
+query39				True
+query48				True
+query56				True
+query3				True
+query12				True
+query88				True
+query89				True
+query58				True
+query75				True
+query37				True
+query98				True
+query7				True
+query30				True
+query47				True
+query38				True
+query21				True
+query33				True
+query6				True
+query27				True
+query71				True
+query52				True
+query43				True
+query81				True
+query86				True
+query44				True
+query42				True
+query26				True
+query82				True
+query92				True
+query99				True
+query69				True
+query68				True
+query61				True
+query95				Error
+query41				True
+query28				True
+query65				Error
+query76				True
+query15				True
+query96				True
+query46				True
+query35				True
+query19				True
+query84				True
+query63				True
+query87				True
+query23				True
+query72				True
+query97				True
+query5				True
+query90				True
+query31				True
+query80				True
+query1				True
+query77				True
+query57				True
+query11				True
+query91				Error
+query51				True
+query32				True
+query29				Error
+query4				True
+query22				True
+query64				Error
+query66				True
+query18				True
+query67				True
+query83				True
+query78				True
+query10				True
+query70				True
+query24				True
+query36				True
+query8				True
+query34				True
+query59				True
+query39				True
+query48				True
+query56				True
+query3				True
+query12				True
+query88				True
+query89				True
+query58				True
+query75				True
+query37				True
+query98				True
+query7				True
+query30				True
+query47				True
+query38				True
+query21				True
+query33				True
+query6				True
+query27				True
+query71				True
+query52				True
+query43				True
+query81				True
+query86				True
+query44				True
+query42				True
+query26				True
+query82				True
+query92				True
+query99				True
+query69				True
+query68				True
+query61				True
+query95				Error
+query41				True
+query28				True
+query65				Error
+query60				True
+query85				True
+query53				True
+query55				True
+query16				True
+query45				True
+query25				Error
+query73				True
+query74				True
+query62				True
+query13				True
+query2				True
+query50				Error
+query40				True
+query20				True
+query49				True
+query79				True
+query54				True
+query93				True
+query9				True
+query14				True
+query17				True
+query94				True
+../tpcds-queries : ../gpt_sql_from_original
+
+Overall Stats
+illegal QH: 0
+illegal QE: 7
+
+query76				True
+query15				True
+query96				True
+query46				True
+query35				True
+query19				True
+query84				True
+query63				True
+query87				True
+query23				True
+query72				True
+query97				True
+query5				True
+query90				True
+query31				True
+query80				True
+query1				True
+query77				True
+query57				True
+query11				True
 query91				True
 query51				True
 query32				True
@@ -98,23 +279,9 @@ query9				True
 query14				True
 query17				True
 query94				True
-
+../tpcds-queries : ../gpt_sql
 
 Overall Stats
 illegal QH: 1
-illegal QE: 1
-
-query1				Error
-
-
-Overall Stats
-illegal QH: 0
-illegal QE: 1
-
-query1				Error
-
-
-Overall Stats
-illegal QH: 0
 illegal QE: 1
 

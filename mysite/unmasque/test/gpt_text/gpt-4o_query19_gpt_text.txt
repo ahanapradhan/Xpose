@@ -1,4 +1,0 @@
-"This SQL query is designed to generate a report that identifies the top 100 brands and manufacturers by total sales revenue for items sold in December 1998, specifically for a manager with ID 38. The report focuses on sales where the customer's current address and the store's address have different ZIP code prefixes, indicating purchases made by customers outside their local area. The results are sorted in descending order of total sales revenue, providing insights into the most successful brands and manufacturers during this period."
-
--- Prompt Token count = 368
-

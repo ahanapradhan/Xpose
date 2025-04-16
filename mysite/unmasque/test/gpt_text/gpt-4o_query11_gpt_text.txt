@@ -1,4 +1,0 @@
-"Based on the provided SQL query, the business analysis focuses on identifying customers who have shown a greater increase in their web sales compared to their store sales from the year 2001 to 2002. The query aggregates sales data from both store and web channels, calculates the total sales for each customer for the specified years, and compares the growth rates between the two channels. It then selects the top 100 customers who have a higher growth rate in web sales than in store sales, providing their customer ID, first name, last name, and birth country for further business insights and potential targeted marketing strategies."
-
--- Prompt Token count = 1153
-

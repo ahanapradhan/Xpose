@@ -1,4 +1,0 @@
-"This SQL query retrieves a list of up to 100 customers who made purchases in a city different from their current city of residence. It includes the customer's last and first names, their current city, the city where the purchase was made, the sales ticket number, the total amount spent using coupons, and the net profit from these sales. The data is filtered to include only sales made on weekends (Saturday or Sunday) during the years 2000, 2001, and 2002, in specific cities ('Midway' and 'Fairview'), and for households with either six dependents or no vehicles. The results are sorted by the customer's last name, first name, current city, purchase city, and ticket number."
-
--- Prompt Token count = 545
-

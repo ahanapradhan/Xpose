@@ -4,11 +4,10 @@ from abc import abstractmethod
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
-from mysite.unmasque.test.experiments.utils import give_conn, load_config, \
-    XFE_DIR, TEXT_DIR
+from mysite.unmasque.test.experiments.llm_talk import TalkToGpt4O, TalkToGptO3Mini
 
-import tiktoken
-from openai import OpenAI
+from mysite.unmasque.test.experiments.utils import give_conn, load_config, \
+    XFE_DIR, TEXT_DIR, MODEL, O_THREE, FOUR_O, readline_ignoring_comments
 
 TPCDS_Schema = """CREATE TABLE call_center(cc_call_center_sk INTEGER, cc_call_center_id VARCHAR, cc_rec_start_date DATE, cc_rec_end_date DATE, cc_closed_date_sk INTEGER, cc_open_date_sk INTEGER, cc_name VARCHAR, cc_class VARCHAR, cc_employees INTEGER, cc_sq_ft INTEGER, cc_hours VARCHAR, cc_manager VARCHAR, cc_mkt_id INTEGER, cc_mkt_class VARCHAR, cc_mkt_desc VARCHAR, cc_market_manager VARCHAR, cc_division INTEGER, cc_division_name VARCHAR, cc_company INTEGER, cc_company_name VARCHAR, cc_street_number VARCHAR, cc_street_name VARCHAR, cc_street_type VARCHAR, cc_suite_number VARCHAR, cc_city VARCHAR, cc_county VARCHAR, cc_state VARCHAR, cc_zip VARCHAR, cc_country VARCHAR, cc_gmt_offset DECIMAL(5,2), cc_tax_percentage DECIMAL(5,2));
 CREATE TABLE catalog_page(cp_catalog_page_sk INTEGER, cp_catalog_page_id VARCHAR, cp_start_date_sk INTEGER, cp_end_date_sk INTEGER, cp_department VARCHAR, cp_catalog_number INTEGER, cp_catalog_page_number INTEGER, cp_description VARCHAR, cp_type VARCHAR);
@@ -36,34 +35,23 @@ CREATE TABLE web_sales(ws_sold_date_sk INTEGER, ws_sold_time_sk INTEGER, ws_ship
 CREATE TABLE web_site(web_site_sk INTEGER, web_site_id VARCHAR, web_rec_start_date DATE, web_rec_end_date DATE, web_name VARCHAR, web_open_date_sk INTEGER, web_close_date_sk INTEGER, web_class VARCHAR, web_manager VARCHAR, web_mkt_id INTEGER, web_mkt_class VARCHAR, web_mkt_desc VARCHAR, web_market_manager VARCHAR, web_company_id INTEGER, web_company_name VARCHAR, web_street_number VARCHAR, web_street_name VARCHAR, web_street_type VARCHAR, web_suite_number VARCHAR, web_city VARCHAR, web_county VARCHAR, web_state VARCHAR, web_zip VARCHAR, web_country VARCHAR, web_gmt_offset DECIMAL(5,2), web_tax_percentage DECIMAL(5,2));
 """
 
+config = load_config()
+
 
 class Text2SQLTranslator:
     def __init__(self, name):
-        config = load_config()
         self.name = name
         self.working_dir_path = f"../{config[XFE_DIR]}/"
         self.qfolder_path = f"../{config[TEXT_DIR]}/"
         self.output_filename = "gpt_sql.sql"
         self.client = None
-
-    @abstractmethod
-    def count_tokens(self, text):
-        pass
-
-    @abstractmethod
-    def doJob(self, text):
-        # gets API Key from environment variable OPENAI_API_KEY
-        self.client = OpenAI()
+        self.loop_cutoff = 5
 
     def give_filename(self, qkey):
         return f"{self.name}_{qkey}_{self.output_filename}"
 
-    def post_process(self, reply):
+    def post_process(self, qe_query):
         conn = give_conn()
-        rlines = reply.strip().splitlines()
-        nlines = [line for line in rlines if not line.strip().startswith('--')]
-        new_lines1 = [line for line in nlines if not line.strip().startswith('```')]
-        qe_query = ' '.join(line.strip() for line in new_lines1 if line.strip())
         if not len(qe_query.strip()):
             return qe_query, ""
         try:
@@ -87,8 +75,7 @@ class Text2SQLTranslator:
         reply = self.doJob(original_question)
         check, problem = self.post_process(reply)
         num = 0
-        cutoff = 20
-        while True:
+        while len(problem) and num < self.loop_cutoff:
             next_question = f"{original_question}\nYou formulated the following query:\t" \
                             f"\"{check}\"\n The query has the following error:\n" \
                             f"\"{problem}\". \nFix it.\n"
@@ -96,9 +83,11 @@ class Text2SQLTranslator:
             reply = self.doJob(next_question)
             check, problem = self.post_process(reply)
             num = num + 1
-            if not len(problem) or num >= cutoff:
-                break
 
+        self._write_to_file(append, check, qkey)
+        return check
+
+    def _write_to_file(self, append, check, qkey):
         working_dir = self.working_dir_path
         if not os.path.exists(working_dir):
             os.makedirs(working_dir)
@@ -112,97 +101,49 @@ class Text2SQLTranslator:
         f.close()
         mode_name = 'appended' if mode == 'a' else 'written'
         print(f"Text {mode_name} into {outfile}")
-        return check
+
+    @abstractmethod
+    def doJob(self, next_question):
+        pass
 
 
-class GptO3MiniText2SQLTranslator(Text2SQLTranslator):
+class GptO3MiniText2SQLTranslator(TalkToGptO3Mini, Text2SQLTranslator):
     def __init__(self):
-        super().__init__("o3-mini")
-
-    def count_tokens(self, text):
-        raise NotImplementedError
-
-    def doJob(self, text):
-        super().doJob(text)
-        response = self.client.chat.completions.create(
-            model=self.name,
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"{text}",
-                },
-            ]
-        )
-        reply = response.choices[0].message.content
-        # print(reply)
-        return reply
+        TalkToGptO3Mini.__init__(self)
+        Text2SQLTranslator.__init__(self, self.name)
 
 
-class Gpt4OText2SQLTranslator(Text2SQLTranslator):
+class Gpt4OText2SQLTranslator(TalkToGpt4O, Text2SQLTranslator):
 
     def __init__(self):
-        super().__init__("gpt-4o")
-
-    def count_tokens(self, text):
-        encoding = tiktoken.encoding_for_model(self.name)
-        tokens = encoding.encode(text)
-        return len(tokens)
-
-    def doJob(self, text):
-        super().doJob(text)
-        response = self.client.chat.completions.create(
-            model=self.name,
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"{text}",
-                },
-            ], temperature=0, stream=False
-        )
-        reply = response.choices[0].message.content
-        # print(reply)
-        # c_token = self.count_tokens(text)
-        # print(f"\n-- Prompt Token count = {c_token}\n")
-        return reply
+        TalkToGpt4O.__init__(self)
+        Text2SQLTranslator.__init__(self, self.name)
 
 
 def create_text2SQL_agent(gpt_model):
-    if gpt_model == "o3":
+    if gpt_model == O_THREE:
         return GptO3MiniText2SQLTranslator()
-    elif gpt_model == "4o":
+    elif gpt_model == FOUR_O:
         return Gpt4OText2SQLTranslator()
     else:
         raise ValueError("Model not supported!")
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        model_name = '4o'
-        print("Using gpt-4o")
-    else:
-        model_name = sys.argv[1]
 
-    translator = create_text2SQL_agent(model_name)
+    translator = create_text2SQL_agent(config[MODEL])
 
     prompt = "You are an expert in SQL. " \
              "Formulate SQL query that suits the following natural language text description in English." \
              "Only give the SQL, do not add any explanation. " \
+             "Do not keep any place-holder parameter in the query." \
+             "Use valid data values as query constants, if the text does not mention them." \
              "Please ensure the SQL query is correct and optimized. Text: "
     for filename in os.listdir(translator.qfolder_path):
-        if filename.endswith('.txt') and filename == 'query1.txt':
+        if filename.endswith('.txt'):
             key = filename.split('_')[0].split('.')[0]
             file_path = os.path.join(translator.qfolder_path, filename)
-
-            # Read lines from the file
-            with open(file_path, 'r', encoding='utf-8') as f:
-                lines = f.readlines()
-
-            new_lines = [line for line in lines if not line.strip().startswith('--')]
-            q_sql = new_lines
+            q_sql = readline_ignoring_comments(file_path)
             output1 = translator.doJob_loop(prompt, key, q_sql)
-            print(output1)
-            # Write the updated content back to the file
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.writelines(lines)
-
+            # print(output1)
             print(f"Processed: {filename}")

@@ -4,7 +4,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
 from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, \
-    XFE_DIR
+    XFE_DIR, MODEL
 from mysite.unmasque.test.experiments.text_to_sql import create_text2SQL_agent
 
 # Set your folder path here
@@ -43,10 +43,37 @@ def do_for_a_pair():
     return check1
 
 
+def __check_for_one():
+    global keys, qh, xfe_qe, check, err_counter, qh_error, fo
+    if filename.endswith('.sql'):
+        keys = filename.split('.')
+        qkey = keys[0]
+        qh_file_path = os.path.join(qh_folder_path, filename)
+        xfe_file_path = os.path.join(xfe_folder_path, gpt_agent.give_filename(qkey))
+        print(f"{qh_file_path} : {xfe_file_path}")
+
+        with open(qh_file_path, 'r', encoding='utf-8') as fh:
+            qh = fh.readlines()
+            with open(xfe_file_path, 'r', encoding='utf-8') as fe:
+                xfe_qe = fe.readlines()
+                check = do_for_a_pair()
+                if check == "Error":
+                    err_counter = err_counter + 1
+                elif check == "QH Error":
+                    print(f"Check QH for {qkey}")
+                    qh_error = qh_error + 1
+                else:  # check = True
+                    pass
+                with open(output_filepath, 'a', encoding='utf-8') as fo:
+                    fo.writelines(f"{qkey}\t\t\t\t{str(check)}\n")
+
+        # break
+
+
 if __name__ == '__main__':
 
     # Loop through all files in the folder
-    gpt_agent = create_text2SQL_agent("4o")
+    gpt_agent = create_text2SQL_agent(config[MODEL])
     conn = give_conn()
     conn.connectUsingParams()
 
@@ -55,30 +82,12 @@ if __name__ == '__main__':
     output_filepath = os.path.join(check_list)
 
     for filename in os.listdir(qh_folder_path):
-        if filename.endswith('.sql') and filename == 'query1.sql':
-            keys = filename.split('.')
-            qkey = keys[0]
-            qh_file_path = os.path.join(qh_folder_path, filename)
-            xfe_file_path = os.path.join(xfe_folder_path, gpt_agent.give_filename(qkey))
-            print(f"{qh_file_path} : {xfe_file_path}")
-
-            with open(qh_file_path, 'r', encoding='utf-8') as fh:
-                qh = fh.readlines()
-                with open(xfe_file_path, 'r', encoding='utf-8') as fe:
-                    xfe_qe = fe.readlines()
-                    check = do_for_a_pair()
-                    if check == "Error":
-                        err_counter = err_counter + 1
-                    elif check == "QH Error":
-                        print(f"Check QH for {qkey}")
-                        qh_error = qh_error + 1
-                    else:  # check = True
-                        pass
-                    with open(output_filepath, 'a', encoding='utf-8') as fo:
-                        fo.writelines(f"{qkey}\t\t\t\t{str(check)}\n")
-
-            # break
+        try:
+            __check_for_one()
+        except:
+            pass
     with open(output_filepath, 'a', encoding='utf-8') as fo:
+        fo.writelines(f"{qh_folder_path} : {xfe_folder_path}")
         fo.writelines(
             f"\n\nOverall Stats\nillegal QH: {qh_error}\nillegal QE: {err_counter}\n\n")
     conn.closeConnection()

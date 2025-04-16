@@ -1,0 +1,1 @@
+SELECT i.i_product_name, i.i_brand, i.i_class, i.i_category, AVG(inv.inv_quantity_on_hand) AS avg_quantity_on_hand FROM inventory inv JOIN item i ON inv.inv_item_sk = i.i_item_sk GROUP BY ROLLUP(i.i_product_name, i.i_brand, i.i_class, i.i_category);

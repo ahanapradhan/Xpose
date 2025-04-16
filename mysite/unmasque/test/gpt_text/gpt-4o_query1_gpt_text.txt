@@ -1,4 +1,1 @@
-"Identify the top 100 customers in Tennessee who have returned items to a store in 2001, with their total return amount exceeding 120% of the average return amount for that store, and list their customer IDs."
-
--- Prompt Token count = 316
-
+"Identify the top 100 customers in Tennessee who have returned items to a store in 2001, with their total return amount exceeding 120% of the average return amount for that store, and list their customer IDs in ascending order."

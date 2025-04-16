@@ -1,4 +1,0 @@
-"This SQL query is designed to analyze sales performance by calculating the total and average monthly sales for different product categories and brands managed by various managers over a one-year period. It focuses on specific categories such as 'Books', 'Children', 'Electronics', 'Women', 'Music', and 'Men', and further narrows down to particular classes and brands within these categories. The query identifies managers whose sales performance deviates by more than 10% from the average monthly sales, highlighting potential areas for improvement or concern. The results are sorted by manager ID, average monthly sales, and total sales, and are limited to the top 100 records for review."
-
--- Prompt Token count = 650
-

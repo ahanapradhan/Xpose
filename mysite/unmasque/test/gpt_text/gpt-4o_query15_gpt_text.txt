@@ -1,4 +1,0 @@
-"This SQL query is designed to generate a report that summarizes the total sales revenue from catalog sales for the first quarter of 1998, grouped by customer zip code. It specifically targets sales where the customer's zip code starts with certain specified prefixes, or the customer resides in California, Washington, or Georgia, or the sales price exceeds $500. The results are sorted by zip code and limited to the top 100 entries, providing insights into high-value sales regions and customer demographics for strategic business analysis."
-
--- Prompt Token count = 287
-

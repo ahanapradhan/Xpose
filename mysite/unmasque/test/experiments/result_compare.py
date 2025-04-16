@@ -1,7 +1,8 @@
 import os
 import sys
 
-from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, XFE_DIR
+from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, XFE_DIR, \
+    readline_ignoring_comments, MODEL
 from mysite.unmasque.test.experiments.text_to_sql import create_text2SQL_agent
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
@@ -47,11 +48,11 @@ def do_for_a_pair(rcomp: ResultComparator):
 if __name__ == '__main__':
 
     # Loop through all files in the folder
-    gpt_agent = create_text2SQL_agent("4o")
+    gpt_agent = create_text2SQL_agent(config[MODEL])
     conn = give_conn()
     conn.connectUsingParams()
-    rc = ResultComparator(conn, False)
 
+    rc = ResultComparator(conn, False)
     y_counter = 0
     n_counter = 0
     err_counter = 0
@@ -66,27 +67,24 @@ if __name__ == '__main__':
             xfe_file_path = os.path.join(xfe_folder_path, gpt_agent.give_filename(qkey))
             print(f"{qh_file_path} : {xfe_file_path}")
 
-            with open(qh_file_path, 'r', encoding='utf-8') as fh:
-                qh = fh.readlines()
-                with open(xfe_file_path, 'r', encoding='utf-8') as fe:
-                    xfe_qe = fe.readlines()
-                    # conn.begin_transaction()
-                    res, check = do_for_a_pair(rc)
-                    # conn.rollback_transaction()
-                    if check == "Error":
-                        err_counter = err_counter + 1
-                    elif check == "QH Error":
-                        print(f"Check QH for {qkey}")
-                        qh_error = qh_error + 1
-                    elif not check:
-                        n_counter = n_counter + 1
-                    else:
-                        y_counter = y_counter + 1
-                    with open(output_filepath, 'a', encoding='utf-8') as fo:
-                        fo.writelines(f"{qkey}\t\t{str(len(res) >= 2)}\t\t{str(check)}\n")
+            qh = readline_ignoring_comments(qh_file_path)
+            xfe_qe = readline_ignoring_comments(xfe_file_path)
+            res, check = do_for_a_pair(rc)
+            if check == "Error":
+                err_counter = err_counter + 1
+            elif check == "QH Error":
+                print(f"Check QH for {qkey}")
+                qh_error = qh_error + 1
+            elif not check:
+                n_counter = n_counter + 1
+            else:
+                y_counter = y_counter + 1
+            with open(output_filepath, 'a', encoding='utf-8') as fo:
+                fo.writelines(f"{qkey}\t\t{str(len(res) >= 2)}\t\t{str(check)}\n")
 
             # break
     with open(output_filepath, 'a', encoding='utf-8') as fo:
         fo.writelines(
             f"\n\nOverall Stats\nillegal QH: {qh_error}\nillegal QE: {err_counter}\nmatch: {y_counter}\nmismatch: {n_counter}\n")
+
     conn.closeConnection()

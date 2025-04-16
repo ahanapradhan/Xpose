@@ -1,0 +1,1 @@
+SELECT SUM(ss.ss_net_profit) AS total_net_profit FROM store_sales ss JOIN store s ON ss.ss_store_sk = s.s_store_sk JOIN customer c ON ss.ss_customer_sk = c.c_customer_sk WHERE s.s_geography_class = '400 Metropolitan' AND c.c_preferred_cust_flag = 'Y' GROUP BY s.s_store_sk HAVING COUNT(DISTINCT c.c_customer_sk) > 10;

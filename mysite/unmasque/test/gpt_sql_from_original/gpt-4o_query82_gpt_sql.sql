@@ -1,0 +1,1 @@
+SELECT c.c_customer_id FROM customer c JOIN web_sales ws ON c.c_customer_sk = ws.ws_bill_customer_sk JOIN store_sales ss ON c.c_customer_sk = ss.ss_customer_sk GROUP BY c.c_customer_id HAVING SUM(ws.ws_net_paid) > SUM(ss.ss_net_paid);
