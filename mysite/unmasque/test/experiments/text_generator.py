@@ -74,7 +74,7 @@ def generate_text_from_sql():
              "Give the descrption in a single English paragraph, suitable for a business manager. " \
              "Do not add any explanation. Put the paragraph inside double quotes. Here is the SQL:"
     for filename in os.listdir(translator.qfolder_path):
-        if filename.endswith('.sql') and filename == 'query1.sql':
+        if filename.endswith('.sql'):
             keys = filename.split(".")
             key = keys[0]
             file_path = os.path.join(translator.qfolder_path, filename)
