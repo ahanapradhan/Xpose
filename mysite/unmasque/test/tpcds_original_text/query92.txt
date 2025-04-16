@@ -1,1 +1,6 @@
 Compute the total discount on web sales of items from a given manufacturer over a particular 90 day period for sales whose discount exceeded 30% over the average discount of items from that manufacturer in that period of time.
+Query Constants:
+IMID.01 = 350
+WSDATE.01 = 2000-01-27
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 120 of 135

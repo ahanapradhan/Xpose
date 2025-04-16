@@ -1,1 +1,5 @@
 Select the top revenue generating products, sold during breakfast or dinner time for one month managed by a given manager across all three sales channels.
+Query Constants:
+MANAGER.01 = 1
+MONTH.01 = 11
+YEAR.01 = 1999

@@ -1,1 +1,7 @@
 Report the total web sales for customers in specific zip codes, cities, counties or states, or specific items for a given year and quarter. .
+Query Constants:
+QOY.01 = 2
+YEAR.01 = 2001
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 110 of 135
+GBOBC = ca_city

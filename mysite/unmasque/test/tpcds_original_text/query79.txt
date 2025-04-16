@@ -1,1 +1,7 @@
 Compute the per customer coupon amount and net profit of Monday shoppers. Only purchases of three consecutive years made on Mondays in large stores by customers with a certain dependent count and with a large vehicle count are considered.
+Query Constants:
+VEHCNT.01 = 2
+YEAR.01 = 1999
+DEPCNT.01 = 6
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 117 of 135

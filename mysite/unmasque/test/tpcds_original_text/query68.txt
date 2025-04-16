@@ -1,1 +1,7 @@
 Compute the per customer extended sales price, extended list price and extended tax for "out of town" shoppers buying from stores located in two cities in the first two days of each month of three consecutive years. Only consider customers with specific dependent and vehicle counts.
+Query Constants:
+CITY_B.01 = Midway
+CITY_A.01 = Fairview
+VEHCNT.01 = 3
+YEAR.01 = 1999
+DEPCNT.01 = 4

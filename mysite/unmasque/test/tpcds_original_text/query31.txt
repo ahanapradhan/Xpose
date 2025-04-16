@@ -1,1 +1,4 @@
 List counties where the percentage growth in web sales is consistently higher compared to the percentage growth in store sales in the first three consecutive quarters for a given year.
+Query Constants:
+YEAR.01 = 2000
+AGG.01 = ss1.ca_county

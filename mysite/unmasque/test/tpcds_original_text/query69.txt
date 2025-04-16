@@ -1,1 +1,9 @@
 Count the customers with the same gender, marital status, education status, education status, purchase estimate and credit rating who live in certain states and who have purchased from stores but neither form the catalog nor from the web during a two month time period of a given year.
+Query Constants:
+STATE.01 = KY
+STATE.02 = GA
+STATE.03 = NM
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 115 of 135
+YEAR.01 = 2001
+MONTH.01 = 4

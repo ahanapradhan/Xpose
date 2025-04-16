@@ -1,1 +1,7 @@
 Get all items that were sold in stores in a specific month and year and which were returned in the next six months of the same year and re-purchased by the returning customer afterwards through the catalog sales channel in the following three years. For those these items, compute the total quantity sold through the store, the quantity returned and the quantity purchased through the catalog. Group this information by item and store.
+Query Constants:
+MONTH.01 = 9
+YEAR.01 = 1999
+AGG.01 = 29
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 106 of 135

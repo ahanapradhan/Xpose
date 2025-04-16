@@ -1,1 +1,5 @@
 For a given year, month and store manager calculate the total store sales of any combination all brands.
+Query Constants:
+MANAGER.01 = 28
+MONTH.01 = 11
+YEAR.01 = 1999

@@ -1,1 +1,5 @@
 Find customers who have returned items more than 20% more often than the average customer returns for a store in a given state for a given year.
+Query Constants:
+YEAR.01=2000
+STATE.01=TN
+AGGFIELD.01 = SR_RETURN_AMT

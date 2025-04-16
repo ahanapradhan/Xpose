@@ -1,1 +1,7 @@
 Display customers with both store and web sales in consecutive years for whom the increase in web sales exceeds the increase in store sales for a specified year.
+Query Constants:
+YEAR.01 = 2001
+AGGONE.01 = sum
+ORDERC.01 = 1 1 1
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 116 of 135

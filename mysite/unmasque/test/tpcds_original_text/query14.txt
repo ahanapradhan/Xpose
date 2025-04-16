@@ -1,1 +1,4 @@
 ) This query contains multiple iterations: Iteration 1: First identify items in the same brand, class and category that are sold in all three sales channels in two consecutive years. Then compute the average sales (quantity*list price) across all sales of all three sales channels in the same three years (average sales). Finally, compute the total sales and the total number of sales rolled up for each channel, brand, class and category. Only consider sales of cross channel sales that had sales larger than the average sale. Iteration 2: Based on the previous query compare December store sales.
+Query Constants:
+DAY.01 = 11
+YEAR.01 = 1999

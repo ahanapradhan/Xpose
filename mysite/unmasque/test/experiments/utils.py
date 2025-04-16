@@ -29,13 +29,15 @@ def load_config():
     text_dir = config[text_type][TEXT_DIR]
     xfe_dir = config[text_type][XFE_DIR]
     model = config[SOURCE][MODEL]
+    constants = True if config[text_type][CONSTANTS] == 'y' else False
 
     return {
         BENCHMARK_SQL: config[SOURCE][BENCHMARK_SQL],
         TEXT_TYPE: text_type,
         TEXT_DIR: text_dir,
         XFE_DIR: xfe_dir,
-        MODEL: model
+        MODEL: model,
+        CONSTANTS: constants
     }
 
 
@@ -58,4 +60,4 @@ O_THREE = 'o3'
 pdf_path = "tpc-ds_v2.1.0.pdf"
 ORIGINAL = 'original'
 LLM = 'llm'
-
+CONSTANTS = 'constants'

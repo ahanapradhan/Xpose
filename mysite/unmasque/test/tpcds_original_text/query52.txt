@@ -1,1 +1,1 @@
-Report the total of extended sales price for all items of a specific brand in a specific year and month. Qualification Substitution Parameters  MONTH.01=11  YEAR.01=2000 B.53 query53.tpl Find the ID, quarterly sales and yearly sales of those manufacturers who produce items with specific characteristics and whose average monthly sales are larger than 10% of their monthly sales.
+Report the total of extended sales price for all items of a specific brand in a specific year and month. Qualification Substitution Parameters  MONTH.01=11  YEAR.01=2000

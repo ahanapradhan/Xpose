@@ -1,1 +1,5 @@
 Report the increase of weekly store sales from one year to the next year for each store and day of the week.
+Query Constants:
+DMS.01 = 1212
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 113 of 135

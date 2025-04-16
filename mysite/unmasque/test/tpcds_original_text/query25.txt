@@ -1,1 +1,4 @@
 Get all items that were  sold in stores in a particular month and year and  returned and re-purchased by the customer through the catalog channel in the same month and in the six following months. For these items, compute the sum of net profit of store sales, net loss of store loss and net profit of catalog . Group this information by item and store.
+Query Constants:
+YEAR.01 = 2001
+AGG.01 = sum

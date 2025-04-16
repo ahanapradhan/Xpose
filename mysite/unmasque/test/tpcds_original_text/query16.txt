@@ -1,1 +1,10 @@
 Report number of orders, total shipping costs and profits from catalog sales of particular counties and states for a given 60 day period for non-returned sales filled from an alternate warehouse.
+Query Constants:
+COUNTY_E.01 = Williamson County
+COUNTY_D.01 = Williamson County
+COUNTY_C.01 = Williamson County
+COUNTY_B.01 = Williamson County
+COUNTY_A.01 = Williamson County
+STATE.01 = GA
+MONTH.01 = 2
+YEAR.01 = 2002

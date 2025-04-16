@@ -1,1 +1,6 @@
 For the groups of customers living in the same state, having the same gender and marital status who have purchased from stores and from either the catalog or the web during a given year, display the following: • state, gender, marital status, count of customers • min, max, avg, count distinct of the customer’s dependent count • min, max, avg, count distinct of the customer’s employed dependent count • min, max, avg, count distinct of the customer’s dependents in college count Display / calculate the “count of customers” multiple times to emulate a potential reporting tool scenario.
+Query Constants:
+YEAR.01 = 2002
+AGGONE = min
+AGGTWO = max
+AGGTHREE = avg

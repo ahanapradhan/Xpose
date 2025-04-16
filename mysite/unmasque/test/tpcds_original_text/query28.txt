@@ -1,1 +1,20 @@
 Calculate the average list price, number of non empty (null) list prices and number of distinct list prices of six different sales buckets of the store sales channel. Each bucket is defined by a range of distinct items and information about list price, coupon amount and wholesale cost.
+Query Constants:
+WHOLESALECOST.01=57
+WHOLESALECOST.02=31
+WHOLESALECOST.03=79
+WHOLESALECOST.04=38
+WHOLESALECOST.05=17
+WHOLESALECOST.06=7
+COUPONAMT.01=459
+COUPONAMT.02=2323
+COUPONAMT.03=12214
+COUPONAMT.04=6071
+COUPONAMT.05=836
+COUPONAMT.06=7326
+LISTPRICE.01=8
+LISTPRICE.02=90
+LISTPRICE.03=142
+LISTPRICE.04=135
+LISTPRICE.05=122
+LISTPRICE.06=154

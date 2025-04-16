@@ -1,1 +1,4 @@
 List the best and worst performing products measured by net profit.
+Query Constants:
+NULLCOLSS.01 = ss_addr_sk
+STORE.01 = 4

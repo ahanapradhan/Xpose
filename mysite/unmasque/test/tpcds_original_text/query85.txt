@@ -1,2 +1,18 @@
-For all web return reason calculate the average sales, average refunded cash and average return fee by different
-combinations of customer and sales types (e.g., based on marital status, education status, state and sales profit).
+For all web return reason calculate the average sales, average refunded cash and average return fee by different combinations of customer and sales types (e.g., based on marital status, education status, state and sales profit).
+Query Constants:
+YEAR.01 = 2000
+STATE.01 = IN
+STATE.02 = OH
+STATE.03 = NJ
+STATE.04 = WI
+STATE.05 = CT
+STATE.06 = KY
+STATE.07 = LA
+STATE.08 = IA
+STATE.09 = AR
+ES.01 = Advanced Degree
+ES.02 = College
+ES.03 = 2 yr Degree
+MS.01 = M
+MS.02 = S
+MS.03 = W

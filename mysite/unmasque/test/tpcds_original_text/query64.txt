@@ -1,1 +1,12 @@
 Find those stores that sold more cross-sales items from one year to another. Cross-sale items are items that are sold over the Internet, by catalog and in store.
+Query Constants:
+YEAR.01 = 1999
+PRICE.01 = 64
+COLOR.01 = purple
+COLOR.02 = burlywood
+COLOR.03 = indian
+COLOR.04 = spring
+COLOR.05 = floral
+COLOR.06 = medium
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 114 of 135

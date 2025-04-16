@@ -1,1 +1,6 @@
 This query contains multiple, related iterations: Iteration 1: Calculate the total specified monetary value of items in a specific color for store sales transactions by customer name and store, in a specific market, from customers who currently live in their birth countries and in the neighborhood of the store, and list only those customers for whom the total specified monetary value is greater than 5% of the average value Iteration 2: Calculate the total specified monetary value of items in a specific color for store sales transactions by customer name and store, in a specific market, from customers who currently live in their birth countries and in the neighborhood of the store, and list only those customers for whom the total specified monetary value is greater than 5% of the average value
+Query Constants:
+MARKET = 8
+COLOR.1 = pale
+COLOR.2 = chiffon
+AMOUNTONE = ss_net_paid

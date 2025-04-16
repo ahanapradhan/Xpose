@@ -1,1 +1,11 @@
 Compute store sales gross profit margin ranking for items in a given year for a given list of states.\
+Query Constants:
+STATE_H.01 = TN
+STATE_G.01 = TN
+STATE_F.01 = TN
+STATE_E.01 = TN
+STATE_D.01 = TN
+STATE_C.01 = TN
+STATE_B.01 = TN
+STATE_A.01 = TN
+YEAR.01 = 2001

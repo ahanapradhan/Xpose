@@ -1,1 +1,10 @@
 Compute the per-customer coupon amount and net profit of all "out of town" customers buying from stores located in 5 cities on weekends in three consecutive years. The customers need to fit the profile of having a specific dependent count and vehicle count. For all these customers print the city they lived in at the time of purchase, the city in which the store is located, the coupon amount and net profit
+Query Constants:
+CITY_E.01 = Fairview
+CITY_D.01 = Fairview
+CITY_C.01 = Fairview
+CITY_B.01 = Midway
+CITY_A.01 = Fairview
+VEHCNT.01 = 3
+YEAR.01 = 1999
+DEPCNT.01 = 4

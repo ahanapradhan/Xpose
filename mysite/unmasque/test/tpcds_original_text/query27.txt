@@ -1,1 +1,14 @@
 For all items sold in stores located in six states during a given year, find the average quantity, average list price, average list sales price, average coupon amount for a given gender, marital status, education and customer demographic.
+Query Constants:
+STATE_F.01 = TN
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 105 of 135
+STATE_E.01 = TN
+STATE_D.01 = TN
+STATE_C.01 = TN
+STATE_B.01 = TN
+STATE_A.01 = TN
+ES.01 = College
+MS.01 = S
+GEN.01 = M
+YEAR.01 = 2002

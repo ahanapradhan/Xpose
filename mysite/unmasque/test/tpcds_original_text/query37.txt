@@ -1,1 +1,10 @@
 List all items and current prices sold through the catalog channel from certain manufacturers in a given $30 price range and consistently had a quantity between 100 and 500 on hand in a 60-day period.
+Query Constants:
+PRICE.01 = 68
+MANUFACT_ID.01 = 677
+MANUFACT_ID.02 = 940
+MANUFACT_ID.03 = 694
+MANUFACT_ID.04 = 808
+INVDATE.01 = 2000-02-01
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 108 of 135

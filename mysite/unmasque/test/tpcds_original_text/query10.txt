@@ -1,1 +1,9 @@
 Count the customers with the same gender, marital status, education status, purchase estimate, credit rating, dependent count, employed dependent count and college dependent count who live in certain counties and who have purchased from both stores and another sales channel during a three month time period of a given year.
+Query Constants:
+YEAR.01 = 2002
+MONTH.01 = 1
+COUNTY.01 = Rush County
+COUNTY.02 = Toole County
+COUNTY.03 = Jefferson County
+COUNTY.04 = Dona Ana County
+COUNTY.05 = La Porte County

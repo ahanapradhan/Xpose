@@ -1,1 +1,4 @@
 Find customers whose increase in spending was large over the web than in stores this year compared to last year.
+Query Constants:
+YEAR.01 = 2001
+SELECTONE = t_s_secyear.customer_preferred_cust_flag

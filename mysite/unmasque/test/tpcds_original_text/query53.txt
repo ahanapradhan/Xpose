@@ -1,2 +1,3 @@
-Find the ID, quarterly sales and yearly sales of those manufacturers who produce items with specific
-characteristics and whose average monthly sales are larger than 10% of their monthly sales.
+Find the ID, quarterly sales and yearly sales of those manufacturers who produce items with specific characteristics and whose average monthly sales are larger than 10% of their monthly sales.
+Query Constants:
+DMS.01 = 1200

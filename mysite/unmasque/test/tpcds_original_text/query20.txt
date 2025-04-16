@@ -1,2 +1,7 @@
-Compute the total revenue and the ratio of total revenue to revenue by item class for specified item categories
-and time periods.
+Compute the total revenue and the ratio of total revenue to revenue by item class for specified item categories and time periods.
+Query Constants:
+CATEGORY.01 = Sports
+CATEGORY.02 = Books
+CATEGORY.03 = Home
+SDATE.01 = 1999-02-22
+YEAR.01 = 1999

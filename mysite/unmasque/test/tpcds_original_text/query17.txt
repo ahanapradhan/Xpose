@@ -1,1 +1,3 @@
 Analyze, for each state, all items that were sold in stores in a particular quarter and returned in the next three quarters and then re-purchased by the customer through the catalog channel in the three following quarters.
+Query Constants:
+YEAR.01 = 2001

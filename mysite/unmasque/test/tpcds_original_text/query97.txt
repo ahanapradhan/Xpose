@@ -1,1 +1,3 @@
 Generate counts of promotional sales and total sales, and their ratio from the web channel for a particular item category and month to customers in a given time zone.
+Query Constants:
+YEAR.01 = 2000

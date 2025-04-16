@@ -1,1 +1,18 @@
 Compute, for each county, the average quantity, list price, coupon amount, sales price, net profit, age, and number of dependents for all items purchased through catalog sales in a given year by customers who were born in a given list of six months and living in a given list of seven states and who also belong to a given gender and education demographic.
+Query Constants:
+MONTH.01 = 1
+MONTH.02 = 6
+MONTH.03 = 8
+MONTH.04 = 9
+MONTH.05 = 12
+MONTH.06 = 2
+STATE.01 = MS
+STATE.02 = IN
+STATE.03 = ND
+STATE.04 = OK
+STATE.05 = NM
+STATE.06 = VA
+STATE.07 = MS
+ES.01 = Unknown
+GEN.01 = F
+YEAR.01 = 1998

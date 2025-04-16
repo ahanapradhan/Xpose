@@ -1,1 +1,5 @@
 Computes the average quantity, list price, discount, sales price for promotional items sold through the web channel where the promotion is not offered by mail or in an event for given gender, marital status and educational status.
+Query Constants:
+NULLCOLCS01 = cs_ship_addr_sk
+NULLCOLWS.01 = ws_ship_customer_sk
+NULLCOLSS.01 = ss_store_sk

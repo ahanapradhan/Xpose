@@ -1,1 +1,6 @@
 Computes the average quantity, list price, discount, sales price for promotional items sold through the catalog channel where the promotion was not offered by mail or in an event for given gender, marital status and educational status.
+Query Constants:
+YEAR.01 = 2000
+ES.01 = College
+MS.01 = S
+GEN.01 = M

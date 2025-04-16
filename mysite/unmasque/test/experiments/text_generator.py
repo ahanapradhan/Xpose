@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 
 from mysite.unmasque.test.experiments.llm_talk import TalkToGptO3Mini, TalkToGpt4O
 from mysite.unmasque.test.experiments.utils import load_config, TEXT_DIR, BENCHMARK_SQL, MODEL, O_THREE, FOUR_O, \
-    readline_ignoring_comments, pdf_path, TEXT_TYPE, ORIGINAL
+    readline_ignoring_comments, pdf_path, TEXT_TYPE, ORIGINAL, CONSTANTS
 
 config = load_config()
 
@@ -89,30 +89,57 @@ def get_text_from_documentation():
     output_dir = f"../{config[TEXT_DIR]}"
     # === Create output folder if it doesn't exist ===
     os.makedirs(output_dir, exist_ok=True)
-
     # === Extract all text from the PDF ===
     full_text = extract_text(pdf_path)
-
-    # === Regex pattern to find query descriptions before substitution parameters ===
-    query_pattern = re.compile(
-        r'(B\.(\d+)\s+query\d+\.tpl\s*)(.*?)(?=Qualification Substitution Parameters:)',
-        re.DOTALL
-    )
-
+    query_pattern = __get_text_pattern(config[CONSTANTS])
     matches = query_pattern.findall(full_text)
-
     # === Save each description to separate file ===
-    for _, qnum, desc in matches:
-        qnum_int = int(qnum)
-        cleaned_desc = ' '.join(desc.strip().split())
+    for _, qnum, desc, params in matches:
+        cleaned_desc, qnum_int = __prepare_content(desc, params, qnum)
 
-        filename = f"query{qnum_int}.txt"
-        filepath = os.path.join(output_dir, filename)
-
+        textfile = f"query{qnum_int}.txt"
+        print(textfile)
+        filepath = os.path.join(output_dir, textfile)
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(cleaned_desc)
 
     print(f"✅ Saved {len(matches)} descriptions to folder: {output_dir}")
+
+
+def __prepare_content(desc, params, qnum):
+    qnum_int = int(qnum)
+    cleaned_desc = ' '.join(desc.strip().split())
+    content = f"{cleaned_desc}\n"
+    if params:
+        param_lines = []
+        for line in params.strip().splitlines():
+            line = line.strip()
+            line = re.sub(r"^[•\-\*\u2022\uF0B7]+", "", line)  # Remove bullets like •, *, -, etc.
+            if line:
+                param_lines.append(line.strip())
+        if param_lines:
+            content += "Query Constants:\n" + "\n".join(param_lines)
+    return content, qnum_int
+
+
+def __get_text_pattern(include_constants=False):
+    if not include_constants:
+        # === Regex pattern to find query descriptions before substitution parameters ===
+        query_pattern = re.compile(
+            r'(B\.(\d+)\s+query\d+\.tpl\s*)(.*?)(?=Qualification Substitution Parameters:)',
+            re.DOTALL
+        )
+    else:
+        # Regex pattern to capture descriptions + substitution parameters
+        query_pattern = re.compile(
+            r'(B\.(\d+)\s+query\d+\.tpl\s*)'  # Header with query number
+            r'(.*?)'  # Description (non-greedy)
+            r'(?:Qualification Substitution Parameters:\s*'  # Optional Subst section
+            r'(.*?))?'  # Parameters (optional)
+            r'(?=B\.\d+\s+query\d+\.tpl\s*|$)',  # Until next query or EOF
+            re.DOTALL
+        )
+    return query_pattern
 
 
 if __name__ == '__main__':

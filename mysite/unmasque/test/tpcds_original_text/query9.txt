@@ -1,1 +1,9 @@
 Categorize store sales transactions into 5 buckets according to the number of items sold. Each bucket contains the average discount amount, sales price, list price, tax, net paid, paid price including tax, or net profit..
+Query Constants:
+AGGCTHEN.01= ss_ext_discount_amt
+AGGCELSE.01= ss_net_paid
+RC.01=74129
+RC.02=122840
+RC.03=56580
+RC.04=10097
+RC.05=165306

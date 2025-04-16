@@ -1,1 +1,3 @@
 Rollup the web sales for a given year by category and class, and rank the sales among peers within the parent, for each group compute sum of sales, location with the hierarchy and rank within the group.
+Query Constants:
+DMS.01 = 1200

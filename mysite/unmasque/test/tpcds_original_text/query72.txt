@@ -1,1 +1,5 @@
 For each item, warehouse and week combination count the number of sales with and without promotion.
+Query Constants:
+BP.01 = >10000
+MS.01 = D
+YEAR.01 = 1999

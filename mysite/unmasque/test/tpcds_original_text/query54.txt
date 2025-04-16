@@ -1,1 +1,8 @@
 Find all customers who purchased items of a given category and class on the web or through catalog in a given month and year that was followed by an in-store purchase at a store near their residence in the three consecutive months. Calculate a histogram of the revenue by these customers in $50 segments showing the number of customers in each of these revenue generated segments.
+Query Constants:
+CLASS.01 = maternity
+CATEGORY.01 = Women
+MONTH.01 = 12
+TPC Benchmark™ DS - Standard Specification, Version 2.1.0
+Page 112 of 135
+YEAR.01 = 1998

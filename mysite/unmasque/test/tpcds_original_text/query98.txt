@@ -1,1 +1,1 @@
-Report on items sold in a given 30 day period, belonging to the specified category.
+Report on items sold in a given 30 day period, belonging to the specified category. Qualification Substitution Parameters  YEAR.01 = 1999  SDATE.01 = 1999-02-22 TPC Benchmark™ DS - Standard Specification, Version 2.1.0 Page 121 of 135  CATEGORY.01 = Sports  CATEGORY.02 = Books  CATEGORY.03 = Home

@@ -1,3 +1,17 @@
-Calculate the average sales quantity, average sales price, average wholesale cost, total wholesale cost for store
-sales of different customer types (e.g., based on marital status, education status) including their household
-demographics, sales price and different combinations of state and sales profit for a given year.
+Calculate the average sales quantity, average sales price, average wholesale cost, total wholesale cost for store sales of different customer types (e.g., based on marital status, education status) including their household demographics, sales price and different combinations of state and sales profit for a given year.
+Query Constants:
+STATE.01 = TX
+STATE.02 = OH
+STATE.03 = TX
+STATE.04 = OR
+STATE.05 = NM
+STATE.06 = KY
+STATE.07 = VA
+STATE.08 = TX
+STATE.09 = MS
+ES.01 = Advanced Degree
+ES.02 = College
+ES.03 = 2 yr Degree
+MS.01 = M
+MS.02 = S
+MS.03 = W
