@@ -1,0 +1,1 @@
+"Identify and list the names and addresses of suppliers from a specific nation who supply parts with names starting with a given prefix, where the available quantity of these parts exceeds half of the total quantity ordered in the past year, sorted by supplier name."
