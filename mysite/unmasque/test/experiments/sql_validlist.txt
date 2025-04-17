@@ -1,0 +1,36 @@
+../tpch-queries : ../gpt_sql
+
+Overall Stats
+illegal QH: 0
+illegal QE: 0
+
+../tpch-queries : ../gpt_sql_from_original
+
+Overall Stats
+illegal QH: 0
+illegal QE: 0
+
+../tpch-queries : ../gpt_sql_from_original
+
+Overall Stats
+illegal QH: 0
+illegal QE: 0
+
+../tpch-queries : ../gpt_sql_from_original
+
+Overall Stats
+illegal QH: 0
+illegal QE: 0
+
+../tpch-queries : ../gpt_sql_from_original
+
+Overall Stats
+illegal QH: 0
+illegal QE: 0
+
+../tpch-queries : ../gpt_sql_from_original
+
+Overall Stats
+illegal QH: 0
+illegal QE: 0
+
