@@ -1,4 +1,4 @@
 Report the total of extended sales price for all items of a specific brand in a specific year and month.
 Query Constants:
 MONTH.01 = 11
-YEAR.01 = 2000
+YEAR.01 = 1999
