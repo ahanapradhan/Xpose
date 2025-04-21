@@ -1,4 +1,4 @@
 For all items whose price was changed on a given date, compute the percentage change in inventory between the 30-day period BEFORE the price change and the 30-day period AFTER the change. Group this information by warehouse.
 Query Constants:
-SALES_DATE.01 = 2000-03-11
+SALES_DATE.01 = 2000-05-13
 YEAR.01 = 2000

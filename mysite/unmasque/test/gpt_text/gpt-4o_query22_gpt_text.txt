@@ -1,4 +1,2 @@
 "This SQL query is designed to provide a business manager with a summary of inventory levels by calculating the average quantity on hand for products over a specified 12-month period. It categorizes the data by product name, brand, class, and category, and uses a rollup function to allow for hierarchical aggregation. The results are ordered by average quantity on hand and then by product details, providing a clear view of inventory trends and helping in decision-making related to stock management. The query limits the output to the top 100 results, ensuring a focused and manageable dataset for analysis."
 
--- Prompt Token count = 253
-
