@@ -1,4 +1,2 @@
 "Analyzing sales data from 1999, this SQL query identifies significant monthly sales fluctuations for various product categories and brands across different stores and companies. It calculates the total sales and average monthly sales for each category, brand, store, and company combination, and ranks them by month and year. The query then compares the sales of each month to the previous and next months, focusing on instances where the deviation from the average monthly sales exceeds 10%. The result is a list of up to 100 records, ordered by the magnitude of sales deviation, highlighting potential areas of interest for further business analysis."
 
--- Prompt Token count = 877
-

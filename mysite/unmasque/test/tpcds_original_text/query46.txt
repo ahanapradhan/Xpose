@@ -6,5 +6,5 @@ CITY_C.01 = Fairview
 CITY_B.01 = Midway
 CITY_A.01 = Fairview
 VEHCNT.01 = 3
-YEAR.01 = 1999
+YEAR.01 = 2000
 DEPCNT.01 = 4

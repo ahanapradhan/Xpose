@@ -1,4 +1,13 @@
-"This SQL query calculates the total quantity of items sold in 1999 from a store sales database, focusing on specific customer demographics and geographic locations. It targets customers who are either widowed with a secondary education and made purchases between $100 and $150, married with an advanced degree and made purchases between $50 and $100, or divorced with a 2-year degree and made purchases between $150 and $200. Additionally, it filters sales based on customers residing in the United States, specifically in states like Texas, Nebraska, Missouri, Colorado, Tennessee, North Dakota, Oklahoma, Pennsylvania, and California, with varying net profit ranges for each state group."
-
--- Prompt Token count = 523
+"This SQL query calculates the total quantity of items
+sold in 1999 from a store sales database, focusing on
+specific customer demographics and geographic locations.
+It targets customers who are either widowed with a secondary
+education and made purchases between $100 and $150,
+married with an advanced degree and made purchases between
+$50 and $100, or divorced with a 2-year degree and made
+purchases between $150 and $200. Additionally, it filters
+sales based on customers residing in the United States,
+specifically in states like
+Texas, Nebraska, Missouri, Colorado, Tennessee, North Dakota,
+Oklahoma, Pennsylvania, and California, with varying net profit ranges for each state group."
 
