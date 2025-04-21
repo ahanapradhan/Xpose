@@ -1,5 +1,5 @@
 Report the total extended sales price per item brand of a specific manufacturer for all sales in a specific month of the year.
 Query Constants:
 MONTH.01=11
-MANUFACT =128
+MANUFACT =427
 AGGC = ss_ext_sales_price
