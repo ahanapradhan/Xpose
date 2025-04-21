@@ -1,4 +1,4 @@
 Report the total catalog sales for customers in selected geographical regions or who made large purchases for a given year and quarter.
 Query Constants:
-QOY.01 = 2
-YEAR.01 = 2001
+QOY.01 = 1
+YEAR.01 = 1998

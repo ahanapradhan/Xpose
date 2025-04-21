@@ -1,8 +1,8 @@
 Compute the revenue ratios across item classes: For each item in a list of given categories, during a 30 day time period, sold through the web channel compute the ratio of sales of that item to the sum of all of the sales in that item's class.
 Query Constants:
-CATEGORY.01 = Sports
-CATEGORY.02 = Books
-CATEGORY.03 = Home
-SDATE.01 = 1999-02-22
-YEAR.01 = 1999
+CATEGORY.01 = Home
+CATEGORY.02 = Men
+CATEGORY.03 = Women
+SDATE.01 = 2000-05-11
+YEAR.01 = 2000
 
