@@ -1,1 +1,1 @@
-SELECT i_product_name, i_brand, i_class, i_category, AVG(inv_quantity_on_hand) AS avg_quantity_on_hand FROM inventory JOIN item ON inventory.inv_item_sk = item.i_item_sk GROUP BY ROLLUP(i_product_name, i_brand, i_class, i_category) HAVING AVG(inv_quantity_on_hand) > 1200;
+SELECT i.i_product_name, i.i_brand, i.i_class, i.i_category, AVG(inv.inv_quantity_on_hand) AS avg_quantity_on_hand FROM inventory inv JOIN item i ON inv.inv_item_sk = i.i_item_sk WHERE inv.inv_quantity_on_hand > 1200 GROUP BY ROLLUP(i.i_product_name, i.i_brand, i.i_class, i.i_category);

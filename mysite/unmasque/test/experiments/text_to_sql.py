@@ -69,18 +69,18 @@ class Text2SQLTranslator:
 
     def doJob_loop(self, question, qkey, sql, append=False):
         sql_text = " ".join(sql)
-        original_question = f"{question} \"{sql_text}\"\n\n Consider the following schema while formulating SQL.\n " \
-                            f"Schema: \"{TPCDS_Schema}\""
+        schema_info = f"\n\nConsider the following schema while formulating SQL.\nSchema: \"{TPCDS_Schema}\""
+        original_question = f"{question} \"{sql_text}\""
         print(original_question)
-        reply = self.doJob(original_question)
+        reply = self.doJob(f"{original_question} {schema_info}")
         check, problem = self.post_process(reply)
         num = 0
         while len(problem) and num < self.loop_cutoff:
             next_question = f"{original_question}\nYou formulated the following query:\t" \
                             f"\"{check}\"\n The query has the following error:\n" \
-                            f"\"{problem}\". \nFix it.\n"
+                            f"\"{problem}\". \nFix it so that it runs on PostgreSQL database engine.\n"
             print(next_question)
-            reply = self.doJob(next_question)
+            reply = self.doJob(f"{next_question} {schema_info}")
             check, problem = self.post_process(reply)
             num = num + 1
 
@@ -141,7 +141,7 @@ if __name__ == '__main__':
              "Only give the SQL, do not add any explanation. " \
              "Do not keep any place-holder parameter in the query." \
              "Use valid data values as query constants, if the text does not mention them." \
-             "Please ensure the SQL query is correct and optimized. Text: "
+             "Please ensure the SQL query is correct and optimized.\nText: "
     for filename in os.listdir(translator.qfolder_path):
         if filename.endswith('.txt'):
             key = filename.split('_')[0].split('.')[0]

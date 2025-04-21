@@ -1,1 +1,1 @@
-SELECT i.i_item_id, i.i_item_desc, cs.cs_quantity, cs.cs_sales_price FROM catalog_sales cs JOIN item i ON cs.cs_item_sk = i.i_item_sk JOIN date_dim d ON cs.cs_sold_date_sk = d.d_date_sk WHERE i.i_category = 'Sports' AND d.d_date BETWEEN '1999-02-22' AND '1999-03-23';
+SELECT i.i_item_id, i.i_item_desc, i.i_category, cs.cs_quantity, cs.cs_sales_price FROM catalog_sales cs JOIN item i ON cs.cs_item_sk = i.i_item_sk JOIN date_dim d ON cs.cs_sold_date_sk = d.d_date_sk WHERE d.d_date BETWEEN '1999-02-22' AND '1999-03-23' AND i.i_category IN ('Sports', 'Books', 'Home');
