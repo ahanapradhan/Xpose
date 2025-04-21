@@ -30,6 +30,7 @@ def load_config():
     xfe_dir = config[text_type][XFE_DIR]
     model = config[SOURCE][MODEL]
     constants = True if config[text_type][CONSTANTS] == 'y' else False
+    qids = config[QID][Q].split(',')
 
     return {
         BENCHMARK_SQL: config[SOURCE][BENCHMARK_SQL],
@@ -37,7 +38,8 @@ def load_config():
         TEXT_DIR: text_dir,
         XFE_DIR: xfe_dir,
         MODEL: model,
-        CONSTANTS: constants
+        CONSTANTS: constants,
+        QID: qids
     }
 
 
@@ -61,3 +63,5 @@ pdf_path = "tpc-ds_v2.1.0.pdf"
 ORIGINAL = 'original'
 LLM = 'llm'
 CONSTANTS = 'constants'
+QID = 'qid'
+Q = 'q'

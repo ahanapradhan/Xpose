@@ -48,6 +48,8 @@ def __check_for_one():
     if filename.endswith('.sql'):
         keys = filename.split('.')
         qkey = keys[0]
+        if qkey not in queries:
+            return
         qh_file_path = os.path.join(qh_folder_path, filename)
         xfe_file_path = os.path.join(xfe_folder_path, gpt_agent.give_filename(qkey))
         print(f"{qh_file_path} : {xfe_file_path}")
@@ -74,6 +76,7 @@ if __name__ == '__main__':
 
     # Loop through all files in the folder
     gpt_agent = create_text2SQL_agent(config[MODEL])
+    queries = [f"query{n}" for n in config[QID]]
     conn = give_conn()
     conn.connectUsingParams()
 

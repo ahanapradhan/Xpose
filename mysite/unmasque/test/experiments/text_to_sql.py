@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 from mysite.unmasque.test.experiments.llm_talk import TalkToGpt4O, TalkToGptO3Mini
 
 from mysite.unmasque.test.experiments.utils import give_conn, load_config, \
-    XFE_DIR, TEXT_DIR, MODEL, O_THREE, FOUR_O, readline_ignoring_comments
+    XFE_DIR, TEXT_DIR, MODEL, O_THREE, FOUR_O, readline_ignoring_comments, QID
 
 TPCDS_Schema = """CREATE TABLE call_center(cc_call_center_sk INTEGER, cc_call_center_id VARCHAR, cc_rec_start_date DATE, cc_rec_end_date DATE, cc_closed_date_sk INTEGER, cc_open_date_sk INTEGER, cc_name VARCHAR, cc_class VARCHAR, cc_employees INTEGER, cc_sq_ft INTEGER, cc_hours VARCHAR, cc_manager VARCHAR, cc_mkt_id INTEGER, cc_mkt_class VARCHAR, cc_mkt_desc VARCHAR, cc_market_manager VARCHAR, cc_division INTEGER, cc_division_name VARCHAR, cc_company INTEGER, cc_company_name VARCHAR, cc_street_number VARCHAR, cc_street_name VARCHAR, cc_street_type VARCHAR, cc_suite_number VARCHAR, cc_city VARCHAR, cc_county VARCHAR, cc_state VARCHAR, cc_zip VARCHAR, cc_country VARCHAR, cc_gmt_offset DECIMAL(5,2), cc_tax_percentage DECIMAL(5,2));
 CREATE TABLE catalog_page(cp_catalog_page_sk INTEGER, cp_catalog_page_id VARCHAR, cp_start_date_sk INTEGER, cp_end_date_sk INTEGER, cp_department VARCHAR, cp_catalog_number INTEGER, cp_catalog_page_number INTEGER, cp_description VARCHAR, cp_type VARCHAR);
@@ -135,6 +135,7 @@ def create_text2SQL_agent(gpt_model):
 if __name__ == '__main__':
 
     translator = create_text2SQL_agent(config[MODEL])
+    queries = [f"query{n}" for n in config[QID]]
 
     prompt = "You are an expert in SQL. " \
              "Formulate SQL query that suits the following natural language text description in English." \
@@ -145,6 +146,8 @@ if __name__ == '__main__':
     for filename in os.listdir(translator.qfolder_path):
         if filename.endswith('.txt'):
             key = filename.split('_')[0].split('.')[0]
+            if key not in queries:
+                continue
             file_path = os.path.join(translator.qfolder_path, filename)
             q_sql = readline_ignoring_comments(file_path)
             output1 = translator.doJob_loop(prompt, key, q_sql)

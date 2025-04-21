@@ -4,7 +4,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
 from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, XFE_DIR, \
-    readline_ignoring_comments, MODEL
+    readline_ignoring_comments, MODEL, QID
 from mysite.unmasque.test.experiments.text_to_sql import create_text2SQL_agent
 
 from mysite.unmasque.src.core.result_comparator import ResultComparator
@@ -58,11 +58,14 @@ if __name__ == '__main__':
     err_counter = 0
     qh_error = 0
     output_filepath = os.path.join(check_list)
+    queries = [f"query{n}" for n in config[QID]]
 
     for filename in os.listdir(qh_folder_path):
         if filename.endswith('.sql'):
             keys = filename.split('.')
             qkey = keys[0]
+            if qkey not in queries:
+                continue
             qh_file_path = os.path.join(qh_folder_path, filename)
             xfe_file_path = os.path.join(xfe_folder_path, gpt_agent.give_filename(qkey))
             print(f"{qh_file_path} : {xfe_file_path}")

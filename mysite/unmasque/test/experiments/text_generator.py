@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 
 from mysite.unmasque.test.experiments.llm_talk import TalkToGptO3Mini, TalkToGpt4O
 from mysite.unmasque.test.experiments.utils import load_config, TEXT_DIR, BENCHMARK_SQL, MODEL, O_THREE, FOUR_O, \
-    readline_ignoring_comments, pdf_path, TEXT_TYPE, ORIGINAL, CONSTANTS
+    readline_ignoring_comments, pdf_path, TEXT_TYPE, ORIGINAL, CONSTANTS, QID
 
 config = load_config()
 
@@ -80,6 +80,8 @@ def generate_text_from_sql():
         if filename.endswith('.sql'):
             keys = filename.split(".")
             key = keys[0]
+            if key not in queries:
+                continue
             file_path = os.path.join(translator.qfolder_path, filename)
             q_sql = readline_ignoring_comments(file_path)
             print(q_sql)
@@ -100,7 +102,11 @@ def get_text_from_documentation():
     for _, qnum, desc, params in matches:
         cleaned_desc, qnum_int = __prepare_content(desc, params, qnum)
 
-        textfile = f"query{qnum_int}.txt"
+        querynum = f"query{qnum_int}"
+        if querynum not in queries:
+            continue
+
+        textfile = f"{querynum }.txt"
         print(textfile)
         filepath = os.path.join(output_dir, textfile)
         with open(filepath, "w", encoding="utf-8") as f:
@@ -150,6 +156,7 @@ def __get_text_pattern(include_constants=False):
 
 
 if __name__ == '__main__':
+    queries = [f"query{n}" for n in config[QID]]
     text_type = config[TEXT_TYPE]
     if text_type == ORIGINAL:
         get_text_from_documentation()
