@@ -1,4 +1,14 @@
-"Based on the provided SQL query, the business logic is designed to evaluate sales data from a 'store_sales' table, categorizing it into five distinct quantity ranges (buckets) and calculating either the average list price or the average net profit for each range. For each bucket, if the number of sales transactions within the specified quantity range exceeds a certain threshold, the query returns the average list price; otherwise, it returns the average net profit. This analysis is filtered by a specific reason code from the 'reason' table, where the reason key is equal to 1, providing insights into sales performance based on quantity sold."
-
--- Prompt Token count = 739
+"The business logic is designed to evaluate sales
+data from a 'store_sales' table, categorizing it
+into five distinct quantity ranges (buckets) and
+calculating either the average list price or the
+average net profit for each range.
+For each bucket, if the number of sales
+transactions within the specified quantity
+range exceeds a certain threshold,
+the query returns the average list price;
+otherwise, it returns the average net profit.
+This analysis is filtered by a specific reason code
+from the 'reason' table, where the reason key is equal
+to 1, providing insights into sales performance based on quantity sold."
 
