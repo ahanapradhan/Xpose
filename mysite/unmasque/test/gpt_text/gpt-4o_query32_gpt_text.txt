@@ -1,0 +1,4 @@
+"To identify potential over-discounting issues,
+this query calculates the total amount of
+discounts given on catalog sales that exceed 30% above the average discount for items
+manufactured by a specific manufacturer (ID 610) over a 90-day period starting from March 4, 2001. The result is limited to the first 100 records, providing insights into excessive discounting practices that may impact profitability."

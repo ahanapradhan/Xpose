@@ -3,4 +3,4 @@ Query Constants:
 YEAR.01 = 2000
 ES.01 = College
 MS.01 = S
-GEN.01 = M
+GEN.01 = F

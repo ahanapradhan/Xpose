@@ -1,4 +1,2 @@
 "This SQL query calculates the gross margin for store sales in Tennessee for the year 2000 by dividing the sum of net profits by the sum of extended sales prices. It groups the results by item category and class, using a rollup to include subtotals and totals. The query ranks the gross margin within each category and class hierarchy, ordering the results by hierarchy level and rank, and limits the output to the top 100 results. This analysis helps identify the most profitable product categories and classes in the specified region and time period."
 
--- Prompt Token count = 401
-

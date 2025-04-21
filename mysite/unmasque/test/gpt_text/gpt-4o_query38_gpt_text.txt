@@ -1,4 +1,2 @@
 "This SQL query is designed to identify and count the number of unique customers who have made purchases through all three sales channels—store, catalog, and web—within a specific 12-month period. By intersecting the distinct customer names and purchase dates from each sales channel, the query ensures that only those customers who have engaged with all three channels during the specified timeframe are included in the count, providing valuable insights into multi-channel customer engagement."
 
--- Prompt Token count = 404
-

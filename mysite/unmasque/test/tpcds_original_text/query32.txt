@@ -1,5 +1,5 @@
 Compute the total discounted amount for a particular manufacturer in a particular 90 day period for catalog sales whose discounts exceeded the average discount by at least 30%.
 Query Constants:
-CSDATE.01 = 2000-01-27
-YEAR.01 = 2000
-IMID.01 = 977
+CSDATE.01 = 2001-03-04
+YEAR.01 = 2001
+IMID.01 = 610

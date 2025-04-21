@@ -1,6 +1,6 @@
 What is the monthly sales figure based on extended price for a specific month in a specific year, for manufacturers in a specific category in a given time zone. Group sales by manufacturer identifier and sort output by sales amount, by channel, and give Total sales.
 Query Constants:
-CATEGORY.01 = Electronics
+CATEGORY.01 = Books
 GMT.01 = -5
-MONTH.01 = 5
-YEAR.01 = 1998
+MONTH.01 = 3
+YEAR.01 = 1999

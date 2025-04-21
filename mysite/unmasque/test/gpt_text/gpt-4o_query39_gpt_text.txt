@@ -1,4 +1,2 @@
 "These SQL queries analyze inventory data from the year 2002 to identify items in warehouses that exhibit high variability in stock levels. The queries calculate the standard deviation and mean of inventory quantities for each item in each warehouse, grouped by month. They then compute the coefficient of variation (COV) to measure the relative variability. The first query selects items with a COV greater than 1, comparing inventory data between two consecutive months. The second query further filters these results to include only those with a COV greater than 1.5 for the first month, providing insights into inventory fluctuations that may require management attention."
 
--- Prompt Token count = 1281
-

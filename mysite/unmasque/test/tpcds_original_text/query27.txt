@@ -9,4 +9,4 @@ STATE_A.01 = TN
 ES.01 = College
 MS.01 = S
 GEN.01 = M
-YEAR.01 = 2002
+YEAR.01 = 2000

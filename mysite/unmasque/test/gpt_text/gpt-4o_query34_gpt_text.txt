@@ -1,4 +1,2 @@
 "This SQL query is designed to generate a list of customers who have made between 15 and 20 purchases, specifically focusing on transactions that occurred on certain days of the month and in Williamson County stores during the years 1999 to 2001. The customers are filtered based on their household demographics, such as having a high buying potential and owning more than one vehicle per dependent. The output includes the customer's last name, first name, salutation, preferred customer status, and the ticket number of the sales transactions, sorted by the customer's last name, first name, salutation, and preferred customer status in descending order."
 
--- Prompt Token count = 591
-

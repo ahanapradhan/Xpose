@@ -1,4 +1,4 @@
 Find customers and their detailed customer data who have returned items, which they bought on the web, for an amount that is 20% higher than the average amount a customer returns in a given state in a given time period across all items. Order the output by customer data.
 Query Constants:
-YEAR.01 = 2002
+YEAR.01 = 2000
 STATE.01 = GA

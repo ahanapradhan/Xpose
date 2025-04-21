@@ -1,4 +1,10 @@
-"This SQL query is designed to analyze sales data from the year 2000, focusing on items purchased by female customers who are widowed and have a secondary education level. It calculates the average quantity sold, list price, coupon amount, and sales price for each item, specifically for transactions where promotions were not conducted via email or events. The results are grouped by item ID and sorted in ascending order, with a limit of 100 items displayed. This analysis can help in understanding purchasing patterns and the effectiveness of non-email and non-event promotions for this specific customer demographic."
+"This SQL query is designed to analyze sales
+data from the year 2000, focusing on items
+purchased by female customers who are widowed
+and have a secondary education level.
+It calculates the average quantity sold,
+list price, coupon amount, and sales price
+for each item, specifically for transactions
+where promotions were not conducted via email or events. The results are grouped by item ID and sorted in ascending order, with a limit of 100 items displayed. This analysis can help in understanding purchasing patterns and the effectiveness of non-email and non-event promotions for this specific customer demographic."
 
--- Prompt Token count = 311
 

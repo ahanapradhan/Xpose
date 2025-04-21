@@ -1,0 +1,5 @@
+"The business analysis focuses on comparing the
+growth rates of web sales and store sales across
+different counties for the first three quarters
+of the year 2001. The query calculates the sales
+growth from Q1 to Q2 and from Q2 to Q3 for both web and store sales, and then identifies counties where the growth in web sales outpaces the growth in store sales for both transitions. This analysis helps in understanding the shift in consumer purchasing behavior from physical stores to online platforms within specific geographic regions during the specified time frame."

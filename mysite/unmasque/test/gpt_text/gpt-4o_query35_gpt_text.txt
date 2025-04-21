@@ -1,0 +1,14 @@
+"This SQL query is designed to analyze customer
+demographics and purchasing behavior for the
+year 2001, focusing on the first three quarters.
+It examines customers who have made purchases
+in-store, online, or through catalogs,
+and groups the data by state, gender,
+marital status, and various dependent counts
+(total dependents, employed dependents,
+and college-going dependents).
+The query calculates statistical measures such
+as count, standard deviation, average, and
+maximum for these dependent categories,
+providing insights into the distribution and
+characteristics of customer households. The results are sorted and limited to the top 100 entries, offering a concise overview of customer demographics and their purchasing patterns."

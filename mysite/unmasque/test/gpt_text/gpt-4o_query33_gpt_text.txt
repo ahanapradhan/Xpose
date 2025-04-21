@@ -1,4 +1,7 @@
-"This SQL query is designed to analyze and rank the top 100 manufacturers based on their total sales revenue from book sales across three sales channels: store sales, catalog sales, and web sales. The analysis is focused on sales that occurred in March 1999, specifically from customers located in a time zone with a GMT offset of -5. The query aggregates sales data by manufacturer ID, summing up the sales prices from each channel, and then combines these results to provide a comprehensive view of the manufacturers' performance in the specified period and region."
-
--- Prompt Token count = 747
+"This SQL query is designed to analyze and rank the
+top 100 manufacturers based on their total sales
+revenue from book sales across three sales channels:
+store sales, catalog sales, and web sales.
+The analysis is focused on sales that occurred in
+March 1999, specifically from customers located in a time zone with a GMT offset of -5. The query aggregates sales data by manufacturer ID, summing up the sales prices from each channel, and then combines these results to provide a comprehensive view of the manufacturers' performance in the specified period and region."
 
