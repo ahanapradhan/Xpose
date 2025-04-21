@@ -1,5 +1,5 @@
 Select the top revenue generating products bought by out of zip code customers for a given year, month and manager.
 Query Constants:
-MANAGER.01 = 8
-MONTH.01 = 11
+MANAGER.01 = 38
+MONTH.01 = 12
 YEAR.01 = 1998
