@@ -1,6 +1,6 @@
 How many items do we carry with specific combinations of color, units, size and category.
 Query Constants:
-MANUFACT.01 = 738
+MANUFACT.01 = 765
 SIZE.01 = medium
 SIZE.02 = extra large
 SIZE.03 = N/A

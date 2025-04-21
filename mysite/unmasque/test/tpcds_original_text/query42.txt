@@ -1,4 +1,4 @@
 For each item and a specific year and month calculate the sum of the extended sales price of store transactions.
 Query Constants:
-MONTH.01 = 11
+MONTH.01 = 12
 YEAR.01 = 2000

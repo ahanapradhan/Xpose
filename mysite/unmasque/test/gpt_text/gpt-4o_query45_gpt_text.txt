@@ -1,4 +1,2 @@
 "This SQL query is designed to generate a report that summarizes the total sales revenue from web sales for specific customer zip codes and item IDs during the first quarter of the year 2000. It aggregates the sales data by customer zip code and state, focusing on transactions where the customer's billing address matches one of the specified zip codes or the item sold is among a selected list of item IDs. The results are sorted by zip code and state, and the output is limited to the top 100 records."
 
--- Prompt Token count = 374
-

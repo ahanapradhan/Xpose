@@ -1,4 +1,2 @@
 "This SQL query retrieves and ranks the top 100 sales figures for December 2000, categorized by item category, for items managed by a specific manager (with manager ID 1). It aggregates the total sales price for each category and orders the results in descending order of sales, providing insights into the most profitable item categories during that period."
 
--- Prompt Token count = 259
-
