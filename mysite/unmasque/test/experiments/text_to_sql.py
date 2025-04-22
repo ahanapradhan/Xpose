@@ -146,7 +146,7 @@ if __name__ == '__main__':
     for filename in os.listdir(translator.qfolder_path):
         if filename.endswith('.txt'):
             key = filename.split('_')[0].split('.')[0]
-            if key not in queries:
+            if len(queries) and key not in queries:
                 continue
             file_path = os.path.join(translator.qfolder_path, filename)
             q_sql = readline_ignoring_comments(file_path)

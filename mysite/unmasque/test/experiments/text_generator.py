@@ -103,7 +103,7 @@ def get_text_from_documentation():
         cleaned_desc, qnum_int = __prepare_content(desc, params, qnum)
 
         querynum = f"query{qnum_int}"
-        if querynum not in queries:
+        if len(queries) and querynum not in queries:
             continue
 
         textfile = f"{querynum }.txt"

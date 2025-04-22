@@ -4,7 +4,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
 from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, \
-    XFE_DIR, MODEL
+    XFE_DIR, MODEL, QID
 from mysite.unmasque.test.experiments.text_to_sql import create_text2SQL_agent
 
 # Set your folder path here
@@ -48,7 +48,7 @@ def __check_for_one():
     if filename.endswith('.sql'):
         keys = filename.split('.')
         qkey = keys[0]
-        if qkey not in queries:
+        if len(queries) and qkey not in queries:
             return
         qh_file_path = os.path.join(qh_folder_path, filename)
         xfe_file_path = os.path.join(xfe_folder_path, gpt_agent.give_filename(qkey))

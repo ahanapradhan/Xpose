@@ -64,7 +64,7 @@ if __name__ == '__main__':
         if filename.endswith('.sql'):
             keys = filename.split('.')
             qkey = keys[0]
-            if qkey not in queries:
+            if len(queries) and qkey not in queries:
                 continue
             qh_file_path = os.path.join(qh_folder_path, filename)
             xfe_file_path = os.path.join(xfe_folder_path, gpt_agent.give_filename(qkey))

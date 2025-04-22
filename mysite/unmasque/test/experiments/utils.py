@@ -31,6 +31,8 @@ def load_config():
     model = config[SOURCE][MODEL]
     constants = True if config[text_type][CONSTANTS] == 'y' else False
     qids = config[QID][Q].split(',')
+    if not len(qids) or qids[0].lower() == 'all':
+        qids = []
 
     return {
         BENCHMARK_SQL: config[SOURCE][BENCHMARK_SQL],
