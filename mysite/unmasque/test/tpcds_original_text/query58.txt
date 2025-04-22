@@ -1,3 +1,3 @@
 Retrieve the items generating the highest revenue and which had a revenue that was approximately equivalent across all of store, catalog and web within the week ending a given date.
 Query Constants:
-SALES_DATE.01 = 2000-01-03
+SALES_DATE.01 = 2002-02-25

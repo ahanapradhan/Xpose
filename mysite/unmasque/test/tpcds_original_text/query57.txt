@@ -1,5 +1,5 @@
 Find the item brands and categories for each call center and their monthly sales figures for a specified year, where the monthly sales figure deviated more than 10% of the average monthly sales for the year, sorted by deviation and call center. Report the sales deviation from the previous and following month.
 Query Constants:
-YEAR.01 = 1999
+YEAR.01 = 2000
 SELECTONE = v1.i_category, v1.i_brand, v1.cc_name
 SELECTTWO = ,v1.d_year, v1.d_moy

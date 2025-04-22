@@ -1,6 +1,6 @@
 What is the monthly sales amount for a specific month in a specific year, for items in a specific category, purchased by customers residing in a specific time zone. Group sales by item and sort output by sales amount.
 Query Constants:
-CATEGORY.01 = Music
-GMT.01 = -5
-MONTH.01 = 9
-YEAR=1998
+CATEGORY.01 = Jewelry
+GMT.01 = -6
+MONTH.01 = 8
+YEAR=1999

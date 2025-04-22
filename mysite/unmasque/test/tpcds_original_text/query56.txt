@@ -1,8 +1,8 @@
 Compute the monthly sales amount for a specific month in a specific year, for items with three specific colors across all sales channels. Only consider sales of customers residing in a specific time zone. Group sales by item and sort output by sales amount.
 Query Constants:
-COLOR.01 = slate
-COLOR.02 = blanched
-COLOR.03 = burnished
-GMT.01 = -5
-MONTH.01 = 2
-YEAR.01 = 2001
+COLOR.01 = firebrick
+COLOR.02 = rosy
+COLOR.03 = white
+GMT.01 = -6
+MONTH.01 = 3
+YEAR.01 = 1998

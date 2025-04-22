@@ -1,4 +1,2 @@
 "This SQL query is designed to analyze and compare weekly sales performance for stores over two consecutive years. It calculates the total sales for each day of the week (Sunday through Saturday) for each store and week in a given year, and then compares these figures to the corresponding week in the previous year. The result is a set of ratios that indicate how sales for each day of the week have changed year-over-year for each store. The query retrieves and orders the top 100 results based on store name, store ID, and week sequence, providing insights into sales trends and performance improvements or declines across different days of the week."
 
--- Prompt Token count = 1040
-
