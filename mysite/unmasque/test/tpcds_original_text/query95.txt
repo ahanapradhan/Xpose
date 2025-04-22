@@ -1,5 +1,5 @@
 Produce a count of web sales and total shipping cost and net profit in a given 60 day period to customers in a given state from a named web site for returned orders shipped from more than one warehouse.
 Query Constants:
-STATE.01=IL
-MONTH.01=2
-YEAR.01=1999
+STATE.01=IN
+MONTH.01=4
+YEAR.01=2000

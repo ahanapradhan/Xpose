@@ -1,15 +1,15 @@
 Within a year list all month and combination of item categories, classes and brands that have had monthly sales larger than 0.1 percent of the total yearly sales.
 Query Constants:
-CLASS_F.01 = dresses
-CAT_F.01 = Women
-CLASS_E.01 = birdal
-CAT_E.01 = Jewelry
-CLASS_D.01 = shirts
-CAT_D.01 = Men
-CLASS_C.01 = football
-CAT_C.01 = Sports
-CLASS_B.01 = stereo
-CAT_B.01 = Electronics
-CLASS_A.01 = computers
-CAT_A.01 = Books
-YEAR.01 = 1999
+CLASS_F.01 = paint
+CAT_F.01 = Home
+CLASS_E.01 = accessories
+CAT_E.01 = Men
+CLASS_D.01 = fitness
+CAT_D.01 = Books
+CLASS_C.01 = mens
+CAT_C.01 = Jewelry
+CLASS_B.01 = pendants
+CAT_B.01 = Women
+CLASS_A.01 = swimwear
+CAT_A.01 = Shoes
+YEAR.01 = 2002

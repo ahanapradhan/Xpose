@@ -1,5 +1,5 @@
 What is the ratio between the number of items sold over the internet in the morning (8 to 9am) to the number of items sold in the evening (7 to 8pm) of customers with a specified number of dependents. Consider only websites with a high amount of content.
 Query Constants:
-HOUR_PM.01 = 19
-HOUR_AM.01 = 8
-DEPCNT.01 = 6
+HOUR_PM.01 = 20
+HOUR_AM.01 = 12
+DEPCNT.01 = 8

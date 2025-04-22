@@ -1,6 +1,6 @@
 Display total returns of catalog sales by call center and manager in a particular month for male customers of unknown education or female customers with advanced degrees with a specified buy potential and from a particular time zone.
 Query Constants:
-YEAR.01 = 1998
-MONTH.01 = 11
+YEAR.01 = 1999
+MONTH.01 = 12
 BUY_POTENTIAL.01 = Unknown
 GMT.01 = -7

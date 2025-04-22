@@ -1,6 +1,8 @@
 How many items do we sell between pacific times of a day in certain stores to customers with one dependent count and 2 or less vehicles registered or 2 dependents with 4 or fewer vehicles registered or 3 dependents and five or less vehicles registered. In one row break the counts into sells from 8:30 to 9, 9 to 9:30, 9:30 to 10 ... 12 to 12:30
 Query Constants:
-STORE.01=Unknown
-HOUR.01=4
-HOUR.02=2
-HOUR.03=0
+STORE.01=ese
+HOUR.01=8
+HOUR.02=9
+HOUR.03=10
+HOUR.04=11
+HOUR.05=12

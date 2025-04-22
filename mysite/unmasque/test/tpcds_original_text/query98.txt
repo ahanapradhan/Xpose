@@ -1,7 +1,7 @@
 Report on items sold in a given 30 day period, belonging to the specified category.
 Query Constants:
-YEAR.01 = 1999
-SDATE.01 = 1999-02-22
-CATEGORY.01 = Sports
-CATEGORY.02 = Books
+YEAR.01 = 2000
+SDATE.01 = 2000-05-18
+CATEGORY.01 = Electronics
+CATEGORY.02 = Men
 CATEGORY.03 = Home
