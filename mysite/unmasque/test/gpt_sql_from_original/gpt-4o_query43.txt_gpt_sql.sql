@@ -1,1 +1,0 @@
-SELECT s.s_store_id, SUM(ss.ss_net_paid) AS total_sales FROM store_sales ss JOIN store s ON ss.ss_store_sk = s.s_store_sk JOIN date_dim d ON ss.ss_sold_date_sk = d.d_date_sk WHERE d.d_dow BETWEEN 1 AND 7 AND d.d_date BETWEEN CAST(:start_date AS DATE) AND CAST(:end_date AS DATE) GROUP BY s.s_store_id;

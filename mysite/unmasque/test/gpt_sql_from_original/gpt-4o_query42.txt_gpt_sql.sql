@@ -1,1 +1,0 @@
-SELECT i.i_item_id, d.d_year, d.d_moy, SUM(ss.ss_ext_sales_price) AS total_extended_sales_price FROM store_sales ss JOIN item i ON ss.ss_item_sk = i.i_item_sk JOIN date_dim d ON ss.ss_sold_date_sk = d.d_date_sk WHERE d.d_year = specific_year AND d.d_moy = specific_month GROUP BY i.i_item_id, d.d_year, d.d_moy;

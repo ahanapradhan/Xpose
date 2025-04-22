@@ -1,1 +1,1 @@
-SELECT i.i_brand, SUM(ss.ss_ext_sales_price) AS total_ext_sales_price FROM store_sales ss JOIN item i ON ss.ss_item_sk = i.i_item_sk JOIN date_dim d ON ss.ss_sold_date_sk = d.d_date_sk WHERE i.i_manufact_id = 128 AND d.d_moy = 11 GROUP BY i.i_brand;
+SELECT i.i_brand, SUM(ss.ss_ext_sales_price) AS total_ext_sales_price FROM store_sales ss JOIN item i ON ss.ss_item_sk = i.i_item_sk JOIN date_dim d ON ss.ss_sold_date_sk = d.d_date_sk WHERE i.i_manufact_id = 427 AND d.d_moy = 11 GROUP BY i.i_brand;

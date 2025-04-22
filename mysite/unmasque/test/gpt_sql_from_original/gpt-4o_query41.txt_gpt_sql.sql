@@ -1,1 +1,0 @@
-SELECT COUNT(*) FROM item WHERE i_color IS NOT NULL AND i_units IS NOT NULL AND i_size IS NOT NULL AND i_category IS NOT NULL;
