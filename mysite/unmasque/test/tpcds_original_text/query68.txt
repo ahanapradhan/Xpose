@@ -3,5 +3,5 @@ Query Constants:
 CITY_B.01 = Midway
 CITY_A.01 = Fairview
 VEHCNT.01 = 3
-YEAR.01 = 1999
-DEPCNT.01 = 4
+YEAR.01 = 1998
+DEPCNT.01 = 8

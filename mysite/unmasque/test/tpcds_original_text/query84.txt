@@ -1,4 +1,4 @@
 List all customers living in a specified city, with an income between 2 values.
 Query Constants:
-INCOME.01 = 38128
-CITY.01 = Edgewood
+INCOME.01 = 54986
+CITY.01 = Green Acres

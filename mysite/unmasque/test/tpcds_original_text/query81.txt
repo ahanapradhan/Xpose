@@ -1,4 +1,4 @@
 Find customers and their detailed customer data who have returned items bought from the catalog more than 20 percent the average customer returns for customers in a given state in a given time period. Order output by customer data.
 Query Constants:
-YEAR.01 = 2000
-STATE.01 = GA
+YEAR.01 = 1999
+STATE.01 = TX

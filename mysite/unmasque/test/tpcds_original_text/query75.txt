@@ -1,4 +1,4 @@
 For two consecutive years track the sales of items by brand, class and category.
 Query Constants:
-CATEGORY.01 = Books
+CATEGORY.01 = Men
 YEAR.02 = 2002

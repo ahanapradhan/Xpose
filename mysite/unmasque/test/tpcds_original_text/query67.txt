@@ -1,3 +1,3 @@
 Find top stores for each category based on store sales in a specific year.
 Query Constants:
-DMS.01 = 1200
+DMS.01 = 1181

@@ -1,8 +1,9 @@
 Count the number of customers with specific buy potentials and whose dependent count to vehicle count ratio is larger than 1 and who in three consecutive years bought in stores located in 4 counties between 1 and 5 items in one purchase. Only purchases in the first 2 days of the months are considered.
 Query Constants:
-COUNTY_D.01 = Orange County
-COUNTY_C.01 = Bronx County
-COUNTY_B.01 = Franklin Parish
-COUNTY_A.01 = Williamson CountyYEAR.01 = 1999
-BPTWO.01 = unknown
+COUNTY_D.01 = Williamson County
+COUNTY_C.01 = Williamson County
+COUNTY_B.01 = Williamson County
+COUNTY_A.01 = Williamson County
+YEAR.01 = 2000
+BPTWO.01 = 0-500
 BPONE.01 = >10000
