@@ -1,6 +1,6 @@
 Find the ratio of items sold with and without promotions in a given month and year. Only items in certain categories sold to customers living in a specific time zone are considered.
 Query Constants:
-GMT.01 = -5
-CATEGORY.01 = Jewelry
-MONTH.01 = 11
-YEAR.01 = 1998
+GMT.01 = -7
+CATEGORY.01 = Books
+MONTH.01 = 12
+YEAR.01 = 2001
