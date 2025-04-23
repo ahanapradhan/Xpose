@@ -1,1 +1,8 @@
-Give a Query that finds, for two given nations, the gross discounted revenues derived from lineitems in which parts were shipped from a supplier in either nation to a customer in the other nation during 1995 and 1996. The query lists the supplier nation, the customer nation, the year, and the revenue from shipments that took place in that year. The query orders the answer by Supplier nation, Customer nation, and year (all ascending).
+Give a Query that finds, for two given nations, the gross discounted revenues derived from lineitems in which 
+parts were shipped from a supplier in either nation to a customer in the other nation during 1995 and 1996. 
+The query lists the supplier nation, the customer nation, the year, and the revenue from shipments that took place 
+in that year. The query orders the answer by Supplier nation, Customer nation, and year (all ascending).
+
+QUERY CONSTANTS:
+NATION1 = FRANCE
+NATION2 = GERMANY

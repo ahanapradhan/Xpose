@@ -1,1 +1,6 @@
-Give a Query that determines what percentage of the revenue in a given year and month was derived from promotional parts. The query considers only parts actually shipped in that month and gives the percentage. Revenue is defined as (l_extendedprice * (1-l_discount)).
+Give a Query that determines what percentage of the revenue in a given year and month was 
+derived from promotional parts. The query considers only parts actually shipped in that month 
+and gives the percentage. Revenue is defined as (l_extendedprice * (1-l_discount)).
+
+QUERY CONSTANTS:
+DATE = 1995-01-01

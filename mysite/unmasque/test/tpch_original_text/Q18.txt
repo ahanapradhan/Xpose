@@ -1,1 +1,6 @@
-Give a Query that finds a list of the top 100 customers who have ever placed large quantity orders. The query lists the customer name, customer key, the order key, date and total price and the quantity for the order.
+Give a Query that finds a list of the top 100 customers who have ever placed large 
+quantity orders. The query lists the customer name, customer key, the order key, 
+date and total price and the quantity for the order.
+
+QUERY CONSTANTS:
+QUANTITY = 300

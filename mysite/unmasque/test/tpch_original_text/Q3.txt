@@ -1,1 +1,8 @@
-Give a Query that retrieves the shipping priority and potential revenue, defined as the sum of l_extendedprice * (1-l_discount), of the orders having the largest revenue among those that had not been shipped as of a given date. Orders are listed in decreasing order of revenue. If more than 10 unshipped orders exist, only the 10 orders with the largest revenue are listed.
+Give a Query that retrieves the shipping priority and potential revenue, 
+defined as the sum of l_extendedprice * (1-l_discount), of the orders having the largest revenue among 
+those that had not been shipped as of a given date. Orders are listed in decreasing order of revenue. 
+If more than 10 unshipped orders exist, only the 10 orders with the largest revenue are listed.
+
+QUERY CONSTANTS:
+SEGMENT = FURNITURE
+DATE = 1995-03-15

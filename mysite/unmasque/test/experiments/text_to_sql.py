@@ -32,7 +32,7 @@ class Text2SQLTranslator:
         self.loop_cutoff = 5
 
     def give_filename(self, qkey):
-        return f"{self.name}_{qkey}_{self.output_filename}"
+        return f"{self.name}_Q{qkey}_{self.output_filename}"
 
     def post_process(self, qe_query):
         conn = give_conn()
@@ -125,7 +125,7 @@ if __name__ == '__main__':
              "Please ensure the SQL query is correct and optimized. Text: "
     for filename in os.listdir(translator.qfolder_path):
         if filename.endswith('.txt'):
-            key = filename.split('_')[0].split('.')[0]
+            key = filename.split('_')[1].split('.')[0]
             file_path = os.path.join(translator.qfolder_path, filename)
             q_sql = readline_ignoring_comments(file_path)
             output1 = translator.doJob_loop(prompt, key, q_sql)

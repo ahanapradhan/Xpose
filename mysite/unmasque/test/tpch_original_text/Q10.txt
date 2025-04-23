@@ -1,1 +1,7 @@
-Give the Query that finds the top 20 customers, in terms of their effect on lost revenue for a given quarter, who have returned parts. The query considers only parts that were ordered in the specified quarter. The query lists the customer's name, address, nation, phone number, account balance, comment information and revenue lost. The customers are listed in descending order of lost revenue. Revenue lost is defined as sum(l_extendedprice*(1-l_discount)) for all qualifying lineitems.
+Give the Query that finds the top 20 customers, in terms of their effect on lost revenue for a given quarter, 
+who have returned parts. The query considers only parts that were ordered in the specified quarter. The query 
+lists the customer's name, address, nation, phone number, account balance, comment information and revenue lost. 
+The customers are listed in descending order of lost revenue. Revenue lost is defined as sum(l_extendedprice*(1-l_discount)) for all qualifying lineitems.
+
+QUERY CONSTANTS:
+DATE = 1995-01-01

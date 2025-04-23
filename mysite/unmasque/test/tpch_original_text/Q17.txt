@@ -1,1 +1,9 @@
-Give a Query that considers parts of a given brand and with a given container type and determines the average lineitem quantity of such parts ordered for all orders (past and pending) in the 7-year data- base. What would be the average yearly gross (undiscounted) loss in revenue if orders for these parts with a quantity of less than 20% of this average were no longer taken?
+Give a Query that considers parts of a given brand and with a given container type 
+and determines the average lineitem quantity of such parts ordered for all orders 
+(past and pending) in the 7-year database. What would be the average yearly gross 
+(undiscounted) loss in revenue if orders for these parts with a quantity of less 
+than 20% of this average were no longer taken?
+
+QUERY CONSTANTS:
+BRAND = Brand#53
+CONTAINER = MED BOX

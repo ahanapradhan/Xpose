@@ -1,1 +1,9 @@
-Give a Query that lists for each nation in a region the revenue volume that resulted from lineitem transactions in which the customer ordering parts and the supplier filling them were both within that nation. The query is run in order to determine whether to institute local distribution centers in a given region. The query consid- ers only parts ordered in a given year. The query displays the nations and revenue volume in descending order by revenue. Revenue volume for all qualifying lineitems in a particular nation is defined as sum(l_extendedprice * (1 - l_discount)).
+Give a Query that lists for each nation in a region the revenue volume that resulted from lineitem 
+transactions in which the customer ordering parts and the supplier filling them were both within that nation. 
+The query is run in order to determine whether to institute local distribution centers in a given region. 
+The query considers only parts ordered in a given year. The query displays the nations and revenue volume in 
+descending order by revenue. Revenue volume for all qualifying lineitems in a particular nation is defined as sum(l_extendedprice * (1 - l_discount)).
+
+QUERY CONSTANTS:
+REGION = ASIA
+DATE = 1995-01-01

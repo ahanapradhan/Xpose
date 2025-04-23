@@ -1,1 +1,9 @@
-Give a Query that considers all the lineitems shipped in a given year with discounts between DISCOUNT-0.01 and DISCOUNT+0.01. The query lists the amount by which the total revenue would have increased if these discounts had been eliminated for lineitems with l_quantity less than quantity. Note that the potential revenue increase is equal to the sum of [l_extendedprice * l_discount] for all lineitems with discounts and quantities in the qualifying range.
+Give a Query that considers all the lineitems shipped in a given year with discounts between DISCOUNT-0.01 and DISCOUNT+0.01. 
+The query lists the amount by which the total revenue would have increased if these discounts had been eliminated for lineitems 
+with l_quantity less than quantity. Note that the potential revenue increase is equal to the sum of [l_extendedprice * l_discount] 
+for all lineitems with discounts and quantities in the qualifying range.
+
+QUERY CONSTANTS:
+DATE = 1993-01-01
+DISCOUNT = 0.06
+QUANTITY = 24

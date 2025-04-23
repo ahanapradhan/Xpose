@@ -1,1 +1,9 @@
-Give a query that determines the distribution of customers by the number of orders they have made, including customers who have no record of orders, past or present. It counts and reports how many customers have no orders, how many have 1, 2, 3, etc. A check is made to ensure that the orders counted do not fall into one of several special categories of orders. Special categories are identified in the order comment column by looking for a particular pattern.
+Give a query that determines the distribution of customers by the number of orders they have made, 
+including customers who have no record of orders, past or present. It counts and reports how many 
+customers have no orders, how many have 1, 2, 3, etc. A check is made to ensure that the orders counted 
+do not fall into one of several special categories of orders. Special categories are identified in the 
+order comment column by looking for a particular pattern as ..WORD1...WORD2...
+
+QUERY CONSTANTS:
+WORD1 = special
+WORD2 = requests
