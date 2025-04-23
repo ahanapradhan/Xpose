@@ -1,1 +1,17 @@
-SELECT c.c_customer_id FROM customer c JOIN store_returns sr ON c.c_customer_sk = sr.sr_customer_sk JOIN customer_address ca ON c.c_current_addr_sk = ca.ca_address_sk JOIN date_dim d ON sr.sr_returned_date_sk = d.d_date_sk WHERE d.d_year = 2001 AND ca.ca_state = 'TN' GROUP BY c.c_customer_id HAVING SUM(sr.sr_return_amt) > 1.2 * ( SELECT AVG(total_return_amt) FROM ( SELECT SUM(sr_inner.sr_return_amt) AS total_return_amt FROM store_returns sr_inner JOIN customer c_inner ON sr_inner.sr_customer_sk = c_inner.c_customer_sk JOIN customer_address ca_inner ON c_inner.c_current_addr_sk = ca_inner.ca_address_sk JOIN date_dim d_inner ON sr_inner.sr_returned_date_sk = d_inner.d_date_sk WHERE d_inner.d_year = 2001 AND ca_inner.ca_state = 'TN' GROUP BY c_inner.c_customer_id ) avg_returns );
+SELECT c.c_customer_id
+FROM customer c JOIN store_returns sr ON c.c_customer_sk = sr.sr_customer_sk
+JOIN customer_address ca ON c.c_current_addr_sk = ca.ca_address_sk
+JOIN date_dim d ON sr.sr_returned_date_sk = d.d_date_sk
+WHERE d.d_year = 2001 AND ca.ca_state = 'TN'
+GROUP BY c.c_customer_id
+HAVING SUM(sr.sr_return_amt) > 1.2 * ( SELECT AVG(total_return_amt)
+FROM ( SELECT SUM(sr_inner.sr_return_amt) AS total_return_amt
+FROM store_returns sr_inner
+JOIN customer c_inner ON sr_inner.sr_customer_sk = c_inner.c_customer_sk
+JOIN customer_address ca_inner ON c_inner.c_current_addr_sk = ca_inner.ca_address_sk
+JOIN date_dim d_inner ON sr_inner.sr_returned_date_sk = d_inner.d_date_sk
+WHERE d_inner.d_year = 2001 AND ca_inner.ca_state = 'TN'
+GROUP BY c_inner.c_customer_id ) avg_returns );
+
+
+
