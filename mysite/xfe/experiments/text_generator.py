@@ -5,10 +5,10 @@ from abc import abstractmethod
 
 from pdfminer.high_level import extract_text
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-from mysite.unmasque.test.experiments.llm_talk import TalkToGptO3Mini, TalkToGpt4O
-from mysite.unmasque.test.experiments.utils import load_config, TEXT_DIR, BENCHMARK_SQL, MODEL, O_THREE, FOUR_O, \
+from mysite.xfe.experiments.llm_talk import TalkToGptO3Mini, TalkToGpt4O
+from mysite.xfe.experiments.utils import load_config, TEXT_DIR, BENCHMARK_SQL, MODEL, O_THREE, FOUR_O, \
     readline_ignoring_comments, pdf_path, TEXT_TYPE, ORIGINAL
 
 config = load_config()

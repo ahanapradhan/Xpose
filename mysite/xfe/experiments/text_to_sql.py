@@ -29,7 +29,7 @@ class Text2SQLTranslator:
         self.qfolder_path = f"../{config[TEXT_DIR]}/"
         self.output_filename = "gpt_sql_tpch.sql"
         self.client = None
-        self.loop_cutoff = 5
+        self.loop_cutoff = 100 #5
 
     def give_filename(self, qkey):
         return f"{self.name}_Q{qkey}_{self.output_filename}"

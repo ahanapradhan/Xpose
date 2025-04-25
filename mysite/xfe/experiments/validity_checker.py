@@ -1,11 +1,11 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, \
+from mysite.xfe.experiments.utils import give_conn, load_config, BENCHMARK_SQL, \
     XFE_DIR, MODEL
-from mysite.unmasque.test.experiments.text_to_sql import create_text2SQL_agent
+from mysite.xfe.experiments.text_to_sql import create_text2SQL_agent
 
 # Set your folder path here
 config = load_config()

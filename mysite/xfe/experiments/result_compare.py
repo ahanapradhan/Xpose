@@ -1,12 +1,12 @@
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
-from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, XFE_DIR, \
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+from mysite.xfe.experiments.utils import give_conn, load_config, BENCHMARK_SQL, XFE_DIR, \
     readline_ignoring_comments, MODEL
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
-from mysite.unmasque.test.experiments.text_to_sql import create_text2SQL_agent
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+from mysite.xfe.experiments.text_to_sql import create_text2SQL_agent
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
 from mysite.unmasque.src.core.result_comparator import ResultComparator
 

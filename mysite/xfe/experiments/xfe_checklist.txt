@@ -1,41 +1,8 @@
-17		True		False
-11		False		QH Error
-16		False		QH Error
-3		False		QH Error
 17		True		Error
-11		True		False
-16		True		False
-3		True		Error
-22		True		Error
-13		True		Error
-12		True		False
-6		True		Error
-20		True		False
-10		True		False
-21		True		False
-18		True		Error
-9		True		False
-4		True		False
-1		True		Error
-14		True		Error
-7		True		False
-19		True		Error
-8		True		False
-15		False		QH Error
-2		True		False
-5		True		False
-
-
-Overall Stats
-illegal QH: 1
-illegal QE: 9
-match: 0
-mismatch: 12
-17		True		Error
-11		True		False
+11		True		Error
 16		True		Error
 3		True		Error
-22		True		Error
+22		True		False
 13		True		Error
 12		True		Error
 6		True		Error
@@ -47,19 +14,19 @@ mismatch: 12
 4		True		True
 1		True		Error
 14		True		Error
-7		True		Error
+7		True		False
 19		True		Error
 8		True		False
-15		False		QH Error
+15		True		Error
 2		True		Error
 5		True		Error
 
 
 Overall Stats
-illegal QH: 1
+illegal QH: 0
 illegal QE: 15
 match: 1
-mismatch: 5
+mismatch: 6
 17		True		Error
 11		True		False
 16		True		Error
@@ -89,3 +56,63 @@ illegal QH: 0
 illegal QE: 14
 match: 1
 mismatch: 7
+17		True		Error
+11		True		False
+16		True		Error
+3		True		Error
+22		True		False
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		False
+10		True		Error
+21		True		False
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		False
+19		True		Error
+8		True		Error
+15		True		Error
+2		True		True
+5		True		Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 14
+match: 2
+mismatch: 6
+count : 20
+17		True		Error
+11		True		False
+16		True		Error
+3		True		Error
+22		True		False
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		False
+10		True		Error
+21		True		False
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		False
+19		True		Error
+8		True		Error
+15		True		Error
+2		True		True
+5		True		False
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 13
+match: 2
+mismatch: 7
+count : 100
