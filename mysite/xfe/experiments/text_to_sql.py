@@ -2,11 +2,11 @@ import os
 import sys
 from abc import abstractmethod
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-from mysite.unmasque.test.experiments.llm_talk import TalkToGpt4O, TalkToGptO3Mini
+from mysite.xfe.experiments.llm_talk import TalkToGpt4O, TalkToGptO3Mini
 
-from mysite.unmasque.test.experiments.utils import give_conn, load_config, \
+from mysite.xfe.experiments.utils import give_conn, load_config, \
     XFE_DIR, TEXT_DIR, MODEL, O_THREE, FOUR_O, readline_ignoring_comments
 
 TPCH_Schema = """CREATE TABLE region (r_regionkey INTEGER PRIMARY KEY, r_name CHAR(25), r_comment VARCHAR(152));
