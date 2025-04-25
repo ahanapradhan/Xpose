@@ -1,0 +1,1 @@
+SELECT SUM(CASE WHEN p.p_name LIKE '%PROMO%' THEN l.l_extendedprice * (1 - l.l_discount) ELSE 0 END) / SUM(l.l_extendedprice * (1 - l.l_discount)) * 100 AS promo_revenue_percentage FROM lineitem l JOIN part p ON l.l_partkey = p.p_partkey WHERE EXTRACT(YEAR FROM l.l_shipdate) = 2023 AND EXTRACT(MONTH FROM l.l_shipdate) = 1;

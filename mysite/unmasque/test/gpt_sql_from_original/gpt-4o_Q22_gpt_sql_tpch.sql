@@ -1,0 +1,1 @@
+SELECT COUNT(*) AS customer_count, SUM(c_acctbal) AS total_positive_balance FROM customer WHERE SUBSTRING(c_phone, 1, 2) BETWEEN '10' AND '20' AND c_acctbal > ( SELECT AVG(c_acctbal) FROM customer WHERE c_acctbal > 0 ) AND c_custkey NOT IN ( SELECT o_custkey FROM orders WHERE o_orderdate >= (CURRENT_DATE - INTERVAL '7 years') );

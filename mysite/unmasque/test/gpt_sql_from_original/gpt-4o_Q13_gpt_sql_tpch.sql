@@ -1,0 +1,1 @@
+SELECT COALESCE(order_count, 0) AS order_count, COUNT(c.c_custkey) AS customer_count FROM customer c LEFT JOIN ( SELECT o.o_custkey, COUNT(o.o_orderkey) AS order_count FROM orders o WHERE o.o_comment NOT LIKE '%special%' GROUP BY o.o_custkey ) oc ON c.c_custkey = oc.o_custkey GROUP BY order_count ORDER BY order_count;

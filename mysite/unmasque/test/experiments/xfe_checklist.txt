@@ -1,311 +1,104 @@
-query76		True		Error
-query15		True		Error
-query96		True		Error
-query46		True		Error
-query35		True		Error
-query19		True		Error
-query84		True		Error
-query63		True		False
-query87		True		Error
-query23		True		False
-query72		True		False
-query97		True		Error
-query5		True		Error
-query90		False		QH Error
-query31		True		False
-query80		True		Error
-query1		True		Error
-query77		True		Error
-query57		True		Error
-query11		True		Error
-query91		True		False
-query51		True		False
-query32		True		Error
-query29		True		Error
-query4		True		False
-query22		True		Error
-query64		True		False
-query66		True		Error
-query18		True		Error
-query67		True		Error
-query83		True		False
-query78		True		Error
-query10		True		False
-query70		True		False
-query24		True		False
-query36		True		Error
-query8		True		False
-query34		True		False
-query59		True		False
-query39		True		False
-query48		True		Error
-query56		True		False
-query3		True		False
-query12		True		Error
-query88		True		False
-query89		True		Error
-query58		True		False
-query75		True		Error
-query37		True		False
-query98		True		Error
-query7		True		Error
-query30		True		Error
-query47		True		Error
-query38		True		Error
-query21		True		False
-query33		True		False
-query6		True		Error
-query27		True		Error
-query71		True		Error
-query52		True		Error
-query43		True		Error
-query81		True		Error
-query86		True		False
-query44		True		False
-query42		True		Error
-query26		True		Error
-query82		True		False
-query92		True		Error
-query99		True		Error
-query69		True		False
-query68		True		Error
-query61		True		False
-query95		True		False
-query41		True		False
-query28		True		Error
-query65		True		False
-q0		False		QH Error
-query60		True		False
-query85		True		False
-query53		True		False
-query55		True		Error
-query16		True		False
-query45		True		Error
-query25		True		False
-query73		True		False
-query74		True		False
-query62		True		False
-query13		True		Error
-query2		True		Error
-query50		True		Error
-query40		True		Error
-query20		True		Error
-query49		True		Error
-query79		True		Error
-query54		True		False
-query93		True		False
-query9		True		Error
-query14		True		False
-query17		True		Error
-query94		True		False
-
-
-Overall Stats
-illegal QH: 2
-illegal QE: 55
-match: 0
-mismatch: 43
-
-query76		True		Error
-query15		True		Error
-query96		True		Error
-query46		True		False
-query35		True		False
-query19		True		False
-query84		True		False
-query63		True		False
-query87		True		Error
-query23		True		False
-query72		True		Error
-query97		True		Error
-query5		True		False
-query90		False		QH Error
-query31		True		False
-query80		True		False
-query1		True		False
-query77		True		False
-query57		True		False
-query11		True		False
-query91		True		Error
-query51		True		Error
-query32		True		Error
-query29		True		Error
-query4		True		False
-query22		True		Error
-query64		True		Error
-query66		True		False
-query18		True		False
-query67		True		False
-query83		True		False
-query78		True		Error
-query10		True		False
-query70		True		False
-query24		True		False
-query36		True		False
-query8		True		False
-query34		True		False
-query59		True		False
-query39		True		False
-query48		True		Error
-query56		True		False
-query3		True		False
-query12		True		Error
-query88		True		Error
-query89		True		False
-query58		True		False
-query75		True		False
-query37		True		False
-query98		True		False
-query7		True		False
-query30		True		False
-query47		True		Error
-query38		True		Error
-query21		True		False
-query33		True		False
-query6		True		False
-query27		True		False
-query71		True		False
-query52		True		False
-query43		True		False
-query81		True		Error
-query86		True		False
-query44		True		False
-query42		True		False
-query26		True		Error
-query82		True		False
-query92		True		Error
-query99		True		False
-query69		True		False
-query68		True		False
-query61		True		False
-query95		True		Error
-query41		True		False
-query28		True		Error
-query65		True		Error
-query76		True		Error
-query15		True		Error
-query96		True		Error
-query46		True		False
-query35		True		False
-query19		True		False
-query84		True		False
-query63		True		False
-query87		True		Error
-query23		True		False
-query72		True		Error
-query97		True		Error
-query5		True		False
-query90		False		QH Error
-query31		True		False
-query80		True		False
-query1		True		False
-query77		True		False
-query57		True		False
-query11		True		False
-query91		True		Error
-query51		True		Error
-query32		True		Error
-query29		True		Error
-query76		True		Error
-query15		True		Error
-query96		True		Error
-query46		True		Error
-query35		True		Error
-query19		True		Error
-query84		True		Error
-query63		True		False
-query87		True		Error
-query23		True		False
-query72		True		Error
-query97		True		Error
-query5		True		Error
-query90		True		Error
-query31		True		False
-query80		True		Error
-query1		True		False
-query77		True		Error
-query57		True		Error
-query11		True		Error
-query91		True		Error
-query51		True		Error
-query32		True		Error
-query29		True		Error
-query4		True		Error
-query22		True		Error
-query64		True		Error
-query66		True		Error
-query18		True		Error
-query67		True		False
-query83		True		Error
-query78		True		False
-query10		True		Error
-query70		True		False
-query24		True		False
-query36		True		Error
-query8		True		False
-query34		True		False
-query59		True		False
-query39		True		None
-query48		True		Error
-query56		True		False
-query3		True		Error
-query12		True		Error
-query88		True		Error
-query89		True		Error
-query58		True		False
-query75		True		Error
-query37		True		False
-query98		True		Error
-query7		True		Error
-query30		True		Error
-query47		True		Error
-query38		True		Error
-query21		True		Error
-query33		True		Error
-query6		True		Error
-query27		True		Error
-query71		True		False
-query52		True		Error
-query43		True		Error
-query81		True		Error
-query86		True		False
-query44		True		Error
-query42		True		Error
-query26		True		Error
-query82		True		Error
-query92		True		Error
-query99		True		False
-query69		True		False
-query68		True		False
-query61		True		False
-query95		True		Error
-query41		True		False
-query28		True		Error
-query65		True		False
-q0		False		QH Error
-query60		True		False
-query85		True		Error
-query53		True		Error
-query55		True		Error
-query16		True		Error
-query45		True		Error
-query25		True		False
-query73		True		False
-query74		True		Error
-query62		True		False
-query13		True		False
-query2		True		False
-query50		True		Error
-query40		True		Error
-query20		True		Error
-query49		True		False
-query79		True		Error
-query54		True		None
-query93		True		False
-query9		True		Error
-query14		True		Error
-query17		True		False
-query94		True		Error
+QID		 FIT-result		O/P_Match?	O/P_Jaccard_Sim
+query76		True		Error		0
+query15		True		Error		0
+query96		True		Error		0
+query46		True		Error		0
+query35		True		Error		0
+query19		True		Error		0
+query84		True		Error		0
+query63		True		False		0.0
+query87		True		Error		0
+query23		True		False		1.0
+query72		True		Error		0
+query97		True		Error		0
+query5		True		Error		0
+query90		True		Error		0
+query31		True		False		0.0
+query80		True		Error		0
+query1		True		False		0.01
+query77		True		Error		0
+query57		True		Error		0
+query11		True		Error		0
+query91		True		Error		0
+query51		True		Error		0
+query32		True		Error		0
+query29		True		Error		0
+query4		True		Error		0
+query22		True		Error		0
+query64		True		Error		0
+query66		True		Error		0
+query18		True		Error		0
+query67		True		False		0.0
+query83		True		Error		0
+query78		True		False		0.0
+query10		True		Error		0
+query70		True		False		0.0
+query24		True		False		1.0
+query36		True		Error		0
+query8		True		False		0.0
+query34		True		False		0.0
+query59		True		False		0.0
+query39		True		None		0.0
+query48		True		Error		0
+query56		True		False		0.0
+query3		True		Error		0
+query12		True		Error		0
+query88		True		Error		0
+query89		True		Error		0
+query58		True		False		1.0
+query75		True		Error		0
+query37		True		False		1.0
+query98		True		Error		0
+query7		True		Error		0
+query30		True		Error		0
+query47		True		Error		0
+query38		True		Error		0
+query21		True		Error		0
+query33		True		Error		0
+query6		True		Error		0
+query27		True		Error		0
+query71		True		False		0.0
+query52		True		Error		0
+query43		True		Error		0
+query81		True		Error		0
+query86		True		False		0.0
+query44		True		Error		0
+query42		True		Error		0
+query26		True		Error		0
+query82		True		Error		0
+query92		True		Error		0
+query99		True		False		0.0
+query69		True		False		1.0
+query68		True		False		0.0
+query61		True		False		0.0
+query95		True		Error		0
+query41		True		False		0.0
+query28		True		Error		0
+query65		True		False		0.0
+q0		False		QH Error		0
+query60		True		False		0.0
+query85		True		Error		0
+query53		True		Error		0
+query55		True		Error		0
+query16		True		Error		0
+query45		True		Error		0
+query25		True		False		0.0
+query73		True		False		0.0
+query74		True		Error		0
+query62		True		False		0.0
+query13		True		False		0.0
+query2		True		False		0.0
+query50		True		Error		0
+query40		True		Error		0
+query20		True		Error		0
+query49		True		False		0.0
+query79		True		Error		0
+query54		True		None		1.0
+query93		True		False		0.0
+query9		True		Error		0
+query14		True		Error		0
+query17		True		False		0.0
+query94		True		Error		0
 
 
 Overall Stats
@@ -313,3 +106,104 @@ illegal QH: 1
 illegal QE: 66
 match: 0
 mismatch: 33
+QID		 FIT-result		O/P_Match?	O/P_Jaccard_Sim
+query76		True		Error		0
+query15		True		Error		0
+query96		True		Error		0
+query46		True		Error		0
+query35		True		Error		0
+query19		True		Error		0
+query84		True		Error		0
+query63		True		False		0.0
+query87		True		Error		0
+query23		True		False		0.0
+query72		True		False		0.0
+query97		True		Error		0
+query5		True		Error		0
+query90		True		Error		0
+query31		True		False		0.0
+query80		True		Error		0
+query1		True		Error		0
+query77		True		Error		0
+query57		True		Error		0
+query11		True		Error		0
+query91		True		Error		0
+query51		True		False		0.0
+query32		True		Error		0
+query29		True		Error		0
+query4		True		Error		0
+query22		True		Error		0
+query64		True		False		0.0
+query66		True		Error		0
+query18		True		Error		0
+query67		True		Error		0
+query83		True		Error		0
+query78		True		Error		0
+query10		True		False		0.0
+query70		True		False		0.0
+query24		True		False		1.0
+query36		True		Error		0
+query8		True		False		0.0
+query34		True		False		0.0
+query59		True		False		0.0
+query39		True		Error		0
+query48		True		Error		0
+query56		True		False		0.0
+query3		True		Error		0
+query12		True		Error		0
+query88		True		Error		0
+query89		True		Error		0
+query58		True		False		0.0
+query75		True		Error		0
+query37		True		False		1.0
+query98		True		Error		0
+query7		True		Error		0
+query30		True		Error		0
+query47		True		Error		0
+query38		True		Error		0
+query21		True		False		0.0
+query33		True		False		0.0
+query6		True		Error		0
+query27		True		Error		0
+query71		True		Error		0
+query52		True		Error		0
+query43		True		Error		0
+query81		True		Error		0
+query86		True		False		0.0
+query44		True		Error		0
+query42		True		Error		0
+query26		True		Error		0
+query82		True		True		1.0
+query92		True		Error		0
+query99		True		Error		0
+query69		True		False		1.0
+query68		True		Error		0
+query61		True		False		0.0
+query95		True		Error		0
+query41		True		False		1.0
+query28		True		Error		0
+query65		True		False		0.0
+q0		False		QH Error		0
+query60		True		False		0.01
+query85		True		Error		0
+query53		True		False		0.0
+query55		True		Error		0
+query16		True		False		0.0
+query45		True		Error		0
+query25		True		Error		0
+query73		True		False		0.0
+query74		True		False		0.0
+query62		True		False		0.0
+query13		True		Error		0
+query2		True		Error		0
+query50		True		Error		0
+query40		True		Error		0
+query20		True		Error		0
+query49		True		Error		0
+query79		True		Error		0
+query54		True		False		1.0
+query93		True		False		0.0
+query9		True		Error		0
+query14		True		False		0.0
+query17		True		Error		0
+query94		True		Error		0

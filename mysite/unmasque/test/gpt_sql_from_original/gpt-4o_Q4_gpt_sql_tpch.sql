@@ -1,0 +1,1 @@
+SELECT o_orderpriority, COUNT(DISTINCT o_orderkey) AS order_count FROM orders JOIN lineitem ON orders.o_orderkey = lineitem.l_orderkey WHERE lineitem.l_receiptdate > lineitem.l_commitdate AND orders.o_orderdate BETWEEN '2023-01-01' AND '2023-03-31' GROUP BY o_orderpriority ORDER BY o_orderpriority ASC;

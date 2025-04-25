@@ -1,0 +1,1 @@
+SELECT o.o_shippriority, SUM(l.l_extendedprice * (1 - l.l_discount)) AS potential_revenue FROM orders o JOIN lineitem l ON o.o_orderkey = l.l_orderkey WHERE l.l_shipdate > '1998-12-31' GROUP BY o.o_shippriority ORDER BY potential_revenue DESC LIMIT 10;

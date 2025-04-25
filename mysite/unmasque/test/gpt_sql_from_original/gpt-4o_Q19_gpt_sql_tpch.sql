@@ -1,0 +1,1 @@
+SELECT SUM(l_extendedprice * (1 - l_discount)) AS gross_discounted_revenue FROM lineitem JOIN part ON lineitem.l_partkey = part.p_partkey WHERE part.p_brand IN ('Brand#1', 'Brand#2', 'Brand#3') AND part.p_container IN ('SM BOX', 'LG BOX', 'MED BAG') AND part.p_size BETWEEN 1 AND 10 AND lineitem.l_shipmode = 'AIR' AND lineitem.l_shipinstruct = 'DELIVER IN PERSON';

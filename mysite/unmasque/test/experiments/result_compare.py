@@ -1,10 +1,12 @@
 import os
 import sys
 
+from frozenlist._frozenlist import FrozenList
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
 from mysite.unmasque.test.experiments.utils import give_conn, load_config, BENCHMARK_SQL, XFE_DIR, \
-    readline_ignoring_comments, MODEL, QID
+    readline_ignoring_comments, MODEL, QID, SOURCE, TEXT_TYPE
 from mysite.unmasque.test.experiments.text_to_sql import create_text2SQL_agent
 
 from mysite.unmasque.src.core.result_comparator import ResultComparator
@@ -16,9 +18,33 @@ xfe_folder_path = f"../{config[XFE_DIR]}"
 check_list = './xfe_checklist.txt'
 
 
+def get_result_set(con, query):
+    try:
+        res1, _ = con.execute_sql_fetchall(query)
+    except:
+        res1 = []
+    result = set(FrozenList(res1))
+    return result
+
+
+def jaccard_similarity_from_results(con, qh_query, qe_query):
+    # Execute both queries
+    result1 = get_result_set(con, qh_query)
+    result2 = get_result_set(con, qe_query)
+
+    # Compute Jaccard similarity
+    intersection = result1 & result2
+    union = result1 | result2
+
+    if not union:
+        return 1.0  # Consider identical when both are empty
+    return round(len(intersection) / len(union), 2)
+
+
 def do_for_a_pair(rcomp: ResultComparator):
     # Join all lines into a single SQL query
-    con = rc.connectionHelper
+    con = rcomp.connectionHelper
+    jsim = 1
     qh_query = ' '.join(line.strip() for line in qh if line.strip())  # removes newlines and empty lines
     print("QH Query:")
     print(qh_query)
@@ -27,7 +53,7 @@ def do_for_a_pair(rcomp: ResultComparator):
         res1 = con.execute_sql_fetchall(qh_query)
     except Exception as e:
         print(f"{str(e)}")
-        return [0], "QH Error"
+        return [0], "QH Error", 0
     finally:
         con.rollback_transaction()
 
@@ -40,9 +66,13 @@ def do_for_a_pair(rcomp: ResultComparator):
     except Exception as e:
         print(f"{str(e)}")
         check1 = "Error"
+        jsim = 0
     finally:
         con.rollback_transaction()
-    return res1, check1
+
+    if jsim:
+        jsim = jaccard_similarity_from_results(con, qh_query, qe_query)
+    return res1, check1, jsim
 
 
 if __name__ == '__main__':
@@ -60,6 +90,9 @@ if __name__ == '__main__':
     output_filepath = os.path.join(check_list)
     queries = [f"query{n}" for n in config[QID]]
 
+    with open(output_filepath, 'a', encoding='utf-8') as fo:
+        fo.writelines(f"QID\t\t FIT-result\t\tO/P_Match?\tO/P_Jaccard_Sim\n")
+
     for filename in os.listdir(qh_folder_path):
         if filename.endswith('.sql'):
             keys = filename.split('.')
@@ -72,7 +105,7 @@ if __name__ == '__main__':
 
             qh = readline_ignoring_comments(qh_file_path)
             xfe_qe = readline_ignoring_comments(xfe_file_path)
-            res, check = do_for_a_pair(rc)
+            res, check, sim = do_for_a_pair(rc)
             if check == "Error":
                 err_counter = err_counter + 1
             elif check == "QH Error":
@@ -83,11 +116,11 @@ if __name__ == '__main__':
             else:
                 y_counter = y_counter + 1
             with open(output_filepath, 'a', encoding='utf-8') as fo:
-                fo.writelines(f"{qkey}\t\t{str(len(res) >= 2)}\t\t{str(check)}\n")
+                fo.writelines(f"{qkey}\t\t{str(len(res) >= 2)}\t\t{str(check)}\t\t{str(sim)}\n")
 
             # break
     with open(output_filepath, 'a', encoding='utf-8') as fo:
         fo.writelines(
-            f"\n\nOverall Stats\nillegal QH: {qh_error}\nillegal QE: {err_counter}\nmatch: {y_counter}\nmismatch: {n_counter}\n")
+            f"\n\nOverall Stats({config[TEXT_TYPE]}) \nillegal QH: {qh_error}\nillegal QE: {err_counter}\nmatch: {y_counter}\nmismatch: {n_counter}\n")
 
     conn.closeConnection()
