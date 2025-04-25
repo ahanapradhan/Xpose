@@ -1,1 +1,1 @@
-"Calculate the total revenue generated from discounted sales within a specific date range, where the shipping date falls within a year starting from a given date, the discount applied is within a narrow range around a specified discount rate, and the quantity of items sold is below a certain threshold."
+"Calculate the total revenue generated from discounted sales within the year 1993, specifically for transactions where the discount rate is approximately 6% and the quantity of items sold is less than 24 units."
