@@ -60,3 +60,32 @@ illegal QH: 1
 illegal QE: 15
 match: 1
 mismatch: 5
+17		True		Error
+11		True		False
+16		True		Error
+3		True		Error
+22		True		False
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		False
+10		True		Error
+21		True		False
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		False
+19		True		Error
+8		True		False
+15		True		Error
+2		True		Error
+5		True		Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 14
+match: 1
+mismatch: 7

@@ -130,3 +130,31 @@ Overall Stats
 illegal QH: 1
 illegal QE: 0
 
+17				True
+11				True
+16				True
+3				True
+22				True
+13				True
+12				True
+6				True
+20				True
+10				True
+21				True
+18				True
+9				True
+4				True
+1				True
+14				True
+7				True
+19				True
+8				True
+15				Error
+2				True
+5				True
+../tpch-queries : ../gpt_sql
+
+Overall Stats
+illegal QH: 0
+illegal QE: 1
+
