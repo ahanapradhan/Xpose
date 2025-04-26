@@ -125,6 +125,7 @@ if __name__ == '__main__':
              "Please ensure the SQL query is correct and optimized. Text: "
     for filename in os.listdir(translator.qfolder_path):
         if filename.endswith('.txt'):
+            print(filename)
             key = filename.split('_')[1].split('.')[0]
             file_path = os.path.join(translator.qfolder_path, filename)
             q_sql = readline_ignoring_comments(file_path)
