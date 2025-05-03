@@ -1,1 +1,14 @@
-SELECT DISTINCT i.i_item_id, i.i_current_price FROM item i JOIN catalog_sales cs ON i.i_item_sk = cs.cs_item_sk JOIN date_dim d ON cs.cs_sold_date_sk = d.d_date_sk JOIN inventory inv ON i.i_item_sk = inv.inv_item_sk JOIN promotion p ON cs.cs_promo_sk = p.p_promo_sk WHERE i.i_manufact_id IN (843, 815, 850, 840) AND i.i_current_price BETWEEN 68 AND 98 AND inv.inv_date_sk BETWEEN (SELECT d_date_sk FROM date_dim WHERE d_date = '1999-03-06') - 60 AND (SELECT d_date_sk FROM date_dim WHERE d_date = '1999-03-06') AND inv.inv_quantity_on_hand BETWEEN 100 AND 500 AND p.p_channel_catalog = 'Y';
+SELECT DISTINCT i.i_item_id, i.i_current_price
+FROM item i JOIN catalog_sales cs
+ON i.i_item_sk = cs.cs_item_sk
+JOIN date_dim d ON cs.cs_sold_date_sk = d.d_date_sk
+JOIN inventory inv ON i.i_item_sk = inv.inv_item_sk
+JOIN promotion p ON cs.cs_promo_sk = p.p_promo_sk
+WHERE i.i_manufact_id IN (843, 815, 850, 840)
+AND i.i_current_price BETWEEN 68 AND 98
+AND inv.inv_date_sk BETWEEN (SELECT d_date_sk
+    FROM date_dim WHERE d_date = '1999-03-06') - 60
+AND (SELECT d_date_sk FROM date_dim
+WHERE d_date = '1999-03-06')
+AND inv.inv_quantity_on_hand BETWEEN 100 AND 500
+AND p.p_channel_catalog = 'Y';
