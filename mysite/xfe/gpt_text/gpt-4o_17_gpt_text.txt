@@ -1,0 +1,1 @@
+"Calculate the average yearly revenue generated from the sale of products that belong to 'Brand#53' and are packaged in 'MED BAG' containers, where the quantity sold is less than 20% of the average quantity sold for the same product, by dividing the total extended price of these sales by 7."

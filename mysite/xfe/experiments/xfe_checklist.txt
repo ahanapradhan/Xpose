@@ -1,0 +1,185 @@
+17		True		Error
+11		True		Error
+16		True		Error
+3		True		Error
+22		True		False
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		False
+10		True		Error
+21		True		False
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		False
+19		True		Error
+8		True		False
+15		True		Error
+2		True		Error
+5		True		Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 15
+match: 1
+mismatch: 6
+17		True		Error
+11		True		False
+16		True		Error
+3		True		Error
+22		True		False
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		False
+10		True		Error
+21		True		False
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		False
+19		True		Error
+8		True		False
+15		True		Error
+2		True		Error
+5		True		Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 14
+match: 1
+mismatch: 7
+17		True		Error
+11		True		False
+16		True		Error
+3		True		Error
+22		True		False
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		False
+10		True		Error
+21		True		False
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		False
+19		True		Error
+8		True		Error
+15		True		Error
+2		True		True
+5		True		Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 14
+match: 2
+mismatch: 6
+count : 20
+17		True		Error
+11		True		False
+16		True		Error
+3		True		Error
+22		True		False
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		False
+10		True		Error
+21		True		False
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		False
+19		True		Error
+8		True		Error
+15		True		Error
+2		True		True
+5		True		False
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 13
+match: 2
+mismatch: 7
+count : 100
+config : llm
+model : 4o
+
+
+17		True		Error
+11		True		Error
+16		True		Error
+3		True		Error
+22		True		Error
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		Error
+10		True		Error
+21		True		Error
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		Error
+19		True		Error
+8		True		Error
+15		True		Error
+2		True		False
+5		True		Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 19
+match: 1
+mismatch: 2
+count : 100
+config : original
+17		True		Error
+11		True		Error
+16		True		Error
+3		True		Error
+22		True		Error
+13		True		Error
+12		True		Error
+6		True		Error
+20		True		False
+10		True		Error
+21		True		False
+18		True		Error
+9		True		False
+4		True		True
+1		True		Error
+14		True		Error
+7		True		False
+19		True		Error
+8		True		Error
+15		True		Error
+2		True		Error
+5		True		Error
+
+
+Overall Stats
+illegal QH: 0
+illegal QE: 17
+match: 1
+mismatch: 4
+count : 100
+config : llm
+model : o3

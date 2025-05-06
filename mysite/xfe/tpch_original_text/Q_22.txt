@@ -1,0 +1,13 @@
+Give a query that counts how many customers within a specific range of country codes I1,I2,...I7
+have not placed orders for 7 years but who have a greater than average “positive” 
+account balance. It also reflects the magnitude of that balance. 
+Country code is defined as the first two characters of c_phone.
+
+QUERY CONSTANTS:
+I1 = 13
+I2 = 31
+I3 = 23
+I4 = 29
+I5 = 30
+I6 = 18
+I7 = 17

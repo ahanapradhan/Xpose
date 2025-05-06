@@ -1,0 +1,1 @@
+"Calculate the percentage of revenue generated from promotional items compared to the total revenue for all items shipped in January 1995. This is done by summing the revenue from items with a type starting with 'PROMO' and dividing it by the total revenue from all items, then multiplying by 100 to express it as a percentage."

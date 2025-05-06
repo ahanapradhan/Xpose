@@ -1,0 +1,9 @@
+Give a query that identifies suppliers who have an excess of a given part available; 
+an excess is defined to be more than 50% of the parts like the given part that the 
+supplier shipped in a given year for a given nation. Only parts whose names 
+share a certain naming convention COLOR are considered.
+
+QUERY CONSTANTS:
+COLOR = ivory
+DATE = 1995-01-01
+NATION = FRANCE
