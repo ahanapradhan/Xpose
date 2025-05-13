@@ -1,15 +1,16 @@
-import os
-import sys
-from abc import abstractmethod
+You are expert in SQL.
+Formulate a SQL query to express the following business description text:
+"
+List all customers living in a specified city, with an income between 2 values.
+Query Constants:
+INCOME.01 = 54986
+CITY.01 = Green Acres
+"
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
+Make sure the query is correct and optimized.
 
-from mysite.unmasque.test.experiments.llm_talk import TalkToGpt4O, TalkToGptO3Mini
-
-from mysite.unmasque.test.experiments.utils import give_conn, load_config, \
-    XFE_DIR, TEXT_DIR, MODEL, O_THREE, FOUR_O, readline_ignoring_comments, QID
-
-TPCDS_Schema = """CREATE TABLE call_center(cc_call_center_sk INTEGER, cc_call_center_id VARCHAR, cc_rec_start_date DATE, cc_rec_end_date DATE, cc_closed_date_sk INTEGER, cc_open_date_sk INTEGER, cc_name VARCHAR, cc_class VARCHAR, cc_employees INTEGER, cc_sq_ft INTEGER, cc_hours VARCHAR, cc_manager VARCHAR, cc_mkt_id INTEGER, cc_mkt_class VARCHAR, cc_mkt_desc VARCHAR, cc_market_manager VARCHAR, cc_division INTEGER, cc_division_name VARCHAR, cc_company INTEGER, cc_company_name VARCHAR, cc_street_number VARCHAR, cc_street_name VARCHAR, cc_street_type VARCHAR, cc_suite_number VARCHAR, cc_city VARCHAR, cc_county VARCHAR, cc_state VARCHAR, cc_zip VARCHAR, cc_country VARCHAR, cc_gmt_offset DECIMAL(5,2), cc_tax_percentage DECIMAL(5,2));
+Use the following schema to formulate your SQL:
+"""CREATE TABLE call_center(cc_call_center_sk INTEGER, cc_call_center_id VARCHAR, cc_rec_start_date DATE, cc_rec_end_date DATE, cc_closed_date_sk INTEGER, cc_open_date_sk INTEGER, cc_name VARCHAR, cc_class VARCHAR, cc_employees INTEGER, cc_sq_ft INTEGER, cc_hours VARCHAR, cc_manager VARCHAR, cc_mkt_id INTEGER, cc_mkt_class VARCHAR, cc_mkt_desc VARCHAR, cc_market_manager VARCHAR, cc_division INTEGER, cc_division_name VARCHAR, cc_company INTEGER, cc_company_name VARCHAR, cc_street_number VARCHAR, cc_street_name VARCHAR, cc_street_type VARCHAR, cc_suite_number VARCHAR, cc_city VARCHAR, cc_county VARCHAR, cc_state VARCHAR, cc_zip VARCHAR, cc_country VARCHAR, cc_gmt_offset DECIMAL(5,2), cc_tax_percentage DECIMAL(5,2));
 CREATE TABLE catalog_page(cp_catalog_page_sk INTEGER, cp_catalog_page_id VARCHAR, cp_start_date_sk INTEGER, cp_end_date_sk INTEGER, cp_department VARCHAR, cp_catalog_number INTEGER, cp_catalog_page_number INTEGER, cp_description VARCHAR, cp_type VARCHAR);
 CREATE TABLE catalog_returns(cr_returned_date_sk INTEGER, cr_returned_time_sk INTEGER, cr_item_sk INTEGER, cr_refunded_customer_sk INTEGER, cr_refunded_cdemo_sk INTEGER, cr_refunded_hdemo_sk INTEGER, cr_refunded_addr_sk INTEGER, cr_returning_customer_sk INTEGER, cr_returning_cdemo_sk INTEGER, cr_returning_hdemo_sk INTEGER, cr_returning_addr_sk INTEGER, cr_call_center_sk INTEGER, cr_catalog_page_sk INTEGER, cr_ship_mode_sk INTEGER, cr_warehouse_sk INTEGER, cr_reason_sk INTEGER, cr_order_number INTEGER, cr_return_quantity INTEGER, cr_return_amount DECIMAL(7,2), cr_return_tax DECIMAL(7,2), cr_return_amt_inc_tax DECIMAL(7,2), cr_fee DECIMAL(7,2), cr_return_ship_cost DECIMAL(7,2), cr_refunded_cash DECIMAL(7,2), cr_reversed_charge DECIMAL(7,2), cr_store_credit DECIMAL(7,2), cr_net_loss DECIMAL(7,2));
 CREATE TABLE catalog_sales(cs_sold_date_sk INTEGER, cs_sold_time_sk INTEGER, cs_ship_date_sk INTEGER, cs_bill_customer_sk INTEGER, cs_bill_cdemo_sk INTEGER, cs_bill_hdemo_sk INTEGER, cs_bill_addr_sk INTEGER, cs_ship_customer_sk INTEGER, cs_ship_cdemo_sk INTEGER, cs_ship_hdemo_sk INTEGER, cs_ship_addr_sk INTEGER, cs_call_center_sk INTEGER, cs_catalog_page_sk INTEGER, cs_ship_mode_sk INTEGER, cs_warehouse_sk INTEGER, cs_item_sk INTEGER, cs_promo_sk INTEGER, cs_order_number INTEGER, cs_quantity INTEGER, cs_wholesale_cost DECIMAL(7,2), cs_list_price DECIMAL(7,2), cs_sales_price DECIMAL(7,2), cs_ext_discount_amt DECIMAL(7,2), cs_ext_sales_price DECIMAL(7,2), cs_ext_wholesale_cost DECIMAL(7,2), cs_ext_list_price DECIMAL(7,2), cs_ext_tax DECIMAL(7,2), cs_coupon_amt DECIMAL(7,2), cs_ext_ship_cost DECIMAL(7,2), cs_net_paid DECIMAL(7,2), cs_net_paid_inc_tax DECIMAL(7,2), cs_net_paid_inc_ship DECIMAL(7,2), cs_net_paid_inc_ship_tax DECIMAL(7,2), cs_net_profit DECIMAL(7,2));
@@ -35,121 +36,28 @@ CREATE TABLE web_sales(ws_sold_date_sk INTEGER, ws_sold_time_sk INTEGER, ws_ship
 CREATE TABLE web_site(web_site_sk INTEGER, web_site_id VARCHAR, web_rec_start_date DATE, web_rec_end_date DATE, web_name VARCHAR, web_open_date_sk INTEGER, web_close_date_sk INTEGER, web_class VARCHAR, web_manager VARCHAR, web_mkt_id INTEGER, web_mkt_class VARCHAR, web_mkt_desc VARCHAR, web_market_manager VARCHAR, web_company_id INTEGER, web_company_name VARCHAR, web_street_number VARCHAR, web_street_name VARCHAR, web_street_type VARCHAR, web_suite_number VARCHAR, web_city VARCHAR, web_county VARCHAR, web_state VARCHAR, web_zip VARCHAR, web_country VARCHAR, web_gmt_offset DECIMAL(5,2), web_tax_percentage DECIMAL(5,2));
 """
 
-config = load_config()
+Use the following SQL to start with (as seed):
 
-
-class Text2SQLTranslator:
-    def __init__(self, name):
-        self.name = name
-        self.working_dir_path = f"../{config[XFE_DIR]}/"
-        self.qfolder_path = f"../{config[TEXT_DIR]}/"
-        self.output_filename = "gpt_sql.sql"
-        self.client = None
-        self.loop_cutoff = 5
-
-    def give_filename(self, qkey):
-        return f"{self.name}_{qkey}_{self.output_filename}"
-
-    def post_process(self, qe_query):
-        conn = give_conn()
-        if not len(qe_query.strip()):
-            return qe_query, ""
-        try:
-            conn.connectUsingParams()
-            conn.begin_transaction()
-            conn.execute_sql_fetchall(f"EXPLAIN {qe_query}")
-            return qe_query, ""
-        except Exception as e:
-            print(f"Particular error: {str(e)}")
-            print(f"Query: {qe_query}")
-            return qe_query, str(e)
-        finally:
-            conn.rollback_transaction()
-            conn.closeConnection()
-
-    def doJob_loop(self, question, qkey, sql, append=False):
-        sql_text = " ".join(sql)
-        schema_info = f"\n\nConsider the following schema while formulating SQL.\nSchema: \"{TPCDS_Schema}\""
-        original_question = f"{question} \"{sql_text}\""
-        print(original_question)
-        reply = self.doJob(f"{original_question} {schema_info}")
-        check, problem = self.post_process(reply)
-        num = 0
-        while len(problem) and num < self.loop_cutoff:
-            next_question = f"{original_question}\nYou formulated the following query:\t" \
-                            f"\"{check}\"\n The query has the following error:\n" \
-                            f"\"{problem}\". \nFix it so that it runs on PostgreSQL database engine.\n"
-            print(next_question)
-            reply = self.doJob(f"{next_question} {schema_info}")
-            check, problem = self.post_process(reply)
-            num = num + 1
-
-        self._write_to_file(append, check, qkey)
-        return check
-
-    def _write_to_file(self, append, check, qkey):
-        working_dir = self.working_dir_path
-        if not os.path.exists(working_dir):
-            os.makedirs(working_dir)
-        outfile = f"{working_dir}{self.give_filename(qkey)}"
-        orig_out = sys.stdout
-        mode = 'a' if append else 'w'
-        f = open(outfile, mode)
-        sys.stdout = f
-        print(check)
-        sys.stdout = orig_out
-        f.close()
-        mode_name = 'appended' if mode == 'a' else 'written'
-        print(f"Text {mode_name} into {outfile}")
-
-    @abstractmethod
-    def doJob(self, next_question):
-        pass
-
-
-class GptO3MiniText2SQLTranslator(TalkToGptO3Mini, Text2SQLTranslator):
-    def count_tokens(self, text):
-        pass
-
-    def __init__(self):
-        TalkToGptO3Mini.__init__(self)
-        Text2SQLTranslator.__init__(self, self.name)
-
-
-class Gpt4OText2SQLTranslator(TalkToGpt4O, Text2SQLTranslator):
-
-    def __init__(self):
-        TalkToGpt4O.__init__(self)
-        Text2SQLTranslator.__init__(self, self.name)
-
-
-def create_text2SQL_agent(gpt_model):
-    if gpt_model == O_THREE:
-        return GptO3MiniText2SQLTranslator()
-    elif gpt_model == FOUR_O:
-        return Gpt4OText2SQLTranslator()
-    else:
-        raise ValueError("Model not supported!")
-
-
-if __name__ == '__main__':
-
-    translator = create_text2SQL_agent(config[MODEL])
-    queries = [f"query{n}" for n in config[QID]]
-
-    prompt = "You are an expert in SQL. " \
-             "Formulate SQL query that suits the following natural language text description in English." \
-             "Only give the SQL, do not add any explanation. " \
-             "Do not keep any place-holder parameter in the query." \
-             "Use valid data values as query constants, if the text does not mention them." \
-             "Please ensure the SQL query is correct and optimized.\nText: "
-    for filename in os.listdir(translator.qfolder_path):
-        if filename.endswith('.txt'):
-            key = filename.split('_')[1].split('.')[0]
-            if len(queries) and key not in queries:
-                continue
-            file_path = os.path.join(translator.qfolder_path, filename)
-            q_sql = readline_ignoring_comments(file_path)
-            output1 = translator.doJob_loop(prompt, key, q_sql)
-            # print(output1)
-            print(f"Processed: {filename}")
+"
+SELECT c_customer_id   AS customer_id, <unknown> AS customername
+FROM   customer,
+       customer_address,
+       customer_demographics,
+       household_demographics,
+       income_band,
+       store_returns
+WHERE  ca_city = 'Green Acres'
+       AND c_current_addr_sk = ca_address_sk
+       AND ib_lower_bound >= 54986
+       AND ib_upper_bound <= 54986 + 50000
+       AND ib_income_band_sk = hd_income_band_sk
+       AND cd_demo_sk = c_current_cdemo_sk
+       AND hd_demo_sk = c_current_hdemo_sk
+       AND sr_cdemo_sk = cd_demo_sk
+ORDER  BY c_customer_id
+LIMIT 100;
+"
+Refine the seed query by fixing the unknown projections and introducing possible nested structure implied in the text description.
+Aggregate functions within the nested subqueries may be introduced.
+Do not remove any table and joins from the seed query.
+Make sure the SQL remains meaningful wrt the given text description.
