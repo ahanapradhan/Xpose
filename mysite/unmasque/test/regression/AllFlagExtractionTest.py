@@ -798,6 +798,65 @@ LIMIT 100;
 """
         self.do_test(query)
 
+    def test_Q30(self):
+        self.do_test("""SELECT c_customer_id, 
+               c_salutation, 
+               c_first_name, 
+               c_last_name, 
+               c_preferred_cust_flag, 
+               c_birth_day, 
+               c_birth_month, 
+               c_birth_year, 
+               c_birth_country, 
+               c_login, 
+               c_email_address, 
+               c_last_review_date_sk,
+               ctr_total_return 
+FROM   (SELECT wr_returning_customer_sk AS ctr_customer_sk, 
+                ca_state                 AS ctr_state, 
+                Sum(wr_return_amt)       AS ctr_total_return 
+         FROM   web_returns, 
+                date_dim, 
+                customer_address 
+         WHERE  wr_returned_date_sk = d_date_sk 
+                AND d_year = 2000 
+                AND wr_returning_addr_sk = ca_address_sk 
+         GROUP  BY wr_returning_customer_sk, 
+                   ca_state)  ctr1, 
+       customer_address1 ca1, 
+       customer 
+WHERE  ctr1.ctr_total_return > (SELECT Avg(ctr_total_return) * 1.2 
+                                FROM   (SELECT wr_returning_customer_sk AS ctr2_customer_sk, 
+                ca_state                 AS ctr2_state, 
+                Sum(wr_return_amt)       AS ctr2_total_return 
+         FROM   web_returns1, 
+                date_dim1, 
+                customer_address2 
+         WHERE  wr1_returned_date_sk = d1_date_sk 
+                AND d1_year = 2000 
+                AND wr1_returning_addr_sk = ca2_address_sk 
+         GROUP  BY wr1_returning_customer_sk, 
+                   ca2_state)  ctr2 
+                                WHERE  ctr1.ctr_state = ctr2.ctr2_state) 
+       AND ca1.ca1_address_sk = c_current_addr_sk 
+       AND ca1.ca1_state = 'IN' 
+       AND ctr1.ctr_customer_sk = c_customer_sk 
+ORDER  BY c_customer_id, 
+          c_salutation, 
+          c_first_name, 
+          c_last_name, 
+          c_preferred_cust_flag, 
+          c_birth_day, 
+          c_birth_month, 
+          c_birth_year, 
+          c_birth_country, 
+          c_login, 
+          c_email_address, 
+          c_last_review_date_sk,
+          ctr_total_return
+LIMIT 100; 
+""")
+
     def test_Q33(self):
         query = """ 
 

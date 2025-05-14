@@ -6,9 +6,11 @@ catalog_returns,cr_order_number,y,n,,
 catalog_sales,cs_item_sk,y,y,item,i_item_sk
 catalog_sales,cs_order_number,y,n,,
 customer_address,ca_address_sk,y,n,,
+customer_address1,ca1_address_sk,y,n,,
 customer_demographics,cd_demo_sk,y,n,,
 customer,c_customer_sk,y,n,,
 date_dim,d_date_sk,y,n,,
+date_dim1,d1_date_sk,y,n,,
 household_demographics,hd_demo_sk,y,n,,
 income_band,ib_income_band_sk,y,n,,
 inventory,inv_date_sk,y,y,date_dim,d_date_sk
@@ -26,7 +28,7 @@ store_sales,ss_ticket_number,y,n,,
 time_dim,t_time_sk,y,n,,
 warehouse,w_warehouse_sk,y,n,,
 web_page,wp_web_page_sk,y,n,,
-web_returns,wr_item_sk,y,y,item,i_item_sk
+web_returns1,wr1_item_sk,y,y,item,i_item_sk
 web_returns,wr_order_number,y,n,,
 web_sales,ws_item_sk,y,y,item,i_item_sk
 web_sales,ws_order_number,y,n,,
