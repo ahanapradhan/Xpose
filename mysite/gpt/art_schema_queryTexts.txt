@@ -1,0 +1,265 @@
+
+Schema: "
+ CREATE TABLE LOCALITY (
+     L_LOCALITYKEY INTEGER NOT NULL,
+     L_NAME CHAR(25) NOT NULL,
+     L_REMARK VARCHAR(152),
+     PRIMARY KEY (L_LOCALITYKEY)
+ );
+
+ CREATE TABLE ASSOCIATION (
+     A_ASSOCIATIONKEY INTEGER NOT NULL,
+     A_NAME CHAR(25) NOT NULL,
+     A_LOCALITYKEY INTEGER NOT NULL,
+     A_REMARK VARCHAR(152),
+     PRIMARY KEY (A_ASSOCIATIONKEY),
+     FOREIGN KEY (A_LOCALITYKEY) REFERENCES LOCALITY(L_LOCALITYKEY)
+ );
+
+ CREATE TABLE ART_WORK (
+     A_W_ART_WORKKEY INTEGER NOT NULL,
+     A_W_NAME VARCHAR(55) NOT NULL,
+     A_W_MFGR CHAR(25) NOT NULL,
+     A_W_BRAND CHAR(10) NOT NULL,
+     A_W_TYPE VARCHAR(25) NOT NULL,
+     A_W_SIZE INTEGER NOT NULL,
+     A_W_CONTAINER CHAR(10) NOT NULL,
+     A_W_DEALPRICE DECIMAL(15,2) NOT NULL,
+     A_W_REMARK VARCHAR(23) NOT NULL,
+     PRIMARY KEY (A_W_ART_WORKKEY)
+ );
+
+ CREATE TABLE ART_DEALER (
+     A_D_DEALKEY INTEGER NOT NULL,
+     A_D_NAME CHAR(25) NOT NULL,
+     A_D_ADDRESS VARCHAR(40) NOT NULL,
+     A_D_ASSOCIATIONKEY INTEGER NOT NULL,
+     A_D_PHONE CHAR(15) NOT NULL,
+     A_D_ACCTBAL DECIMAL(15,2) NOT NULL,
+     A_D_REMARK VARCHAR(101) NOT NULL,
+     PRIMARY KEY (A_D_DEALKEY),
+     FOREIGN KEY (A_D_ASSOCIATIONKEY) REFERENCES ASSOCIATION(A_ASSOCIATIONKEY)
+ );
+
+ CREATE TABLE ART_WORKDEAL (
+     A_D_ART_WORKKEY INTEGER NOT NULL,
+     A_D_DEALKEY INTEGER NOT NULL,
+     A_D_AVAILQTY INTEGER NOT NULL,
+     A_D_DEALCOST DECIMAL(15,2) NOT NULL,
+     A_D_REMARK VARCHAR(199) NOT NULL,
+     PRIMARY KEY (A_D_ART_WORKKEY, A_D_DEALKEY),
+     FOREIGN KEY (A_D_ART_WORKKEY) REFERENCES ART_WORK(P_ART_WORKKEY),
+     FOREIGN KEY (A_D_DEALKEY) REFERENCES ART_DEALER(A_D_DEALKEY)
+ );
+
+ CREATE TABLE PATRON (
+     PA_PATRKEY INTEGER NOT NULL,
+     PA_NAME VARCHAR(25) NOT NULL,
+     PA_ADDRESS VARCHAR(40) NOT NULL,
+     PA_ASSOCIATIONKEY INTEGER NOT NULL,
+     PA_PHONE CHAR(15) NOT NULL,
+     PA_ACCTBAL DECIMAL(15,2) NOT NULL,
+     PA_ARTSEGMENT CHAR(10) NOT NULL,
+     PA_REMARK VARCHAR(117) NOT NULL,
+     PRIMARY KEY (PA_PATRKEY),
+     FOREIGN KEY (PA_ASSOCIATIONKEY) REFERENCES ASSOCIATION(A_ASSOCIATIONKEY)
+ );
+
+ CREATE TABLE REQUEST (
+     R_REQUESTKEY INTEGER NOT NULL,
+     R_PATRKEY INTEGER NOT NULL,
+     R_REQUESTTATUS CHAR(1) NOT NULL,
+     R_TOTALPRICE DECIMAL(15,2) NOT NULL,
+     R_REQUESTDATE DATE NOT NULL,
+     R_REQUESTPRIORITY CHAR(15) NOT NULL,
+     R_AGENT CHAR(15) NOT NULL,
+     R_TRANSPORTPRIORITY INTEGER NOT NULL,
+     R_REMARK VARCHAR(79) NOT NULL,
+     PRIMARY KEY (R_REQUESTKEY),
+     FOREIGN KEY (R_PATRKEY) REFERENCES PATRON(PA_PATRKEY)
+ );
+
+ CREATE TABLE PAINTING (
+     PAINT_REQUESTKEY INTEGER NOT NULL,
+     PAINT_ART_WORKKEY INTEGER NOT NULL,
+     PAINT_DEALKEY INTEGER NOT NULL,
+     PAINT_SERIESNUMBER INTEGER NOT NULL,
+     PAINT_QUANTITY DECIMAL(15,2) NOT NULL,
+     PAINT_SALESPRICE DECIMAL(15,2) NOT NULL,
+     PAINT_DISCOUNT DECIMAL(15,2) NOT NULL,
+     PAINT_TAX DECIMAL(15,2) NOT NULL,
+     PAINT_RETURNFLAG CHAR(1) NOT NULL,
+     PAINT_SERIESSTATUS CHAR(1) NOT NULL,
+     PAINT_TRANSPORTDATE DATE NOT NULL,
+     PAINT_COMMITDATE DATE NOT NULL,
+     PAINT_RECEIPTDATE DATE NOT NULL,
+     PAINT_TRANSPORTINSTRUCT CHAR(25) NOT NULL,
+     PAINT_TRANSPORTMODE CHAR(10) NOT NULL,
+     PAINT_REMARK VARCHAR(44) NOT NULL,
+     PRIMARY KEY (PAINT_REQUESTKEY, PAINT_SERIESNUMBER),
+     FOREIGN KEY (PAINT_REQUESTKEY) REFERENCES REQUEST(R_REQUESTKEY),
+     FOREIGN KEY (PAINT_ART_WORKKEY, PAINT_DEALKEY) REFERENCES ART_WORKDEAL(A_D_ART_WORKKEY, A_D_DEALKEY)
+ );
+"
+
+Q1:
+Text:
+"The Query provides a summary pricing report for all paintings transported as of a given date. The date
+is within 3 days of the greatest transport date contained in the database. The query lists totals for sales price,
+discounted sales price, discounted sales price plus tax, average quantity, average sales price, and average discount.
+These aggregates are grouped by RETURNFLAG and SERIESTATUS,
+and listed in ascending order of RETURNFLAG and SERIESTATUS.
+A count of the number of paintings in each group is included.
+1998-12-01 is the highest possible transport date as defined in the database population."
+
+Q2:
+ Text:
+ "The Query finds, in Europe, for each artwork made of Brass and of size 15, the art dealer who can supply it
+ at minimum cost. If several European art dealers offer the desired artwork type and size at the same (minimum) cost, the query lists the parts from
+ art dealers with the 100 highest account balances. For each art dealer, the query lists the art dealer’s account balance, name and association; the artwork’s
+ number and artisan; the art dealer’s address, phone number and remark information."
+
+
+Q3:
+Text:
+"The Query retrieves the transporting priority and potential turnover, defined as the sum of sales price * (1-discount),
+of the requests having the largest turnover among those that had not been transported as of a given date.
+Requests are listed in decreasing order of turnover.
+If more than 10 requests exist that were not transported, only the 10 requests with the largest turnover are listed."
+
+Q4:
+Text:
+"The Query counts the number of requests placed in a given quarter of 1995 in which at least one
+painting was received by the patron later than its committed date.
+The query lists the count of such requests for each request priority sorted
+in ascending priority order."
+
+Q5:
+ Text:
+ "The Query lists for each association in Asia the turnover volume that resulted from painting deals
+in which the patron ordering artworks and the art dealer filling them were both within that association. The query is run in order to determine
+whether to institute local distribution centers in a given locality. The query considers only artworks requested in the year 1995. The query displays
+the associations and turnover volume in descending order by turnover. Turnover volume for all qualifying paintings in a particular association is defined
+as sum(sale sprice * (1 - discount))."
+
+
+Q6:
+Text:
+"The Query considers all the paintings transported in a given period, with discounts between 0.05 and
+0.07. The query lists the amount by which the total turnover would have increased if these discounts had been eliminated 
+for paintings with quantity less than 24. Note that the potential turnover increase is equal to the sum of 
+[sales price * discount] for all paintings with discounts and quantities in the qualifying range."
+
+Q7:
+Text:
+"The Query finds, for two given associations, the gross discounted turnovers derived from paintings in which
+artworks were transported from a art dealer in either association to a patron in the other association during 1995 and 1996.
+The query lists the art dealer's association, the patron's association, the year,
+and the turnover from transports that took place in that year.
+The query orders the answer by art dealer's association, patron's association, and year (all ascending)."
+
+Q8:
+Text:
+"The market share for INDIA within the locality of Asia is defined as the fraction of the turnover, the sum of
+[sales price * (1-discount)], from the artworks of ECONOMY ANODIZED STEEL type in that locality that was supplied by
+the Indian art dealers. The query determines this for the years 1995 and 1996 presented in this order."
+
+Q9:
+Text:
+"The Query finds, for each association and each year, the profit for all artworks requested in that year that
+contain a specified substring in their names and that were filled by a art dealer in that association. 
+The profit is defined as the sum of [(sales price*(1-discount)) - (deal cost * quantity)] for all paintings 
+describing artworks in the specified series. The query lists the associations in ascending
+alphabetical order and, for each association, the year and profit in descending order by year (most recent first)."
+
+Q10:
+Text:
+"The Query finds the top 20 patrons, in terms of their effect on lost turnover for a given quarter, who
+have returned artworks. The query considers only artworks that were requested in the specified quarter.
+The query lists the patron’s name, address, association, phone number, account balance, remark information
+and turnover lost. The patrons are listed in descending order of lost turnover.
+Turnover lost is defined as sum(sales price*(1-discount)) for all qualifying paintings."
+
+Q11:
+Text:
+"The Query finds, from scanning the available stock of art dealers in India, all the artworks that represent
+0.001% of the total value of all available artworks. The query displays the artwork number and the value of
+those artworks in descending order of value."
+
+Q12:
+Text:
+"The Query counts, by transport mode, for paintings actually received by patrons in the year 1995, the
+number of paintings belonging to requests for which the receiptdate exceeds the commitdate for two different
+specified transport modes. Only paintings that were actually transported before the commitdate are considered.
+The late paintings are partitioned into two groups, those with
+priority URGENT or HIGH, and those with a priority other than URGENT or HIGH."
+
+Q13:
+Text:
+"This query determines the distribution of patrons by the number of requests they have made, including
+patrons who have no record of request, in past or present. It counts and reports how many patrons have no requests,
+how many have 1, 2, 3, etc. A check is made to ensure that the requests counted do not fall into one of
+several special categories of orders. Special categories are
+identified in the request remark column by looking for the pattern ’%special%requests%’."
+
+Q14:
+Text:
+"The Query determines what percentage of the turnover in a given year and month was derived from
+promotional artworks. The query considers only artworks actually transported in that month and gives the percentage.
+Turnover is defined as (sales price * (1-discount))."
+
+Q15:
+Text:
+"The Query finds the art dealer who contributed the most to the overall turnover for artworks transported during
+the first quarter of 1995. In case of a tie, the query lists all art dealers whose contribution was equal to the maximum,
+presented in art dealer number order. Turnover is calculated as sum(sales price*(1-discount))."
+
+Q16:
+Text:
+"The Query counts the number of art dealers who can supply artworks that satisfy a particular patron’s
+choice. The customer is interested in artworks of sizes 1, 4, and 7 as long as they are not like ’MEDIUM POLISHED%’,
+not of ‘Brand#23’, and not from an art dealer who has had complaints registered at the Better Artisan's Bureau,
+identified by pattern ‘%Customer%Complaints%’ in the remarks."
+
+Q17:
+Text:
+"The Query considers artworks of a given brand and with a given container type and determines the
+average painting quantity of such artworks requested for all requests (past and pending) in the 7-year database.
+What would be the average yearly gross (undiscounted) loss in turnover if requests for these artworks with a quantity
+of less than 70% of this average were no longer taken?"
+
+Q18:
+Text:
+"The Query finds a list of the top 100 patrons who have ever placed more than 300 requests.
+The query lists the patron name, patron key, the request key, date and total price and the quantity for the request."
+
+Q19:
+Text:
+"The query finds the gross discounted turnover for all requests for three different types of artworks that were
+transported by air and delivered in person. Artworks are selected based on the combination of specific brands,
+a list of containers, and a range of sizes."
+
+Q20:
+Text:
+"The query identifies art dealers who have an excess of a given artwork available; an excess is defined to be
+more than 50% of the artwork like the given artwork that the art dealer transported in 1995 for France.
+Only artworks made of Ivory are considered."
+
+Q21:
+Text:
+"The query identifies art dealers, for association ’ARGENTINA’, whose artwork was part of a multi-dealer
+ request (with current status of ’F’) where they were the only art dealers who failed to meet the committed delivery date."
+
+Q22:
+Text:
+"This query counts how many patrons within association codes among ’13’, ’31’, ’23’, ’29’, ’30’, ’18’, and
+’17’ have not placed requests for 7 years but who have a greater than average “positive" account balance.
+It also reflects the magnitude of that balance.
+Association code is defined as the first two characters of a_phone."
+
+
+
+
+ Now, give me an SQL query that matches the above text description.
+ Make sure the query is correct and optimized.
+
