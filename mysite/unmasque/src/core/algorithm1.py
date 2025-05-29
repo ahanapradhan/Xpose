@@ -59,6 +59,16 @@ def construct_nulls_nonNulls(NonNulls, Nulls, QH, S, db):
         if to_nulls:
             continue
 
+        to_nonNulls = False
+        for onenonnull in NonNulls:
+            subset_check = s.issubset(onenonnull)
+            if subset_check:
+                to_nonNulls = True
+                # NonNulls.add(s)
+                break
+        if to_nonNulls:
+            continue
+
         Res = nullify_and_runQuery(QH, db, s)
         if db.isEmpty(Res):
             Nulls.add(s)

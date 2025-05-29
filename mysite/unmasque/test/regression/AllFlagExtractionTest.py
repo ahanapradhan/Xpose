@@ -119,7 +119,7 @@ ORDER  BY cd_gender,
           cd_dep_college_count
 LIMIT 100; """
         self.conn.config.detect_union = False
-        self.conn.config.detect_or = True
+        self.conn.config.detect_or = False
         self.do_test(query)
 
     def test_Q12(self):
@@ -157,10 +157,12 @@ LIMIT 100; """
         self.do_test(query)
 
     def test_Q4(self):
+        self.conn.config.detect_union = True
         query = Q4_CTE
         self.do_test(query)
 
     def test_Q2(self):
+        self.conn.config.detect_union = True
         query = Q2_subquery
         self.do_test(query)
 
@@ -287,7 +289,7 @@ LIMIT 100;            """)
 
     def test_Q4_simple(self):
         query = \
-        """
+            """
         WITH year_total
      AS (SELECT c_customer_id                       customer_id,
                 c_first_name                        customer_first_name,
@@ -572,6 +574,42 @@ LIMIT 100; """
         self.conn.config.detect_union = False
         self.do_test(query)
 
+    def test_Q79(self):
+        self.do_test("""SELECT c_last_name, 
+               c_first_name, 
+               Substr(s_city, 1, 30), 
+               ss_ticket_number, 
+               amt, 
+               profit 
+FROM   (SELECT ss_ticket_number, 
+               ss_customer_sk, 
+               store.s_city, 
+               Sum(ss_coupon_amt) amt, 
+               Sum(ss_net_profit) profit 
+        FROM   store_sales, 
+               date_dim, 
+               store, 
+               household_demographics 
+        WHERE  store_sales.ss_sold_date_sk = date_dim.d_date_sk 
+               AND store_sales.ss_store_sk = store.s_store_sk 
+               AND store_sales.ss_hdemo_sk = household_demographics.hd_demo_sk 
+               AND ( household_demographics.hd_dep_count = 8 
+                      OR household_demographics.hd_vehicle_count > 4 ) 
+               AND date_dim.d_dow = 1 
+               AND date_dim.d_year IN ( 2000, 2000 + 1, 2000 + 2 ) 
+               AND store.s_number_employees BETWEEN 200 AND 295 
+        GROUP  BY ss_ticket_number, 
+                  ss_customer_sk, 
+                  ss_addr_sk, 
+                  store.s_city) ms, 
+       customer 
+WHERE  ss_customer_sk = c_customer_sk 
+ORDER  BY c_last_name, 
+          c_first_name, 
+          Substr(s_city, 1, 30), 
+          profit
+LIMIT 100; """)
+
     def test_Q16(self):
         query = """SELECT
          Count(DISTINCT cs_order_number) AS order_count ,
@@ -755,25 +793,469 @@ ORDER  BY d_week_seq1;"""
         self.do_test(query)
 
     def test_Q71(self):
+        self.conn.config.detect_union = True
         query = Q71_subquery
         self.do_test(query)
 
+    def test_union_extreme(self):
+        self.do_test("""
+        SELECT 1 
+        FROM
+        WHERE
+        UNION ALL
+        SELECT 1 
+        FROM
+        WHERE
+        UNION ALL
+        SELECT 1 
+        FROM
+        WHERE
+        UNION ALL
+        SELECT 1 
+        FROM
+        WHERE""")
+
+    def test_Q_store_sales(self):
+        self.do_test("""select 1 from store_sales
+                     where ss_sold_date_sk > ss_sold_time_sk
+                     AND ss_item_sk > ss_store_sk
+                     AND ss_addr_sk > ss_promo_sk
+                     AND ss_cdemo_sk < ss_hdemo_sk
+                     AND ss_customer_sk < ss_item_sk
+                     AND ss_list_price > ss_sales_price
+                     AND ss_net_profit < ss_net_paid
+                     AND ss_ext_list_price > ss_ext_sales_price
+                     AND ss_ext_wholesale_cost > ss_wholesale_cost
+                     AND ss_ext_tax < ss_coupon_amt
+                     limit 500;""")
+
+    def test_Q71_1(self):
+        self.conn.config.detect_union = True
+        query = """
+        SELECT 1
+        FROM catalog_page, date_dim
+        WHERE cp_start_date_sk = d_date_sk
+        AND d_moy = 11 
+               AND d_year = 2001
+        UNION ALL
+        SELECT 1 
+        FROM   web_sales, 
+               date_dim 
+        WHERE  d_date_sk = ws_sold_date_sk 
+               AND d_moy = 11 
+               AND d_year = 2001 
+        UNION ALL 
+        SELECT 1 
+        FROM   catalog_sales, 
+               date_dim 
+        WHERE  d_date_sk = cs_sold_date_sk 
+               AND d_moy = 11 
+               AND d_year = 2001 
+        UNION ALL 
+        SELECT 1 
+        FROM   store_sales, 
+               date_dim 
+        WHERE  d_date_sk = ss_sold_date_sk 
+               AND d_moy = 11 
+               AND d_year = 2001
+
+UNION ALL
+        SELECT 1 
+        FROM web_returns, date_dim
+        WHERE wr_returned_date_sk = d_date_sk
+        AND d_moy = 11 
+               AND d_year = 2001
+UNION ALL
+        SELECT 1
+        from catalog_returns, date_dim
+        WHERE cr_returned_date_sk = d_date_sk
+        AND d_moy = 11
+               AND d_year = 2001
+UNION ALL
+        SELECT 1
+        FROM web_page, date_dim
+        WHERE wp_creation_date_sk = d_date_sk
+        AND d_moy = 11
+               AND d_year = 2001
+
+UNION ALL
+        SELECT 1
+        FROM web_site, date_dim
+        WHERE web_open_date_sk = d_date_sk
+        AND d_moy = 11
+               AND d_year = 2001
+        UNION ALL
+        SELECT 1
+        FROM customer, date_dim
+        WHERE c_first_sales_date_sk = d_date_sk
+        AND d_moy = 11
+               AND d_year = 2001
+                       UNION ALL
+        SELECT 1
+        FROM store_returns, date_dim
+        WHERE sr_returned_date_sk = d_date_sk
+        AND d_moy = 11
+               AND d_year = 2001
+        UNION ALL
+        SELECT 1
+        FROM inventory, date_dim
+        WHERE inv_date_sk = d_date_sk
+        AND d_moy = 11
+               AND d_year = 2001
+        UNION ALL
+        SELECT 1 
+        FROM promotion, date_dim
+        WHERE p_start_date_sk = d_date_sk
+        AND d_moy = 11
+               AND d_year = 2001
+     UNION ALL
+     SELECT 1
+     FROM store, date_dim
+     WHERE s_closed_date_sk = d_date_sk
+     AND d_moy = 11
+               AND d_year = 2001
+    UNION ALL
+    SELECT 1
+    from call_center, date_dim
+    WHERE cc_closed_date_sk = d_date_sk
+    AND d_moy = 11
+               AND d_year = 2001
+
+"""
+        self.do_test(query)
+
+    def test_Q71_3(self):
+        self.conn.config.detect_union = True
+        query = """SELECT ws_ext_sales_price AS ext_price, 
+                   ws_sold_date_sk    AS sold_date_sk, 
+                   ws_item_sk         AS sold_item_sk, 
+                   ws_sold_time_sk    AS time_sk 
+            FROM   web_sales, 
+                   item,
+                   date_dim 
+            WHERE  d_date_sk = ws_sold_date_sk and i_item_sk = ws_item_sk
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT cs_ext_sales_price AS ext_price, 
+                   cs_sold_date_sk    AS sold_date_sk, 
+                   cs_item_sk         AS sold_item_sk, 
+                   cs_sold_time_sk    AS time_sk 
+            FROM   catalog_sales, 
+                   ship_mode, 
+                   date_dim 
+            WHERE  d_date_sk = cs_sold_date_sk and cs_ship_mode_sk = sm_ship_mode_sk 
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT ss_ext_sales_price AS ext_price, 
+                   ss_sold_date_sk    AS sold_date_sk, 
+                   ss_item_sk         AS sold_item_sk, 
+                   ss_sold_time_sk    AS time_sk 
+            FROM   store_sales,
+                   customer, 
+                   date_dim 
+            WHERE  d_date_sk = ss_sold_date_sk and c_customer_sk = ss_customer_sk  
+                   AND d_moy = 11 
+                   AND d_year = 2001
+            
+    """
+        self.do_test(query)
+
+    def test_Q71_2(self):
+        self.conn.config.detect_union = True
+        query = """SELECT ws_ext_sales_price AS ext_price, 
+                   ws_sold_date_sk    AS sold_date_sk, 
+                   ws_item_sk         AS sold_item_sk, 
+                   ws_sold_time_sk    AS time_sk 
+            FROM   web_sales, 
+                   item,
+                   date_dim 
+            WHERE  d_date_sk = ws_sold_date_sk and i_item_sk = ws_item_sk
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT cs_ext_sales_price AS ext_price, 
+                   cs_sold_date_sk    AS sold_date_sk, 
+                   cs_item_sk         AS sold_item_sk, 
+                   cs_sold_time_sk    AS time_sk 
+            FROM   catalog_sales, 
+                   date_dim 
+            WHERE  d_date_sk = cs_sold_date_sk  
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT ss_ext_sales_price AS ext_price, 
+                   ss_sold_date_sk    AS sold_date_sk, 
+                   ss_item_sk         AS sold_item_sk, 
+                   ss_sold_time_sk    AS time_sk 
+            FROM   store_sales, 
+                   date_dim 
+            WHERE  d_date_sk = ss_sold_date_sk 
+                   AND d_moy = 11 
+                   AND d_year = 2001
+    """
+        self.do_test(query)
+
+    def test_Q71_4(self):
+        self.conn.config.detect_union = True
+        query = """SELECT ws_ext_sales_price AS ext_price, 
+                   ws_sold_date_sk    AS sold_date_sk, 
+                   ws_item_sk         AS sold_item_sk, 
+                   ws_sold_time_sk    AS time_sk 
+            FROM   web_sales, 
+                   item,
+                   date_dim 
+            WHERE  d_date_sk = ws_sold_date_sk and i_item_sk = ws_item_sk
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT cs_ext_sales_price AS ext_price, 
+                   cs_sold_date_sk    AS sold_date_sk, 
+                   cs_item_sk         AS sold_item_sk, 
+                   cs_sold_time_sk    AS time_sk 
+            FROM   catalog_sales, 
+                   ship_mode, warehouse, 
+                   date_dim 
+            WHERE  d_date_sk = cs_sold_date_sk and cs_ship_mode_sk = sm_ship_mode_sk 
+                   AND d_moy = 11 AND cs_warehouse_sk = w_warehouse_sk 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT ss_ext_sales_price AS ext_price, 
+                   ss_sold_date_sk    AS sold_date_sk, 
+                   ss_item_sk         AS sold_item_sk, 
+                   ss_sold_time_sk    AS time_sk 
+            FROM   store_sales,
+                   customer, 
+                   date_dim 
+            WHERE  d_date_sk = ss_sold_date_sk and c_customer_sk = ss_customer_sk  
+                   AND d_moy = 11 
+                   AND d_year = 2001
+    """
+        self.do_test(query)
+
+    def test_Q71_5(self):
+        self.conn.config.detect_union = True
+        query = """SELECT ws_ext_sales_price AS ext_price, 
+                   ws_sold_date_sk    AS sold_date_sk, 
+                   ws_item_sk         AS sold_item_sk, 
+                   ws_sold_time_sk    AS time_sk 
+            FROM   web_sales, 
+                   item,
+                   date_dim,
+                   web_returns
+            WHERE  d_date_sk = ws_sold_date_sk and i_item_sk = ws_item_sk AND 
+            ws_order_number = wr_order_number 
+                                    AND ws_item_sk = wr_item_sk
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT cs_ext_sales_price AS ext_price, 
+                   cs_sold_date_sk    AS sold_date_sk, 
+                   cs_item_sk         AS sold_item_sk, 
+                   cs_sold_time_sk    AS time_sk 
+            FROM   catalog_sales, 
+                   ship_mode, warehouse, 
+                   date_dim 
+            WHERE  d_date_sk = cs_sold_date_sk and cs_ship_mode_sk = sm_ship_mode_sk 
+                   AND d_moy = 11 AND cs_warehouse_sk = w_warehouse_sk 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT ss_ext_sales_price AS ext_price, 
+                   ss_sold_date_sk    AS sold_date_sk, 
+                   ss_item_sk         AS sold_item_sk, 
+                   ss_sold_time_sk    AS time_sk 
+            FROM   store_sales,
+                   customer, 
+                   date_dim 
+            WHERE  d_date_sk = ss_sold_date_sk and c_customer_sk = ss_customer_sk  
+                   AND d_moy = 11 
+                   AND d_year = 2001
+    """
+        self.do_test(query)
+
+    def test_Q71_6(self):
+        self.conn.config.detect_union = True
+        query = """SELECT ws_ext_sales_price AS ext_price, 
+                   ws_sold_date_sk    AS sold_date_sk, 
+                   ws_item_sk         AS sold_item_sk, 
+                   ws_sold_time_sk    AS time_sk 
+            FROM   web_sales, 
+                   item,
+                   date_dim,
+                   web_returns
+            WHERE  d_date_sk = ws_sold_date_sk and i_item_sk = ws_item_sk AND 
+            ws_order_number = wr_order_number 
+                                    AND ws_item_sk = wr_item_sk
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT cs_ext_sales_price AS ext_price, 
+                   cs_sold_date_sk    AS sold_date_sk, 
+                   cs_item_sk         AS sold_item_sk, 
+                   cs_sold_time_sk    AS time_sk 
+            FROM   catalog_sales, 
+                   ship_mode, warehouse, 
+                   date_dim, catalog_returns
+            WHERE  d_date_sk = cs_sold_date_sk and cs_ship_mode_sk = sm_ship_mode_sk 
+                   AND d_moy = 11 AND cs_warehouse_sk = w_warehouse_sk and cs_order_number = cr_order_number 
+                                    AND cs_item_sk = cr_item_sk
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT ss_ext_sales_price AS ext_price, 
+                   ss_sold_date_sk    AS sold_date_sk, 
+                   ss_item_sk         AS sold_item_sk, 
+                   ss_sold_time_sk    AS time_sk 
+            FROM   store_sales,
+                   customer, 
+                   date_dim 
+            WHERE  d_date_sk = ss_sold_date_sk and c_customer_sk = ss_customer_sk  
+                   AND d_moy = 11 
+                   AND d_year = 2001
+    """
+        self.do_test(query)
+
+    def test_Q71_6_2(self):
+        self.conn.config.detect_union = True
+        query = """SELECT ws_ext_sales_price AS ext_price, 
+                   ws_sold_date_sk    AS sold_date_sk, 
+                   ws_item_sk         AS sold_item_sk, 
+                   ws_sold_time_sk    AS time_sk 
+            FROM   web_sales, 
+                   item,
+                   date_dim,
+                   web_returns, web_page
+            WHERE  d_date_sk = ws_sold_date_sk and i_item_sk = ws_item_sk AND 
+            ws_order_number = wr_order_number 
+                                    AND ws_item_sk = wr_item_sk
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+                   AND ws_web_page_sk = wp_web_page_sk
+            UNION ALL 
+            SELECT cs_ext_sales_price AS ext_price, 
+                   cs_sold_date_sk    AS sold_date_sk, 
+                   cs_item_sk         AS sold_item_sk, 
+                   cs_sold_time_sk    AS time_sk 
+            FROM   catalog_sales, 
+                   ship_mode, warehouse, 
+                   date_dim, catalog_returns
+            WHERE  d_date_sk = cs_sold_date_sk and cs_ship_mode_sk = sm_ship_mode_sk 
+                   AND d_moy = 11 AND cs_warehouse_sk = w_warehouse_sk and cs_order_number = cr_order_number 
+                                    AND cs_item_sk = cr_item_sk
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT ss_ext_sales_price AS ext_price, 
+                   ss_sold_date_sk    AS sold_date_sk, 
+                   ss_item_sk         AS sold_item_sk, 
+                   ss_sold_time_sk    AS time_sk 
+            FROM   store_sales,
+                   customer, 
+                   date_dim, customer_address 
+            WHERE  d_date_sk = ss_sold_date_sk and c_customer_sk = ss_customer_sk  
+                   AND d_moy = 11 
+                   AND d_year = 2001 AND c_current_addr_sk = ca_address_sk
+    """
+        self.do_test(query)
+
+    def test_Q71_6_1(self):
+        self.conn.config.detect_union = True
+        query = """SELECT ws_ext_sales_price AS ext_price, 
+                   ws_sold_date_sk    AS sold_date_sk, 
+                   ws_item_sk         AS sold_item_sk, 
+                   ws_sold_time_sk    AS time_sk 
+            FROM   web_sales, 
+                   item,
+                   date_dim,
+                   web_returns
+            WHERE  d_date_sk = ws_sold_date_sk and i_item_sk = ws_item_sk AND 
+            ws_order_number = wr_order_number 
+                                    AND ws_item_sk = wr_item_sk
+                   AND d_moy = 11 
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT cs_ext_sales_price AS ext_price, 
+                   cs_sold_date_sk    AS sold_date_sk, 
+                   cs_item_sk         AS sold_item_sk, 
+                   cs_sold_time_sk    AS time_sk 
+            FROM   catalog_sales, 
+                   ship_mode, warehouse, 
+                   date_dim, catalog_returns
+            WHERE  d_date_sk = cs_sold_date_sk and cs_ship_mode_sk = sm_ship_mode_sk 
+                   AND d_moy = 11 AND cs_warehouse_sk = w_warehouse_sk and cs_order_number = cr_order_number 
+                                    AND cs_item_sk = cr_item_sk
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT ss_ext_sales_price AS ext_price, 
+                   ss_sold_date_sk    AS sold_date_sk, 
+                   ss_item_sk         AS sold_item_sk, 
+                   ss_sold_time_sk    AS time_sk 
+            FROM   store_sales,
+                   customer, 
+                   date_dim, customer_address 
+            WHERE  d_date_sk = ss_sold_date_sk and c_customer_sk = ss_customer_sk  
+                   AND d_moy = 11 
+                   AND d_year = 2001 AND c_current_addr_sk = ca_address_sk
+    """
+        self.do_test(query)
+
     def test_Q54(self):
+        self.conn.config.detect_union = True
         query = Q54_subquery
+        self.do_test(query)
+
+    def test_Q71_7(self):
+        self.conn.config.detect_union = True
+        query = """SELECT ws_ext_sales_price AS ext_price, 
+                   ws_sold_date_sk    AS sold_date_sk, 
+                   ws_item_sk         AS sold_item_sk, 
+                   ws_sold_time_sk    AS time_sk 
+            FROM   web_sales, 
+                   item,
+                   web_returns
+            WHERE  i_item_sk = ws_item_sk AND 
+            ws_order_number = wr_order_number 
+                                    AND ws_item_sk = wr_item_sk 
+            UNION ALL 
+            SELECT cs_ext_sales_price AS ext_price, 
+                   cs_sold_date_sk    AS sold_date_sk, 
+                   cs_item_sk         AS sold_item_sk, 
+                   cs_sold_time_sk    AS time_sk 
+            FROM   catalog_sales, 
+                   ship_mode, warehouse, 
+                   date_dim, catalog_returns
+            WHERE  d_date_sk = cs_sold_date_sk and cs_ship_mode_sk = sm_ship_mode_sk 
+                   AND d_moy = 11 AND cs_warehouse_sk = w_warehouse_sk and cs_order_number = cr_order_number 
+                                    AND cs_item_sk = cr_item_sk
+                   AND d_year = 2001 
+            UNION ALL 
+            SELECT ss_ext_sales_price AS ext_price, 
+                   ss_sold_date_sk    AS sold_date_sk, 
+                   ss_item_sk         AS sold_item_sk, 
+                   ss_sold_time_sk    AS time_sk 
+            FROM   store_sales,
+                   customer, customer_address,
+                   date_dim
+            WHERE  d_date_sk = ss_sold_date_sk and c_customer_sk = ss_customer_sk  
+                   AND d_moy = 11 
+                   AND d_year = 2001 and ss_addr_sk = ca_address_sk 
+    """
         self.do_test(query)
 
     def test_Q5(self):
         query = Q5_CTE
-        self.conn.config.detect_oj = True
+        self.conn.config.detect_union = True
         self.do_test(query)
 
     def test_Q11(self):
+        self.conn.config.detect_union = True
         query = Q11_CTE
         self.do_test(query)
 
     def test_Q74(self):
+        self.conn.config.detect_union = True
+
         query = Q74_subquery
-        self.conn.config.detect_or = True
+        # self.conn.config.detect_or = True
         self.do_test(query)
 
     def test_Q3(self):
@@ -797,6 +1279,83 @@ ORDER  BY dt.d_year,
 LIMIT 100;
 """
         self.do_test(query)
+
+    def test_Q85(self):
+        self.do_test("""SELECT Substr(r_reason_desc, 1, 20), 
+               Avg(ws_quantity), 
+               Avg(wr_refunded_cash), 
+               Avg(wr_fee) 
+FROM   web_sales, 
+       web_returns, 
+       web_page, 
+       customer_demographics cd1, 
+       customer_demographics cd2, 
+       customer_address, 
+       date_dim, 
+       reason 
+WHERE  ws_web_page_sk = wp_web_page_sk 
+       AND ws_item_sk = wr_item_sk 
+       AND ws_order_number = wr_order_number 
+       AND ws_sold_date_sk = d_date_sk 
+       AND d_year = 2001 
+       AND cd1.cd_demo_sk = wr_refunded_cdemo_sk 
+       AND cd2.cd1_demo_sk = wr_returning_cdemo_sk 
+       AND ca_address_sk = wr_refunded_addr_sk 
+       AND r_reason_sk = wr_reason_sk 
+       AND ( ( cd1.cd_marital_status = 'W' 
+               AND cd1.cd_marital_status = cd2.cd1_marital_status 
+               AND cd1.cd_education_status = 'Primary' 
+               AND cd1.cd_education_status = cd2.cd1_education_status 
+               AND ws_sales_price BETWEEN 100.00 AND 150.00 ) 
+              OR ( cd1.cd_marital_status = 'D' 
+                   AND cd1.cd_marital_status = cd2.cd1_marital_status 
+                   AND cd1.cd_education_status = 'Secondary' 
+                   AND cd1.cd_education_status = cd2.cd1_education_status 
+                   AND ws_sales_price BETWEEN 50.00 AND 100.00 ) 
+              OR ( cd1.cd_marital_status = 'M' 
+                   AND cd1.cd_marital_status = cd2.cd1_marital_status 
+                   AND cd1.cd_education_status = 'Advanced Degree' 
+                   AND cd1.cd_education_status = cd2.cd1_education_status 
+                   AND ws_sales_price BETWEEN 150.00 AND 200.00 ) ) 
+       AND ( ( ca_country = 'United States' 
+               AND ca_state IN ( 'KY', 'ME', 'IL' ) 
+               AND ws_net_profit BETWEEN 100 AND 200 ) 
+              OR ( ca_country = 'United States' 
+                   AND ca_state IN ( 'OK', 'NE', 'MN' ) 
+                   AND ws_net_profit BETWEEN 150 AND 300 ) 
+              OR ( ca_country = 'United States' 
+                   AND ca_state IN ( 'FL', 'WI', 'KS' ) 
+                   AND ws_net_profit BETWEEN 50 AND 250 ) ) 
+GROUP  BY r_reason_desc 
+ORDER  BY Substr(r_reason_desc, 1, 20), 
+          Avg(ws_quantity), 
+          Avg(wr_refunded_cash), 
+          Avg(wr_fee)
+LIMIT 100; """)
+
+    def test_Q92(self):
+        self.do_test("""SELECT 
+         Sum(ws_ext_discount_amt) AS Excess_Discount_Amount
+FROM     web_sales , 
+         item , 
+         date_dim 
+WHERE    i_manufact_id = 718 
+AND      i_item_sk = ws_item_sk 
+AND      d_date BETWEEN '2002-03-29' AND      ( 
+                  Cast('2002-03-29' AS DATE) +  INTERVAL '90' day) 
+AND      d_date_sk = ws_sold_date_sk 
+AND      ws_ext_discount_amt > 
+         ( 
+                SELECT 1.3 * avg(ws1_ext_discount_amt) 
+                FROM   web_sales1 , 
+                       date_dim1 
+                WHERE  ws1_item_sk = i_item_sk 
+                AND    d1_date BETWEEN '2002-03-29' AND    ( 
+                              cast('2002-03-29' AS date) + INTERVAL '90' day) 
+                AND    d1_date_sk = ws1_sold_date_sk ) 
+ORDER BY sum(ws_ext_discount_amt) 
+LIMIT 100; 
+""")
 
     def test_Q30(self):
         self.do_test("""SELECT c_customer_id, 
@@ -1739,6 +2298,7 @@ LIMIT 100; """
         self.do_test(query)
 
     def test_Q14_subquery(self):
+        self.conn.config.detect_union = True
         query = """SELECT Avg(quantity * list_price) average_sales 
          FROM   (SELECT ss_quantity   quantity, 
                         ss_list_price list_price 
@@ -2161,7 +2721,7 @@ ORDER BY channel ,
     def test_Q4_full(self):
         self.conn.config.detect_union = True
         query = \
-        """WITH year_total
+            """WITH year_total
      AS (SELECT c_customer_id                       customer_id,
                 c_first_name                        customer_first_name,
                 c_last_name                         customer_last_name,
@@ -2369,6 +2929,9 @@ ORDER  BY t_secyear.customer_id,
           t_secyear.customer_last_name,
           t_secyear.customer_preferred_cust_flag;"""
         self.do_test(query)
+
+    def test_sample(self):
+        self.do_test("select * from nation;")
 
 
 if __name__ == '__main__':
