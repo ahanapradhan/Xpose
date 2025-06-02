@@ -13,12 +13,16 @@ set ytics nomirror
 set grid
 set ytics 2000
 
+set ytics textcolor rgb "blue" # Color left y-axis tics blue
+set y2tics textcolor rgb "red" # Color right y-axis tics red
+
+
 # Define cubic fits
 f_y1(x) = 7.7595*x**3 - 88.2442*x**2 + 934.3902*x - 662.9
 f_y2(x) = 0.0995*x**3 - 1.2698*x**2 + 14.7822*x - 11.5
 
 # Plot data and fits
 plot \
-    '../data/aoa_scale.dat' using 1:2 with linesp pointsize 1.5 lw 5 lt rgb "blue" title "calls to Q_H", \
+    '../data/aoa_scale.dat' using 1:2 with linesp pointsize 1.5 lw 5 lt rgb "blue" title "#Q_H Calls", \
     '../data/aoa_scale.dat' using 1:3 axes x1y2 with linesp pointsize 1.5 lw 5 lt rgb "red" title "Time(s)", \
 
