@@ -1,8 +1,8 @@
 
-set terminal pngcairo size 600,400 enhanced font 'Arial,20'
+set terminal pngcairo size 1200,400 enhanced font 'Arial,20'
 set output '../figs/stacked_barplot.png'
 
-set xlabel "QID" font ", 24"
+set xlabel "QID" font ", 12"
 set ylabel "Extraction Time (Minutes)" font ", 20"
 set key top center
 set style data histogram
