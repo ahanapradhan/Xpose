@@ -1,0 +1,96 @@
+The Query retrieves the shipping priority and potential revenue, defined as the sum of extended price
+* (1-discount), of the orders having the largest revenue among those that had not been shipped as of a given date. Orders are listed in
+decreasing order of revenue. If more than 10 unshipped orders exist, only the 10 orders with the largest revenue are listed. 
+below is database schema 
+ CREATE TABLE NATION  ( N_NATIONKEY  INTEGER NOT NULL,
+                            N_NAME       CHAR(25) NOT NULL,
+                            N_REGIONKEY  INTEGER NOT NULL,
+                            N_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE REGION  ( R_REGIONKEY  INTEGER NOT NULL,
+                            R_NAME       CHAR(25) NOT NULL,
+                            R_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE PART  ( P_PARTKEY     INTEGER NOT NULL,
+                          P_NAME        VARCHAR(55) NOT NULL,
+                          P_MFGR        CHAR(25) NOT NULL,
+                          P_BRAND       CHAR(10) NOT NULL,
+                          P_TYPE        VARCHAR(25) NOT NULL,
+                          P_SIZE        INTEGER NOT NULL,
+                          P_CONTAINER   CHAR(10) NOT NULL,
+                          P_RETAILPRICE DECIMAL(15,2) NOT NULL,
+                          P_COMMENT     VARCHAR(23) NOT NULL );
+ 
+CREATE TABLE SUPPLIER ( S_SUPPKEY     INTEGER NOT NULL,
+                             S_NAME        CHAR(25) NOT NULL,
+                             S_ADDRESS     VARCHAR(40) NOT NULL,
+                             S_NATIONKEY   INTEGER NOT NULL,
+                             S_PHONE       CHAR(15) NOT NULL,
+                             S_ACCTBAL     DECIMAL(15,2) NOT NULL,
+                             S_COMMENT     VARCHAR(101) NOT NULL);
+ 
+CREATE TABLE PARTSUPP ( PS_PARTKEY     INTEGER NOT NULL,
+                             PS_SUPPKEY     INTEGER NOT NULL,
+                             PS_AVAILQTY    INTEGER NOT NULL,
+                             PS_SUPPLYCOST  DECIMAL(15,2)  NOT NULL,
+                             PS_COMMENT     VARCHAR(199) NOT NULL );
+ 
+CREATE TABLE CUSTOMER ( C_CUSTKEY     INTEGER NOT NULL,
+                             C_NAME        VARCHAR(25) NOT NULL,
+                             C_ADDRESS     VARCHAR(40) NOT NULL,
+                             C_NATIONKEY   INTEGER NOT NULL,
+                             C_PHONE       CHAR(15) NOT NULL,
+                             C_ACCTBAL     DECIMAL(15,2)   NOT NULL,
+                             C_MKTSEGMENT  CHAR(10) NOT NULL,
+                             C_COMMENT     VARCHAR(117) NOT NULL);
+ 
+CREATE TABLE ORDERS  ( O_ORDERKEY       INTEGER NOT NULL,
+                           O_CUSTKEY        INTEGER NOT NULL,
+                           O_ORDERSTATUS    CHAR(1) NOT NULL,
+                           O_TOTALPRICE     DECIMAL(15,2) NOT NULL,
+                           O_ORDERDATE      DATE NOT NULL,
+                           O_ORDERPRIORITY  CHAR(15) NOT NULL,
+                           O_CLERK          CHAR(15) NOT NULL,
+                           O_SHIPPRIORITY   INTEGER NOT NULL,
+                           O_COMMENT        VARCHAR(79) NOT NULL);
+ 
+CREATE TABLE WEB_LINEITEM ( WL_ORDERKEY    INTEGER NOT NULL,
+                            WL_PARTKEY     INTEGER NOT NULL,
+                            WL_SUPPKEY     INTEGER NOT NULL,
+                            WL_LINENUMBER  INTEGER NOT NULL,
+                            WL_QUANTITY    DECIMAL(15,2) NOT NULL,
+                            WL_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                            WL_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                            WL_TAX         DECIMAL(15,2) NOT NULL,
+                            WL_RETURNFLAG  CHAR(1) NOT NULL,
+                            WL_LINESTATUS  CHAR(1) NOT NULL,
+                            WL_SHIPDATE    DATE NOT NULL,
+                            WL_COMMITDATE  DATE NOT NULL,
+                            WL_RECEIPTDATE DATE NOT NULL,
+                            WL_SHIPINSTRUCT CHAR(25) NOT NULL,
+                            WL_SHIPMODE     CHAR(10) NOT NULL,
+                            WL_COMMENT      VARCHAR(44) NOT NULL);
+CREATE TABLE STORE_LINEITEM (SL_ORDERKEY    INTEGER NOT NULL,
+                            SL_PARTKEY     INTEGER NOT NULL,
+                            SL_SUPPKEY     INTEGER NOT NULL,
+                            SL_LINENUMBER  INTEGER NOT NULL,
+                            SL_QUANTITY    DECIMAL(15,2) NOT NULL,
+                            SL_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                            SL_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                            SL_TAX         DECIMAL(15,2) NOT NULL,
+                            SL_RETURNFLAG  CHAR(1) NOT NULL,
+                            SL_LINESTATUS  CHAR(1) NOT NULL,
+                            SL_SHIPDATE    DATE NOT NULL,
+                            SL_COMMITDATE  DATE NOT NULL,
+                            SL_RECEIPTDATE DATE NOT NULL,
+                            SL_SHIPINSTRUCT CHAR(25) NOT NULL,
+                            SL_SHIPMODE     CHAR(10) NOT NULL,
+                            SL_COMMENT      VARCHAR(44) NOT NULL); 
+ You are an expert in SQL. Formulate SQL query that suits the following natural language text description in English. Only give the SQL, do not add any explanation. Do not keep any place-holder parameter in the query. Use valid data values as query constants, if the text does not mention them. Please ensure the SQL query is correct and optimized. Text:    The Query retrieves the shipping priority and potential revenue, defined as the sum of extended price * (1-discount), of the orders having the largest revenue among those that had not been shipped as of '1998-09-16'. Orders are listed in decreasing order of revenue. If more than 10 unshipped orders exist, only the 10 orders with the largest revenue are listed.
+SELECT o.O_SHIPPRIORITY, SUM(wl.WL_EXTENDEDPRICE * (1 - wl.WL_DISCOUNT)) AS potential_revenue
+FROM orders o
+JOIN web_lineitem wl ON o.O_ORDERKEY = wl.WL_ORDERKEY
+WHERE o.O_ORDERDATE <= '1998-09-16' AND wl.WL_SHIPDATE > '1998-09-16'
+GROUP BY o.O_SHIPPRIORITY, o.O_ORDERKEY
+ORDER BY potential_revenue DESC
+LIMIT 10;

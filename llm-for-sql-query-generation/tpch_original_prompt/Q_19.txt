@@ -1,0 +1,11 @@
+Give a query that finds the gross discounted revenue for all orders for three different 
+types of parts that were shipped by air and delivered in person. Parts are selected 
+based on the combination of specific brands, a list of containers, and a range of sizes.
+
+QUERY CONSTANTS:
+QUANTITY1 = 1
+QUANTITY2 = 10
+QUANTITY3 = 20
+BRAND1 = Brand#12
+BRAND2 = Brand#23
+BRAND3 = Brand#34

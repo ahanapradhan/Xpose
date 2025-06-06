@@ -1,0 +1,94 @@
+Give a Query that lists for each nation in a region the revenue volume that resulted from lineitem 
+transactions in which the customer ordering parts and the supplier filling them were both within that nation. 
+The query is run in order to determine whether to institute local distribution centers in a given region. 
+The query considers only parts ordered in a given year. The query displays the nations and revenue volume in 
+descending order by revenue. Revenue volume for all qualifying lineitems in a particular nation is defined as sum(l_extendedprice * (1 - l_discount)).
+
+QUERY CONSTANTS:
+REGION = ASIA
+DATE = 1995-01-01 
+below is database schema 
+ CREATE TABLE NATION  ( N_NATIONKEY  INTEGER NOT NULL,
+                            N_NAME       CHAR(25) NOT NULL,
+                            N_REGIONKEY  INTEGER NOT NULL,
+                            N_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE REGION  ( R_REGIONKEY  INTEGER NOT NULL,
+                            R_NAME       CHAR(25) NOT NULL,
+                            R_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE PART  ( P_PARTKEY     INTEGER NOT NULL,
+                          P_NAME        VARCHAR(55) NOT NULL,
+                          P_MFGR        CHAR(25) NOT NULL,
+                          P_BRAND       CHAR(10) NOT NULL,
+                          P_TYPE        VARCHAR(25) NOT NULL,
+                          P_SIZE        INTEGER NOT NULL,
+                          P_CONTAINER   CHAR(10) NOT NULL,
+                          P_RETAILPRICE DECIMAL(15,2) NOT NULL,
+                          P_COMMENT     VARCHAR(23) NOT NULL );
+ 
+CREATE TABLE SUPPLIER ( S_SUPPKEY     INTEGER NOT NULL,
+                             S_NAME        CHAR(25) NOT NULL,
+                             S_ADDRESS     VARCHAR(40) NOT NULL,
+                             S_NATIONKEY   INTEGER NOT NULL,
+                             S_PHONE       CHAR(15) NOT NULL,
+                             S_ACCTBAL     DECIMAL(15,2) NOT NULL,
+                             S_COMMENT     VARCHAR(101) NOT NULL);
+ 
+CREATE TABLE PARTSUPP ( PS_PARTKEY     INTEGER NOT NULL,
+                             PS_SUPPKEY     INTEGER NOT NULL,
+                             PS_AVAILQTY    INTEGER NOT NULL,
+                             PS_SUPPLYCOST  DECIMAL(15,2)  NOT NULL,
+                             PS_COMMENT     VARCHAR(199) NOT NULL );
+ 
+CREATE TABLE CUSTOMER ( C_CUSTKEY     INTEGER NOT NULL,
+                             C_NAME        VARCHAR(25) NOT NULL,
+                             C_ADDRESS     VARCHAR(40) NOT NULL,
+                             C_NATIONKEY   INTEGER NOT NULL,
+                             C_PHONE       CHAR(15) NOT NULL,
+                             C_ACCTBAL     DECIMAL(15,2)   NOT NULL,
+                             C_MKTSEGMENT  CHAR(10) NOT NULL,
+                             C_COMMENT     VARCHAR(117) NOT NULL);
+ 
+CREATE TABLE ORDERS  ( O_ORDERKEY       INTEGER NOT NULL,
+                           O_CUSTKEY        INTEGER NOT NULL,
+                           O_ORDERSTATUS    CHAR(1) NOT NULL,
+                           O_TOTALPRICE     DECIMAL(15,2) NOT NULL,
+                           O_ORDERDATE      DATE NOT NULL,
+                           O_ORDERPRIORITY  CHAR(15) NOT NULL,
+                           O_CLERK          CHAR(15) NOT NULL,
+                           O_SHIPPRIORITY   INTEGER NOT NULL,
+                           O_COMMENT        VARCHAR(79) NOT NULL);
+ 
+CREATE TABLE LINEITEM ( L_ORDERKEY    INTEGER NOT NULL,
+                             L_PARTKEY     INTEGER NOT NULL,
+                             L_SUPPKEY     INTEGER NOT NULL,
+                             L_LINENUMBER  INTEGER NOT NULL,
+                             L_QUANTITY    DECIMAL(15,2) NOT NULL,
+                             L_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                             L_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                             L_TAX         DECIMAL(15,2) NOT NULL,
+                             L_RETURNFLAG  CHAR(1) NOT NULL,
+                             L_LINESTATUS  CHAR(1) NOT NULL,
+                             L_SHIPDATE    DATE NOT NULL,
+                             L_COMMITDATE  DATE NOT NULL,
+                             L_RECEIPTDATE DATE NOT NULL,
+                             L_SHIPINSTRUCT CHAR(25) NOT NULL,
+                             L_SHIPMODE     CHAR(10) NOT NULL,
+                             L_COMMENT      VARCHAR(44) NOT NULL); 
+ You are an expert in SQL. Formulate SQL query that suits the following natural language text description in English. Only give the SQL, do not add any explanation. Do not keep any place-holder parameter in the query. Use valid data values as query constants, if the text does not mention them. Please ensure the SQL query is correct and optimized. Text:    Please list for each nation in a region the revenue volume that resulted from lineitem transactions in which the customer ordering parts and the supplier filling them were both within that nation. The query is run in order to determine whether to institute local distribution centers in a given region. The query considers only parts ordered in a given year. The query displays the nations and revenue volume in descending order by revenue. Revenue volume for all qualifying lineitems in a particular nation is defined as sum(l_extendedprice * (1 - l_discount)).
+The original question can be enriched as:
+Please list for each nation (NATION.N_NAME) in a region (REGION.R_NAME = 'ASIA') the revenue volume that resulted from lineitem transactions in which the customer ordering parts and the supplier filling them were both within that nation. The query considers only parts ordered in a given year (ORDERS.O_ORDERDATE >= '1995-01-01' AND ORDERS.O_ORDERDATE < '1996-01-01'). The revenue volume for all qualifying lineitems in a particular nation is defined as sum(l_extendedprice * (1 - l_discount)). The query displays the nations and revenue volume in descending order by revenue.
+Join the necessary tables to match the required information and apply the conditions to filter the data. Select the nation name (NATION.N_NAME) and calculate the revenue volume (sum(l_extendedprice * (1 - l_discount))). Order the results by revenue volume in descending order.
+We can solve the given question with the following enrichment reasoning steps:
+The information about the region can be found from the REGION table.
+The information about the nation can be found from the NATION table.
+The information about the customer and supplier can be found from the CUSTOMER and SUPPLIER tables, respectively.
+The information about the orders can be found from the ORDERS table.
+The information about the lineitems can be found from the LINEITEM table.
+It is asked to list for each nation (NATION.N_NAME) in a region (REGION.R_NAME = 'ASIA') the revenue volume that resulted from lineitem transactions in which the customer ordering parts and the supplier filling them were both within that nation. The query considers only parts ordered in a given year (ORDERS.O_ORDERDATE >= '1995-01-01' AND ORDERS.O_ORDERDATE < '1996-01-01'). The revenue volume for all qualifying lineitems in a particular nation is defined as sum(l_extendedprice * (1 - l_discount)). The query displays the nations and revenue volume in descending order by revenue.
+To combine and match the required information, joining operations are required between the REGION, NATION, CUSTOMER, ORDERS, SUPPLIER, and LINEITEM tables.
+After applying the conditions that restrict the region (REGION.R_NAME = 'ASIA'), the year of the order (ORDERS.O_ORDERDATE >= '1995-01-01' AND ORDERS.O_ORDERDATE < '1996-01-01'), and the requirement that both the customer and supplier are within the same nation, the nation name (NATION.N_NAME) and the revenue volume (sum(l_extendedprice * (1 - l_discount))) should be selected. The results should be ordered by revenue volume in descending order.
+So, the final sqlite SQL query answer to the given question is:
+SELECT T3.N_NAME, SUM(T6.L_EXTENDEDPRICE * (1 - T6.L_DISCOUNT)) AS REVENUE_VOLUME FROM REGION AS T1 JOIN NATION AS T3 ON T1.R_REGIONKEY = T3.N_REGIONKEY JOIN CUSTOMER AS T4 ON T3.N_NATIONKEY = T4.C_NATIONKEY JOIN ORDERS AS T5 ON T4.C_CUSTKEY = T5.O_CUSTKEY JOIN LINEITEM AS T6 ON T5.O_ORDERKEY = T6.L_ORDERKEY JOIN SUPPLIER AS T7 ON T6.L_SUPPKEY = T7.S_SUPPKEY WHERE T1.R_NAME = 'ASIA' AND T3.N_NATIONKEY = T7.S_NATIONKEY AND T5.O_ORDERDATE >= '1995-01-01' AND T5.O_ORDERDATE < '1996-01-01' GROUP BY T3.N_NAME ORDER BY REVENUE_VOLUME DESC
+I reflected on my result and I found nothing wrong in my answer. The SQL query will solve the question and match the expected output.

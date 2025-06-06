@@ -1,0 +1,93 @@
+Give a Query that finds, in a given region, for each part of a certain type and size, the supplier who can supply it at minimum cost. 
+If several suppliers in that region offer the desired part type and size at the same (minimum) cost, the query lists the parts from 
+suppliers with the 100 highest account balances. For each supplier, the query lists the supplier's account balance, name and nation; 
+the part's number and manufacturer; the supplier's address, phone number and comment information.
+
+QUERY CONSTANTS:
+REGION = EUROPE
+TYPE = BRASS
+SIZE = 15 
+below is database schema 
+ CREATE TABLE NATION  ( N_NATIONKEY  INTEGER NOT NULL,
+                            N_NAME       CHAR(25) NOT NULL,
+                            N_REGIONKEY  INTEGER NOT NULL,
+                            N_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE REGION  ( R_REGIONKEY  INTEGER NOT NULL,
+                            R_NAME       CHAR(25) NOT NULL,
+                            R_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE PART  ( P_PARTKEY     INTEGER NOT NULL,
+                          P_NAME        VARCHAR(55) NOT NULL,
+                          P_MFGR        CHAR(25) NOT NULL,
+                          P_BRAND       CHAR(10) NOT NULL,
+                          P_TYPE        VARCHAR(25) NOT NULL,
+                          P_SIZE        INTEGER NOT NULL,
+                          P_CONTAINER   CHAR(10) NOT NULL,
+                          P_RETAILPRICE DECIMAL(15,2) NOT NULL,
+                          P_COMMENT     VARCHAR(23) NOT NULL );
+ 
+CREATE TABLE SUPPLIER ( S_SUPPKEY     INTEGER NOT NULL,
+                             S_NAME        CHAR(25) NOT NULL,
+                             S_ADDRESS     VARCHAR(40) NOT NULL,
+                             S_NATIONKEY   INTEGER NOT NULL,
+                             S_PHONE       CHAR(15) NOT NULL,
+                             S_ACCTBAL     DECIMAL(15,2) NOT NULL,
+                             S_COMMENT     VARCHAR(101) NOT NULL);
+ 
+CREATE TABLE PARTSUPP ( PS_PARTKEY     INTEGER NOT NULL,
+                             PS_SUPPKEY     INTEGER NOT NULL,
+                             PS_AVAILQTY    INTEGER NOT NULL,
+                             PS_SUPPLYCOST  DECIMAL(15,2)  NOT NULL,
+                             PS_COMMENT     VARCHAR(199) NOT NULL );
+ 
+CREATE TABLE CUSTOMER ( C_CUSTKEY     INTEGER NOT NULL,
+                             C_NAME        VARCHAR(25) NOT NULL,
+                             C_ADDRESS     VARCHAR(40) NOT NULL,
+                             C_NATIONKEY   INTEGER NOT NULL,
+                             C_PHONE       CHAR(15) NOT NULL,
+                             C_ACCTBAL     DECIMAL(15,2)   NOT NULL,
+                             C_MKTSEGMENT  CHAR(10) NOT NULL,
+                             C_COMMENT     VARCHAR(117) NOT NULL);
+ 
+CREATE TABLE ORDERS  ( O_ORDERKEY       INTEGER NOT NULL,
+                           O_CUSTKEY        INTEGER NOT NULL,
+                           O_ORDERSTATUS    CHAR(1) NOT NULL,
+                           O_TOTALPRICE     DECIMAL(15,2) NOT NULL,
+                           O_ORDERDATE      DATE NOT NULL,
+                           O_ORDERPRIORITY  CHAR(15) NOT NULL,
+                           O_CLERK          CHAR(15) NOT NULL,
+                           O_SHIPPRIORITY   INTEGER NOT NULL,
+                           O_COMMENT        VARCHAR(79) NOT NULL);
+ 
+CREATE TABLE LINEITEM ( L_ORDERKEY    INTEGER NOT NULL,
+                             L_PARTKEY     INTEGER NOT NULL,
+                             L_SUPPKEY     INTEGER NOT NULL,
+                             L_LINENUMBER  INTEGER NOT NULL,
+                             L_QUANTITY    DECIMAL(15,2) NOT NULL,
+                             L_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                             L_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                             L_TAX         DECIMAL(15,2) NOT NULL,
+                             L_RETURNFLAG  CHAR(1) NOT NULL,
+                             L_LINESTATUS  CHAR(1) NOT NULL,
+                             L_SHIPDATE    DATE NOT NULL,
+                             L_COMMITDATE  DATE NOT NULL,
+                             L_RECEIPTDATE DATE NOT NULL,
+                             L_SHIPINSTRUCT CHAR(25) NOT NULL,
+                             L_SHIPMODE     CHAR(10) NOT NULL,
+                             L_COMMENT      VARCHAR(44) NOT NULL); 
+ You are an expert in SQL. Formulate SQL query that suits the following natural language text description in English. Only give the SQL, do not add any explanation. Do not keep any place-holder parameter in the query. Use valid data values as query constants, if the text does not mention them. Please ensure the SQL query is correct and optimized. Text:    Give a Query that finds, in a given region, for each part of a certain type and size, the supplier who can supply it at minimum cost. If several suppliers in that region offer the desired part type and size at the same (minimum) cost, the query lists the parts from suppliers with the 100 highest account balances. For each supplier, the query lists the supplier's account balance, name and nation; the part's number and manufacturer; the supplier's address, phone number and comment information.
+QUERY CONSTANTS:
+REGION = EUROPE
+TYPE = BRASS
+SIZE = 15 
+
+SELECT s.s_acctbal, s.s_name, n.n_name, p.p_partkey, p.p_mfgr, s.s_address, s.s_phone, s.s_comment
+FROM supplier s
+JOIN partsupp ps ON s.s_suppkey = ps.ps_suppkey
+JOIN part p ON ps.ps_partkey = p.p_partkey
+JOIN nation n ON s.s_nationkey = n.n_nationkey
+JOIN region r ON n.n_regionkey = r.r_regionkey
+WHERE r.r_name = 'EUROPE' AND p.p_type = 'BRASS' AND p.p_size = 15
+ORDER BY ps.ps_supplycost ASC, s.s_acctbal DESC
+LIMIT 100;

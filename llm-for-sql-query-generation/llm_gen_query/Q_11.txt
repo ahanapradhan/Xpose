@@ -1,0 +1,106 @@
+Give a Query that finds, from scanning the available stock of suppliers in a given nation, 
+all the parts that represent a significant percentage of the total value of all available parts. 
+The query displays the part number and the value of those parts in descending order of value.
+
+QUERY CONSTANTS:
+NATION = INDIA
+FRACTION = 0.0001 
+below is database schema 
+ CREATE TABLE NATION  ( N_NATIONKEY  INTEGER NOT NULL,
+                            N_NAME       CHAR(25) NOT NULL,
+                            N_REGIONKEY  INTEGER NOT NULL,
+                            N_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE REGION  ( R_REGIONKEY  INTEGER NOT NULL,
+                            R_NAME       CHAR(25) NOT NULL,
+                            R_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE PART  ( P_PARTKEY     INTEGER NOT NULL,
+                          P_NAME        VARCHAR(55) NOT NULL,
+                          P_MFGR        CHAR(25) NOT NULL,
+                          P_BRAND       CHAR(10) NOT NULL,
+                          P_TYPE        VARCHAR(25) NOT NULL,
+                          P_SIZE        INTEGER NOT NULL,
+                          P_CONTAINER   CHAR(10) NOT NULL,
+                          P_RETAILPRICE DECIMAL(15,2) NOT NULL,
+                          P_COMMENT     VARCHAR(23) NOT NULL );
+ 
+CREATE TABLE SUPPLIER ( S_SUPPKEY     INTEGER NOT NULL,
+                             S_NAME        CHAR(25) NOT NULL,
+                             S_ADDRESS     VARCHAR(40) NOT NULL,
+                             S_NATIONKEY   INTEGER NOT NULL,
+                             S_PHONE       CHAR(15) NOT NULL,
+                             S_ACCTBAL     DECIMAL(15,2) NOT NULL,
+                             S_COMMENT     VARCHAR(101) NOT NULL);
+ 
+CREATE TABLE PARTSUPP ( PS_PARTKEY     INTEGER NOT NULL,
+                             PS_SUPPKEY     INTEGER NOT NULL,
+                             PS_AVAILQTY    INTEGER NOT NULL,
+                             PS_SUPPLYCOST  DECIMAL(15,2)  NOT NULL,
+                             PS_COMMENT     VARCHAR(199) NOT NULL );
+ 
+CREATE TABLE CUSTOMER ( C_CUSTKEY     INTEGER NOT NULL,
+                             C_NAME        VARCHAR(25) NOT NULL,
+                             C_ADDRESS     VARCHAR(40) NOT NULL,
+                             C_NATIONKEY   INTEGER NOT NULL,
+                             C_PHONE       CHAR(15) NOT NULL,
+                             C_ACCTBAL     DECIMAL(15,2)   NOT NULL,
+                             C_MKTSEGMENT  CHAR(10) NOT NULL,
+                             C_COMMENT     VARCHAR(117) NOT NULL);
+ 
+CREATE TABLE ORDERS  ( O_ORDERKEY       INTEGER NOT NULL,
+                           O_CUSTKEY        INTEGER NOT NULL,
+                           O_ORDERSTATUS    CHAR(1) NOT NULL,
+                           O_TOTALPRICE     DECIMAL(15,2) NOT NULL,
+                           O_ORDERDATE      DATE NOT NULL,
+                           O_ORDERPRIORITY  CHAR(15) NOT NULL,
+                           O_CLERK          CHAR(15) NOT NULL,
+                           O_SHIPPRIORITY   INTEGER NOT NULL,
+                           O_COMMENT        VARCHAR(79) NOT NULL);
+ 
+CREATE TABLE LINEITEM ( L_ORDERKEY    INTEGER NOT NULL,
+                             L_PARTKEY     INTEGER NOT NULL,
+                             L_SUPPKEY     INTEGER NOT NULL,
+                             L_LINENUMBER  INTEGER NOT NULL,
+                             L_QUANTITY    DECIMAL(15,2) NOT NULL,
+                             L_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                             L_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                             L_TAX         DECIMAL(15,2) NOT NULL,
+                             L_RETURNFLAG  CHAR(1) NOT NULL,
+                             L_LINESTATUS  CHAR(1) NOT NULL,
+                             L_SHIPDATE    DATE NOT NULL,
+                             L_COMMITDATE  DATE NOT NULL,
+                             L_RECEIPTDATE DATE NOT NULL,
+                             L_SHIPINSTRUCT CHAR(25) NOT NULL,
+                             L_SHIPMODE     CHAR(10) NOT NULL,
+                             L_COMMENT      VARCHAR(44) NOT NULL); 
+ You are an expert in SQL. Formulate SQL query that suits the following natural language text description in English. Only give the SQL, do not add any explanation. Do not keep any place-holder parameter in the query. Use valid data values as query constants, if the text does not mention them. Please ensure the SQL query is correct and optimized. Text:    Find all the parts that represent a significant percentage of the total value of all available parts from suppliers in India. The query displays the part number and the value of those parts in descending order of value.
+SELECT T1.P_PARTKEY, T1.P_RETAILPRICE * T2.PS_AVAILQTY AS VALUE FROM PART AS T1 JOIN PARTSUPP AS T2 ON T1.P_PARTKEY = T2.PS_PARTKEY JOIN SUPPLIER AS T3 ON T2.PS_SUPPKEY = T3.S_SUPPKEY JOIN NATION AS T4 ON T3.S_NATIONKEY = T4.N_NATIONKEY WHERE T4.N_NAME = 'INDIA' ORDER BY VALUE DESC;
+Let's think step by step.
+1. We need to find parts from suppliers in India.
+2. We need to calculate the total value of each part, which is the product of the retail price of the part and the available quantity.
+3. We need to filter parts that represent a significant percentage of the total value of all available parts.
+4. We need to display the part number and the value of those parts in descending order of value.
+
+To achieve this, we need to join the `PART`, `PARTSUPP`, `SUPPLIER`, and `NATION` tables. We will then filter the results to only include suppliers from India. Finally, we will order the results by the calculated value in descending order.
+
+However, the original query does not include the filtering for significant percentage of the total value. We will add a subquery to calculate the total value of all available parts and then filter the parts that represent a significant percentage of this total value.
+
+Here is the corrected and optimized SQL query:
+
+```sql
+SELECT T1.P_PARTKEY, T1.P_RETAILPRICE * T2.PS_AVAILQTY AS VALUE 
+FROM PART AS T1 
+JOIN PARTSUPP AS T2 ON T1.P_PARTKEY = T2.PS_PARTKEY 
+JOIN SUPPLIER AS T3 ON T2.PS_SUPPKEY = T3.S_SUPPKEY 
+JOIN NATION AS T4 ON T3.S_NATIONKEY = T4.N_NATIONKEY 
+WHERE T4.N_NAME = 'INDIA' 
+AND (T1.P_RETAILPRICE * T2.PS_AVAILQTY) > (SELECT SUM(P.P_RETAILPRICE * PS.PS_AVAILQTY) * 0.0001 
+                                           FROM PART AS P 
+                                           JOIN PARTSUPP AS PS ON P.P_PARTKEY = PS.PS_PARTKEY 
+                                           JOIN SUPPLIER AS S ON PS.PS_SUPPKEY = S.S_SUPPKEY 
+                                           JOIN NATION AS N ON S.S_NATIONKEY = N.N_NATIONKEY 
+                                           WHERE N.N_NAME = 'INDIA') 
+ORDER BY VALUE DESC;
+```
+This query first calculates the total value of all available parts from suppliers in India and then filters the parts that represent more than 0.01% of this total value. The results are then ordered by the value in descending order.

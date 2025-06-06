@@ -1,0 +1,128 @@
+The Query determines what percentage of the revenue in a given year and month was derived from
+promotional parts. The query considers only parts actually shipped in that month and gives the percentage. Revenue
+is defined as (extended price * (1-discount)). 
+below is database schema 
+ CREATE TABLE NATION  ( N_NATIONKEY  INTEGER NOT NULL,
+                            N_NAME       CHAR(25) NOT NULL,
+                            N_REGIONKEY  INTEGER NOT NULL,
+                            N_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE REGION  ( R_REGIONKEY  INTEGER NOT NULL,
+                            R_NAME       CHAR(25) NOT NULL,
+                            R_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE PART  ( P_PARTKEY     INTEGER NOT NULL,
+                          P_NAME        VARCHAR(55) NOT NULL,
+                          P_MFGR        CHAR(25) NOT NULL,
+                          P_BRAND       CHAR(10) NOT NULL,
+                          P_TYPE        VARCHAR(25) NOT NULL,
+                          P_SIZE        INTEGER NOT NULL,
+                          P_CONTAINER   CHAR(10) NOT NULL,
+                          P_RETAILPRICE DECIMAL(15,2) NOT NULL,
+                          P_COMMENT     VARCHAR(23) NOT NULL );
+ 
+CREATE TABLE SUPPLIER ( S_SUPPKEY     INTEGER NOT NULL,
+                             S_NAME        CHAR(25) NOT NULL,
+                             S_ADDRESS     VARCHAR(40) NOT NULL,
+                             S_NATIONKEY   INTEGER NOT NULL,
+                             S_PHONE       CHAR(15) NOT NULL,
+                             S_ACCTBAL     DECIMAL(15,2) NOT NULL,
+                             S_COMMENT     VARCHAR(101) NOT NULL);
+ 
+CREATE TABLE PARTSUPP ( PS_PARTKEY     INTEGER NOT NULL,
+                             PS_SUPPKEY     INTEGER NOT NULL,
+                             PS_AVAILQTY    INTEGER NOT NULL,
+                             PS_SUPPLYCOST  DECIMAL(15,2)  NOT NULL,
+                             PS_COMMENT     VARCHAR(199) NOT NULL );
+ 
+CREATE TABLE CUSTOMER ( C_CUSTKEY     INTEGER NOT NULL,
+                             C_NAME        VARCHAR(25) NOT NULL,
+                             C_ADDRESS     VARCHAR(40) NOT NULL,
+                             C_NATIONKEY   INTEGER NOT NULL,
+                             C_PHONE       CHAR(15) NOT NULL,
+                             C_ACCTBAL     DECIMAL(15,2)   NOT NULL,
+                             C_MKTSEGMENT  CHAR(10) NOT NULL,
+                             C_COMMENT     VARCHAR(117) NOT NULL);
+ 
+CREATE TABLE ORDERS  ( O_ORDERKEY       INTEGER NOT NULL,
+                           O_CUSTKEY        INTEGER NOT NULL,
+                           O_ORDERSTATUS    CHAR(1) NOT NULL,
+                           O_TOTALPRICE     DECIMAL(15,2) NOT NULL,
+                           O_ORDERDATE      DATE NOT NULL,
+                           O_ORDERPRIORITY  CHAR(15) NOT NULL,
+                           O_CLERK          CHAR(15) NOT NULL,
+                           O_SHIPPRIORITY   INTEGER NOT NULL,
+                           O_COMMENT        VARCHAR(79) NOT NULL);
+ 
+CREATE TABLE WEB_LINEITEM ( WL_ORDERKEY    INTEGER NOT NULL,
+                            WL_PARTKEY     INTEGER NOT NULL,
+                            WL_SUPPKEY     INTEGER NOT NULL,
+                            WL_LINENUMBER  INTEGER NOT NULL,
+                            WL_QUANTITY    DECIMAL(15,2) NOT NULL,
+                            WL_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                            WL_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                            WL_TAX         DECIMAL(15,2) NOT NULL,
+                            WL_RETURNFLAG  CHAR(1) NOT NULL,
+                            WL_LINESTATUS  CHAR(1) NOT NULL,
+                            WL_SHIPDATE    DATE NOT NULL,
+                            WL_COMMITDATE  DATE NOT NULL,
+                            WL_RECEIPTDATE DATE NOT NULL,
+                            WL_SHIPINSTRUCT CHAR(25) NOT NULL,
+                            WL_SHIPMODE     CHAR(10) NOT NULL,
+                            WL_COMMENT      VARCHAR(44) NOT NULL);
+CREATE TABLE STORE_LINEITEM (SL_ORDERKEY    INTEGER NOT NULL,
+                            SL_PARTKEY     INTEGER NOT NULL,
+                            SL_SUPPKEY     INTEGER NOT NULL,
+                            SL_LINENUMBER  INTEGER NOT NULL,
+                            SL_QUANTITY    DECIMAL(15,2) NOT NULL,
+                            SL_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                            SL_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                            SL_TAX         DECIMAL(15,2) NOT NULL,
+                            SL_RETURNFLAG  CHAR(1) NOT NULL,
+                            SL_LINESTATUS  CHAR(1) NOT NULL,
+                            SL_SHIPDATE    DATE NOT NULL,
+                            SL_COMMITDATE  DATE NOT NULL,
+                            SL_RECEIPTDATE DATE NOT NULL,
+                            SL_SHIPINSTRUCT CHAR(25) NOT NULL,
+                            SL_SHIPMODE     CHAR(10) NOT NULL,
+                            SL_COMMENT      VARCHAR(44) NOT NULL); 
+ You are an expert in SQL. Formulate SQL query that suits the following natural language text description in English. Only give the SQL, do not add any explanation. Do not keep any place-holder parameter in the query. Use valid data values as query constants, if the text does not mention them. Please ensure the SQL query is correct and optimized. Text:    The Query determines what percentage of the revenue in a given year and month was derived from promotional parts. The query considers only parts actually shipped in that month and gives the percentage. Revenue is defined as (extended price * (1-discount)). 
+
+SELECT CAST(SUM(CASE WHEN T1.P_TYPE LIKE '%PROMO%' THEN T2.WL_EXTENDEDPRICE * (1 - T2.WL_DISCOUNT) ELSE 0 END) AS DECIMAL(15,2)) * 100 / SUM(T2.WL_EXTENDEDPRICE * (1 - T2.WL_DISCOUNT)) AS PromoPercentage
+FROM PART AS T1
+JOIN WEB_LINEITEM AS T2 ON T1.P_PARTKEY = T2.WL_PARTKEY
+WHERE YEAR(T2.WL_SHIPDATE) = 1998 AND MONTH(T2.WL_SHIPDATE) = 12;
+```
+I reflected on my results and thought the SQL query will cause error because:
+The condition `YEAR(T2.WL_SHIPDATE) = 1998 AND MONTH(T2.WL_SHIPDATE) = 12` is not correct. The correct way to extract the year and month from a date in SQL Server is to use the `DATEPART` function.
+So, I reflected on my results and I found nothing wrong in my answer. The SQL query will cause error.
+And I will try to find the correct SQL query again.
+Let's go through the given SQL query and make corrections step by step:
+
+1. **Table Join**: The join between `PART` and `WEB_LINEITEM` is correct.
+
+2. **Condition for Year and Month**: In SQL Server, the `YEAR()` and `MONTH()` functions can be used to extract the year and month from a date. However, they need to be explicitly cast to integers. The provided query is correct, but let's make it explicit.
+
+3. **Promotional Parts Calculation**: The calculation for the sum of revenue from promotional parts and the total revenue is correct.
+
+4. **Percentage Calculation**: The percentage calculation is correct.
+
+5. **CAST to DECIMAL**: This is done correctly to ensure accurate division.
+
+6. **Filtering Shipped Parts**: The filter `T1.P_TYPE LIKE '%PROMO%'` is correct.
+
+7. **No Typos or Issues**: There are no typos or other issues in the SELECT, JOIN, WHERE, GROUP BY, or ORDER BY clauses.
+
+8. **No Unnecessary Columns**: All columns are necessary and are used in the calculations.
+
+The provided SQL query will work correctly, and there is no need to change anything. The `YEAR()` and `MONTH()` functions will work as expected in this context.
+
+**Final Optimized SQL Query**:
+```sql
+SELECT CAST(SUM(CASE WHEN T1.P_TYPE LIKE '%PROMO%' THEN T2.WL_EXTENDEDPRICE * (1 - T2.WL_DISCOUNT) ELSE 0 END) AS DECIMAL(15,2)) * 100 / SUM(T2.WL_EXTENDEDPRICE * (1 - T2.WL_DISCOUNT)) AS PromoPercentage
+FROM PART AS T1
+JOIN WEB_LINEITEM AS T2 ON T1.P_PARTKEY = T2.WL_PARTKEY
+WHERE YEAR(T2.WL_SHIPDATE) = 1998 AND MONTH(T2.WL_SHIPDATE) = 12;
+```
+
+This query is correct and will solve the problem as specified. The error in the original statement was a misunderstanding, as the provided SQL will work as intended. The `YEAR()` and `MONTH()` functions are indeed correct and appropriate in this context. The final correct and optimal SQL query is provided above.

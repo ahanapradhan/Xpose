@@ -1,0 +1,96 @@
+Give a Query that gives the market share for a given nation within a given region is defined as 
+the fraction of the revenue, the sum of [l_extendedprice * (1-l_discount)], from the products of a 
+specified type in that region that was supplied by suppli- ers from the given nation. 
+The query determines this for the years 1995 and 1996 presented in this order.
+
+QUERY CONSTANTS:
+NATION = INDIA
+REGION = ASIA
+TYPE = ECONOMY ANODIZED STEEL 
+below is database schema 
+ CREATE TABLE NATION  ( N_NATIONKEY  INTEGER NOT NULL,
+                            N_NAME       CHAR(25) NOT NULL,
+                            N_REGIONKEY  INTEGER NOT NULL,
+                            N_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE REGION  ( R_REGIONKEY  INTEGER NOT NULL,
+                            R_NAME       CHAR(25) NOT NULL,
+                            R_COMMENT    VARCHAR(152));
+ 
+CREATE TABLE PART  ( P_PARTKEY     INTEGER NOT NULL,
+                          P_NAME        VARCHAR(55) NOT NULL,
+                          P_MFGR        CHAR(25) NOT NULL,
+                          P_BRAND       CHAR(10) NOT NULL,
+                          P_TYPE        VARCHAR(25) NOT NULL,
+                          P_SIZE        INTEGER NOT NULL,
+                          P_CONTAINER   CHAR(10) NOT NULL,
+                          P_RETAILPRICE DECIMAL(15,2) NOT NULL,
+                          P_COMMENT     VARCHAR(23) NOT NULL );
+ 
+CREATE TABLE SUPPLIER ( S_SUPPKEY     INTEGER NOT NULL,
+                             S_NAME        CHAR(25) NOT NULL,
+                             S_ADDRESS     VARCHAR(40) NOT NULL,
+                             S_NATIONKEY   INTEGER NOT NULL,
+                             S_PHONE       CHAR(15) NOT NULL,
+                             S_ACCTBAL     DECIMAL(15,2) NOT NULL,
+                             S_COMMENT     VARCHAR(101) NOT NULL);
+ 
+CREATE TABLE PARTSUPP ( PS_PARTKEY     INTEGER NOT NULL,
+                             PS_SUPPKEY     INTEGER NOT NULL,
+                             PS_AVAILQTY    INTEGER NOT NULL,
+                             PS_SUPPLYCOST  DECIMAL(15,2)  NOT NULL,
+                             PS_COMMENT     VARCHAR(199) NOT NULL );
+ 
+CREATE TABLE CUSTOMER ( C_CUSTKEY     INTEGER NOT NULL,
+                             C_NAME        VARCHAR(25) NOT NULL,
+                             C_ADDRESS     VARCHAR(40) NOT NULL,
+                             C_NATIONKEY   INTEGER NOT NULL,
+                             C_PHONE       CHAR(15) NOT NULL,
+                             C_ACCTBAL     DECIMAL(15,2)   NOT NULL,
+                             C_MKTSEGMENT  CHAR(10) NOT NULL,
+                             C_COMMENT     VARCHAR(117) NOT NULL);
+ 
+CREATE TABLE ORDERS  ( O_ORDERKEY       INTEGER NOT NULL,
+                           O_CUSTKEY        INTEGER NOT NULL,
+                           O_ORDERSTATUS    CHAR(1) NOT NULL,
+                           O_TOTALPRICE     DECIMAL(15,2) NOT NULL,
+                           O_ORDERDATE      DATE NOT NULL,
+                           O_ORDERPRIORITY  CHAR(15) NOT NULL,
+                           O_CLERK          CHAR(15) NOT NULL,
+                           O_SHIPPRIORITY   INTEGER NOT NULL,
+                           O_COMMENT        VARCHAR(79) NOT NULL);
+ 
+CREATE TABLE LINEITEM ( L_ORDERKEY    INTEGER NOT NULL,
+                             L_PARTKEY     INTEGER NOT NULL,
+                             L_SUPPKEY     INTEGER NOT NULL,
+                             L_LINENUMBER  INTEGER NOT NULL,
+                             L_QUANTITY    DECIMAL(15,2) NOT NULL,
+                             L_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                             L_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                             L_TAX         DECIMAL(15,2) NOT NULL,
+                             L_RETURNFLAG  CHAR(1) NOT NULL,
+                             L_LINESTATUS  CHAR(1) NOT NULL,
+                             L_SHIPDATE    DATE NOT NULL,
+                             L_COMMITDATE  DATE NOT NULL,
+                             L_RECEIPTDATE DATE NOT NULL,
+                             L_SHIPINSTRUCT CHAR(25) NOT NULL,
+                             L_SHIPMODE     CHAR(10) NOT NULL,
+                             L_COMMENT      VARCHAR(44) NOT NULL); 
+ You are an expert in SQL. Formulate SQL query that suits the following natural language text description in English. Only give the SQL, do not add any explanation. Do not keep any place-holder parameter in the query. Use valid data values as query constants, if the text does not mention them. Please ensure the SQL query is correct and optimized. Text:    Give the market share for a given nation within a given region is defined as the fraction of the revenue, the sum of [l_extendedprice * (1-l_discount)], from the products of a specified type in that region that was supplied by suppliers from the given nation. The query determines this for the years 1995 and 1996 presented in this order.
+Query Constants: NATION = INDIA, REGION = ASIA, TYPE = ECONOMY ANODIZED STEEL
+
+SELECT SUM(CASE WHEN T4.N_NAME = 'INDIA' THEN T1.L_EXTENDEDPRICE * (1 - T1.L_DISCOUNT) ELSE 0 END) / SUM(T1.L_EXTENDEDPRICE * (1 - T1.L_DISCOUNT)) AS market_share_1995
+FROM LINEITEM AS T1
+JOIN PART AS T2 ON T1.L_PARTKEY = T2.P_PARTKEY
+JOIN SUPPLIER AS T3 ON T1.L_SUPPKEY = T3.S_SUPPKEY
+JOIN NATION AS T4 ON T3.S_NATIONKEY = T4.N_NATIONKEY
+JOIN REGION AS T5 ON T4.N_REGIONKEY = T5.R_REGIONKEY
+WHERE T5.R_NAME = 'ASIA' AND T2.P_TYPE = 'ECONOMY ANODIZED STEEL' AND EXTRACT(YEAR FROM T1.L_SHIPDATE) = 1995
+UNION ALL
+SELECT SUM(CASE WHEN T4.N_NAME = 'INDIA' THEN T1.L_EXTENDEDPRICE * (1 - T1.L_DISCOUNT) ELSE 0 END) / SUM(T1.L_EXTENDEDPRICE * (1 - T1.L_DISCOUNT)) AS market_share_1996
+FROM LINEITEM AS T1
+JOIN PART AS T2 ON T1.L_PARTKEY = T2.P_PARTKEY
+JOIN SUPPLIER AS T3 ON T1.L_SUPPKEY = T3.S_SUPPKEY
+JOIN NATION AS T4 ON T3.S_NATIONKEY = T4.N_NATIONKEY
+JOIN REGION AS T5 ON T4.N_REGIONKEY = T5.R_REGIONKEY
+WHERE T5.R_NAME = 'ASIA' AND T2.P_TYPE = 'ECONOMY ANODIZED STEEL' AND EXTRACT(YEAR FROM T1.L_SHIPDATE) = 1996;
