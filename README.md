@@ -94,6 +94,14 @@ Use the following command:
 the `main` function in main_cmd.py can be run from the IDE.  
 
 
+(Current code uses relative imports in main_cmd.py script. If that causes import related error while trying to run from IDE, please change the imports to absolute.)
+
+#### From GUI:
+In the terminal, go inside `unmasque` folder and start the Django app using the command: `python3 manage.py runserver`
+Once the server is up at the 8080 port of localhost, the GUI can be accessed through the link: `http://localhost:8080/unmasque/`
+
+
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # How to Execute XFE?
@@ -102,10 +110,65 @@ Use the following command:
 `python query_refiner.py 4o <Query-Key>`
 
 The `benchmark.py` file in this directory contains `etpch` schema, query keys, and their corresponding business questions, and repeatable error feedback prompts.
-`query_refiner.py` file assumesthe  existence of these files.
+`query_refiner.py` file assumes the  existence of these files.
 
 #### Note:
 OPENAI `API_KEY` must be set in the environment variable of the system to make this script work.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Text2SQL on E-TPCH Benchmark Queries using Infly-RL-SQL-32B(https://huggingface.co/infly/inf-rl-qwen-coder-32b-2746)
+
+Hardware Used:
+
+![image](https://github.com/user-attachments/assets/2b45dc58-d538-4743-9ff1-05882a122007)
+
+Directory `llm_for_sql_query_generation` contains inputs, code, and outputs of this experiment.
+
+Code file: `inference.py`
+
+### Set up environment:
+
+`sudo apt update && sudo apt upgrade -y`
+
+`sudo apt install python3-pip python3-venv -y`
+
+`python3 -m venv qwen-env`
+
+
+`source qwen-env/bin/activate`
+
+`pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121`
+
+`pip install transformers accelerate`
+
+Then install the NVIDIA driver and toolkit using the below commands:
+
+for driver:
+`sudo apt install nvidia-driver-525`
+
+for toolkit:
+
+`wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin`
+
+`sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600`
+
+`wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda-repo-ubuntu2204-12-1-local_12.1.0-530.30.02-1_amd64.deb`
+
+`sudo dpkg -i cuda-repo-ubuntu2204-12-1-local_12.1.0-530.30.02-1_amd64.deb`
+
+`sudo cp /var/cuda-repo-ubuntu2204-12-1-local/cuda-*-keyring.gpg /usr/share/keyrings/`
+
+`sudo apt-get update`
+
+`sudo apt-get -y install cuda`
+
+Once installation is done:
+
+`export PATH=/usr/local/cuda-12.1/bin:$PATH`
+
+`export LD_LIBRARY_PATH=/usr/local/cuda-12.1/lib64:$LD_LIBRARY_PATH`
+
+
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -131,10 +194,4 @@ OPENAI `API_KEY` must be set in the environment variable of the system to make t
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
-
-(Current code uses relative imports in main_cmd.py script. If that causes import related error while trying to run from IDE, please change the imports to absolute.)
-
-#### From GUI:
-In the terminal, go inside `unmasque` folder and start the Django app using the command: `python3 manage.py runserver`
-Once the server is up at the 8080 port of localhost, the GUI can be accessed through the link: `http://localhost:8080/unmasque/`
 
