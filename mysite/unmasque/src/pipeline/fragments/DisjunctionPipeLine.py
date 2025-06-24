@@ -1,6 +1,7 @@
 import copy
 from abc import abstractmethod, ABC
 
+from ...core.or_extractor import OrExtractor
 from ....src.core.aoa import InequalityPredicate
 from ....src.core.cs2 import Cs2
 from ....src.core.db_restorer import DbRestorer
@@ -202,29 +203,22 @@ class DisjunctionPipeLine(GenericPipeLine, ABC):
         return True, time_profile
 
     def __run_extraction_loop(self, all_eq_predicates, core_relations, ids, query, time_profile):
-        # Loop indefinitely until no new OR-equivalent predicates are found
-        while True:
-            or_eq_predicates = []  # Holds the new set of predicates found in this iteration
 
-            # Iterate through each predicate index
-            for i in ids:
-                # Collect the i-th predicate from each group in all_eq_predicates
-                in_candidates = [copy.deepcopy(em[i]) for em in all_eq_predicates]
-                self.logger.debug("Checking OR predicate of ", in_candidates)
+        or_extractor = OrExtractor(self.connectionHelper, core_relations,
+                                   self.global_min_instance_dict, all_eq_predicates)
+        # Iterate through each predicate index
+        for i in ids:
+            # Collect the i-th predicate from each group in all_eq_predicates
+            in_candidates = [copy.deepcopy(em[i]) for em in all_eq_predicates]
+            self.logger.debug("Checking OR predicate of ", in_candidates)
 
-                """
+            """
                 New Disjunction Extraction Logic Goes here!!
-                append the newly found predicate in or_eq_predicates list
-                """
+            """
 
-                self.logger.debug("new or predicates...", all_eq_predicates, or_eq_predicates)
+            or_extractor.doJob(query)
 
-            # If no new predicates were found across all indexes, exit loop
-            if all(element == tuple() for element in or_eq_predicates):
-                break
-
-            # Otherwise, append the new set of OR-equivalent predicates to the collection
-            all_eq_predicates.append(or_eq_predicates)
+            all_eq_predicates.extend(or_extractor.filter_predicates)
 
         # Return the updated time profile after the loop finishes
         return time_profile
