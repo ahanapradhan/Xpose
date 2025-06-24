@@ -1,8 +1,6 @@
 import copy
 from abc import abstractmethod, ABC
 
-from ...core.abstract.MinimizerBase import Minimizer
-from ...util.constants import UNMASQUE
 from ....src.core.aoa import InequalityPredicate
 from ....src.core.cs2 import Cs2
 from ....src.core.db_restorer import DbRestorer
@@ -10,10 +8,8 @@ from ....src.core.equi_join import U2EquiJoin
 from ....src.core.filter import Filter
 from ....src.core.view_minimizer import ViewMinimizer
 from ....src.pipeline.abstract.generic_pipeline import GenericPipeLine
-from ....src.util.aoa_utils import get_constants_for
 from ....src.util.constants import FILTER, INEQUALITY, DONE, RUNNING, START, EQUALITY, DB_MINIMIZATION, \
     SAMPLING, RESTORE_DB, ERROR
-from ....src.util.utils import get_format, get_val_plus_delta
 from ....src.util.error_handling import UnmasqueError
 
 
@@ -174,76 +170,64 @@ class DisjunctionPipeLine(GenericPipeLine, ABC):
         raise NotImplementedError("Trouble!")
 
     def _extract_disjunction(self, init_predicates, core_relations, query, time_profile):  # for once
+        # Initialize a list to store the final disjunction (OR-ed) predicates
         self.or_predicates = []
+
+        # Create a deep copy of the initial predicates to work with (avoids mutating the input)
         curr_eq_predicates = copy.deepcopy(init_predicates)
+
+        # Start with a list of one predicate group (can be extended during loop execution)
         all_eq_predicates = [curr_eq_predicates]
+
+        # Create a list of indices corresponding to each initial predicate
         ids = list(range(len(curr_eq_predicates)))
+
+        # Check if OR detection is enabled in the configuration
         if self.connectionHelper.config.detect_or:
             try:
-                time_profile = self.__run_extraction_loop(all_eq_predicates, core_relations, ids, query, time_profile)
+                # Run the loop that attempts to extract disjunctions (modifies all_eq_predicates)
+                time_profile = self.__run_extraction_loop(
+                    all_eq_predicates, core_relations, ids, query, time_profile
+                )
             except Exception as e:
+                # If an error occurs during disjunction extraction, update internal state and log it
                 self.update_state(ERROR)
                 self.logger.error("Error in disjunction loop. ", str(e))
                 return False, time_profile
+
+        # Transpose the list of lists to group corresponding predicates across all disjunction paths
         self.or_predicates = list(zip(*all_eq_predicates))
+
+        # Return success status and the updated time profile
         return True, time_profile
 
     def __run_extraction_loop(self, all_eq_predicates, core_relations, ids, query, time_profile):
+        # Loop indefinitely until no new OR-equivalent predicates are found
         while True:
-            or_eq_predicates = []
+            or_eq_predicates = []  # Holds the new set of predicates found in this iteration
+
+            # Iterate through each predicate index
             for i in ids:
+                # Collect the i-th predicate from each group in all_eq_predicates
                 in_candidates = [copy.deepcopy(em[i]) for em in all_eq_predicates]
                 self.logger.debug("Checking OR predicate of ", in_candidates)
-                if not len(in_candidates[-1]):
-                    or_eq_predicates.append(tuple())
-                    continue
 
-                restore_details = self.__get_OR_db_restoration_details(core_relations, in_candidates)
-                self.logger.debug(restore_details)
-                check, time_profile = self._mutation_pipeline(core_relations, query, time_profile, restore_details)
-                if not check or not self.__get_predicates_in_action():
-                    or_eq_predicates.append(tuple())
-                else:
-                    or_eq_predicates.append(self.__get_predicates_in_action()[i])
+                """
+                New Disjunction Extraction Logic Goes here!!
+                append the newly found predicate in or_eq_predicates list
+                """
+
                 self.logger.debug("new or predicates...", all_eq_predicates, or_eq_predicates)
+
+            # If no new predicates were found across all indexes, exit loop
             if all(element == tuple() for element in or_eq_predicates):
                 break
+
+            # Otherwise, append the new set of OR-equivalent predicates to the collection
             all_eq_predicates.append(or_eq_predicates)
+
+        # Return the updated time profile after the loop finishes
         return time_profile
-
-    def __get_OR_db_restoration_details(self, core_relations, in_candidates):
-        restore_details = []
-        for tab in core_relations:
-            where_condition = self.__falsify_predicates(tab, in_candidates)
-            restore_details.append((tab, where_condition))
-        return restore_details
-
-    def __falsify_predicates(self, tabname, held_predicates):
-        always = "true"
-        where_condition = always
-        wheres = []
-        for pred in held_predicates:
-            if not len(pred):
-                return where_condition
-            tab, attrib, op, lb, ub = pred[0], pred[1], pred[2], pred[3], pred[4]
-            if tab != tabname:
-                continue
-            datatype = self.filter_extractor.get_datatype((tab, attrib))
-            val_lb, val_ub = get_format(datatype, lb), get_format(datatype, ub)
-
-            if op.lower() in ['equal', '=']:
-                where_condition = f"{attrib} != {val_lb}"
-            elif op.lower() == 'like':
-                where_condition = f"{attrib} NOT LIKE {val_lb}"
-            else:
-                delta, _ = get_constants_for(datatype)
-                val_lb_minus_one = get_format(datatype, get_val_plus_delta(datatype, lb, -1 * delta))
-                val_ub_plus_one = get_format(datatype, get_val_plus_delta(datatype, ub, 1 * delta))
-                where_condition = f"({attrib} <= {val_lb_minus_one} or {attrib} >= {val_ub_plus_one})"
-            wheres.append(where_condition)
-        where_condition = " and ".join(wheres) if len(wheres) else always
-        self.logger.debug(where_condition)
-        return where_condition
 
     @abstractmethod
     def extract(self, query):
