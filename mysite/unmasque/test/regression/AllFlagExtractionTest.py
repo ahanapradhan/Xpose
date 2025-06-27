@@ -797,23 +797,104 @@ ORDER  BY d_week_seq1;"""
         query = Q71_subquery
         self.do_test(query)
 
-    def test_union_extreme(self):
+    def test_extreme_1(self):
+        self.conn.config.detect_union = True
         self.do_test("""
-        SELECT 1 
-        FROM
-        WHERE
+        --SELECT 1 FROM catalog_sales
+        --UNION ALL
+        SELECT 1 FROM catalog_returns                 
         UNION ALL
-        SELECT 1 
-        FROM
-        WHERE
+        SELECT 1 FROM web_sales
         UNION ALL
-        SELECT 1 
-        FROM
-        WHERE
+        SELECT 1 FROM web_returns
         UNION ALL
-        SELECT 1 
-        FROM
-        WHERE""")
+        SELECT 1 FROM store_sales
+        UNION ALL
+        SELECT 1 FROM store_returns
+        UNION ALL
+        SELECT 1 FROM store
+        UNION ALL
+        SELECT 1 FROM promotion
+        UNION ALL
+        SELECT 1 FROM reason
+        UNION ALL
+        SELECT 1 FROM item
+        UNION ALL
+        SELECT 1 FROM web_page
+        UNION ALL
+        SELECT 1 FROM date_dim
+        UNION ALL
+        SELECT 1 FROM time_dim
+        UNION ALL
+        SELECT 1 FROM call_center;
+        """)
+
+    def test_union_extreme(self):
+        self.conn.config.detect_union = True
+
+        self.do_test("""
+       SELECT 1
+--FROM customer c
+--JOIN customer_address ca ON c.c_current_addr_sk = ca.ca_address_sk
+--JOIN customer_demographics cd ON c.c_current_cdemo_sk = cd.cd_demo_sk
+FROM store_returns sr 
+JOIN reason r ON sr.sr_reason_sk = r.r_reason_sk
+--JOIN date_dim d ON sr.sr_returned_date_sk = d.d_date_sk
+
+UNION ALL
+        -- Subquery 1: Customer domain
+SELECT 1
+FROM customer c
+JOIN customer_address ca ON c.c_current_addr_sk = ca.ca_address_sk
+JOIN customer_demographics cd ON c.c_current_cdemo_sk = cd.cd_demo_sk
+--JOIN store_returns sr ON c.c_customer_sk = sr.sr_customer_sk
+--JOIN reason r ON sr.sr_reason_sk = r.r_reason_sk
+--JOIN date_dim d ON sr.sr_returned_date_sk = d.d_date_sk
+
+UNION ALL
+
+-- Subquery 2: Store sales domain
+SELECT 1
+FROM store_sales ss
+JOIN store s ON ss.ss_store_sk = s.s_store_sk
+--JOIN promotion p ON ss.ss_promo_sk = p.p_promo_sk
+--JOIN time_dim t ON ss.ss_sold_time_sk = t.t_time_sk
+--JOIN item i ON ss.ss_item_sk = i.i_item_sk
+--JOIN inventory inv ON ss.ss_item_sk = inv.inv_item_sk
+                  --AND ss.ss_sold_date_sk = inv.inv_date_sk
+
+UNION ALL
+
+-- Subquery 3: Web sales domain
+SELECT 1
+FROM web_sales ws
+--JOIN web_site w ON ws.ws_web_site_sk = w.web_site_sk
+--JOIN web_returns wr ON ws.ws_order_number = wr.wr_order_number
+--JOIN web_page wp ON ws.ws_web_page_sk = wp.wp_web_page_sk
+--JOIN ship_mode sm ON ws.ws_ship_mode_sk = sm.sm_ship_mode_sk
+--JOIN warehouse wh ON ws.ws_warehouse_sk = wh.w_warehouse_sk
+
+UNION ALL
+
+-- Subquery 3: Web sales domain
+SELECT 1
+FROM web_site w 
+--JOIN web_returns wr ON ws.ws_order_number = wr.wr_order_number
+--JOIN web_page wp ON ws.ws_web_page_sk = wp.wp_web_page_sk
+--JOIN ship_mode sm ON ws.ws_ship_mode_sk = sm.sm_ship_mode_sk
+--JOIN warehouse wh ON ws.ws_warehouse_sk = wh.w_warehouse_sk
+
+UNION ALL
+
+-- Subquery 4: Catalog sales domain
+SELECT 1
+FROM catalog_sales cs
+JOIN catalog_returns cr ON cs.cs_order_number = cr.cr_order_number
+--JOIN call_center cc ON cs.cs_call_center_sk = cc.cc_call_center_sk
+--JOIN catalog_page cp ON cs.cs_catalog_page_sk = cp.cp_catalog_page_sk
+--JOIN household_demographics hd ON cs.cs_bill_hdemo_sk = hd.hd_demo_sk
+--JOIN income_band ib ON hd.hd_income_band_sk = ib.ib_income_band_sk;
+""")
 
     def test_Q_store_sales(self):
         self.do_test("""select 1 from store_sales
