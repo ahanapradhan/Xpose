@@ -188,7 +188,7 @@ WHERE c_mktsegment = 'BUILDING'
   AND l_shipdate > DATE '1995-03-15'
 GROUP BY l_orderkey, o_orderdate, o_shippriority
 ORDER BY revenue DESC, o_orderdate
-LIMIT 10;""", True, False, False, False),
+LIMIT 10;""", False, False, False, False),
                      TestQuery("MQ4", """SELECT o_orderdate, o_orderpriority, COUNT(*) AS order_count
 FROM orders
 WHERE o_orderdate >= DATE '1997-07-01' 

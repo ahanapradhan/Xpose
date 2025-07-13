@@ -1,5 +1,3 @@
-import copy
-
 from ...src.core.cs2 import Cs2
 from ...src.util.constants import SCALE_DOWN, WORKING_SCHEMA
 

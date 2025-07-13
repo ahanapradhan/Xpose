@@ -4,8 +4,8 @@ from datetime import date, timedelta
 
 import pytest
 
-from mysite.unmasque.src.core.initialization import Initiator
-from mysite.unmasque.test.eTPCH_Queries import Q4, Q6, Q7, Q9, Q10, Q14, Q5, Q15
+from ...src.core.initialization import Initiator
+from ...test.eTPCH_Queries import Q4, Q6, Q7, Q9, Q10, Q14, Q5, Q15
 from ...src.core.factory.PipeLineFactory import PipeLineFactory
 from ..util import queries
 from ..util.BaseTestCase import BaseTestCase

@@ -1,12 +1,10 @@
 import copy
-from datetime import date
-from typing import Tuple, Union
 
 from .abstract.GenerationPipeLineBase import GenerationPipeLineBase
 from .dataclass.genPipeline_context import GenPipelineContext
 from .dataclass.pgao_context import PGAOcontext
 from ..util.QueryStringGenerator import QueryStringGenerator
-from ..util.aoa_utils import get_tab, get_attrib, get_one_tab_attrib_from_aoa_pred
+from ..util.aoa_utils import get_tab, get_attrib
 
 
 class OuterJoin(GenerationPipeLineBase):
