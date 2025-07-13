@@ -1,0 +1,1 @@
+"Identify and rank parts supplied by suppliers from India based on the total value of their available inventory, calculated as the product of supply cost and available quantity. Only include parts where this total value exceeds 0.01% of the overall inventory value of all parts supplied by Indian suppliers, and present the results in descending order of value."

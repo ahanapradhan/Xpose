@@ -1,0 +1,1 @@
+"Identify and list the names and addresses of suppliers located in France who supply parts with 'ivory' in their name, where the available quantity of these parts exceeds half of the total quantity ordered in the year 1995. The results are sorted by the supplier's name."
