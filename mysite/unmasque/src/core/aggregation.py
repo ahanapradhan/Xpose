@@ -46,7 +46,8 @@ def get_k_value(attrib, filter_attrib_dict, groupby_key_flag, tabname, datatype,
             lb, ub = filter_attrib_dict[(tabname, attrib)][0], filter_attrib_dict[(tabname, attrib)][1]
             lb = get_boundary_value(lb, is_ub=False)
             ub = get_boundary_value(ub, is_ub=True)
-            a, b = min(max(get_dummy_val_for('int') + c, lb), ub), max(max(get_dummy_val_for('int') + c, lb), ub)
+            a = min(max(get_dummy_val_for('int') + c, lb), ub)
+            b = min(min(get_dummy_val_for('int') + c, lb), ub)
             b = min(a + 1, b)
             if a == 0:  # swap a and b
                 a = b
