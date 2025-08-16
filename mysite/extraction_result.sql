@@ -1055,3 +1055,109 @@ AND wl_commitdate = wl_receiptdate and wl_shipmode = 'AIR' GROUP BY s_name, s_ph
  Where customer.c_custkey = orders.o_custkey
  and customer.c_acctbal <= 999.99;
  --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ 
+        select r_name from region
+        INTERSECT
+        select r1_name from region1 where r1_regionkey > 2;
+        
+ --- extracted query:
+  
+ Select 'MIDDLE EAST' as r_name 
+ From region, region1 
+ Where region.r_name = region1.r1_name
+ and region1.r1_regionkey >= 3
+ and region.r_name = 'MIDDLE EAST';
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ 
+        select r_regionkey from region
+        INTERSECT
+        select r1_regionkey from region1 where r1_name LIKE 'A%';
+        
+ --- extracted query:
+  
+ Select r_regionkey 
+ From region, region1 
+ Where region.r_regionkey = region1.r1_regionkey
+ and region1.r1_name LIKE 'A%' 
+ Group By r_regionkey 
+ Order By r_regionkey desc;
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ 
+        select r_regionkey from region
+        INTERSECT ALL
+        select r1_regionkey from region1 where r1_name LIKE 'A%';
+        
+ --- extracted query:
+  
+ Select r_regionkey 
+ From region, region1 
+ Where region.r_regionkey = region1.r1_regionkey
+ and region1.r1_name LIKE 'A%' 
+ Group By r_regionkey 
+ Order By r_regionkey desc;
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ 
+        select s_nationkey from supplier where s_acctbal > 1000
+        INTERSECT
+        select s1_nationkey from supplier1 where s1_acctbal > 1500;
+        
+ --- extracted query:
+ too many values to unpack (expected 2)
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ 
+        select s_nationkey from supplier where s_acctbal > 1000
+        INTERSECT
+        select s1_nationkey from supplier1 where s1_acctbal > 1500;
+        
+ --- extracted query:
+ too many values to unpack (expected 2)
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ 
+        select s_nationkey from supplier where s_acctbal > 1000
+        INTERSECT
+        select s1_nationkey from supplier1 where s1_acctbal > 1500;
+        
+ --- extracted query:
+  
+ Select s_nationkey 
+ From supplier, supplier1 
+ Where supplier.s_nationkey = supplier1.s1_nationkey
+ and supplier.s_acctbal >= 1000.01
+ and supplier1.s1_acctbal >= 1500.01 
+ Group By s_nationkey 
+ Order By s_nationkey asc;
+ --- END OF ONE EXTRACTION EXPERIMENT
+
+ --- START OF ONE EXTRACTION EXPERIMENT
+ --- input query:
+ 
+        select s_nationkey from supplier where s_acctbal > 1000
+        INTERSECT
+        select s_nationkey from supplier where s_acctbal > 1500;
+        
+ --- extracted query:
+  
+ Select s_nationkey 
+ From supplier 
+ Where supplier.s_acctbal >= 1500.01 
+ Group By s_nationkey 
+ Order By s_nationkey asc;
+ --- END OF ONE EXTRACTION EXPERIMENT

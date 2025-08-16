@@ -35,6 +35,15 @@ class ExtractionTestCase(BaseTestCase):
         self.conn.config.use_cs2 = False
         self.pipeline = None
 
+    def test_intersect(self):
+        query = """
+        select s_nationkey from supplier where s_acctbal > 1000
+        INTERSECT
+        select s_nationkey from supplier where s_acctbal > 1500;
+        """
+        self.conn.config.use_cs2 = False
+        self.do_test(query)
+
     def test_exists(self):
         query = """select n_regionkey from nation where exists (select * from customer, orders where c_custkey = o_custkey and o_totalprice < 10000);"""
         self.conn.config.use_cs2 = False
