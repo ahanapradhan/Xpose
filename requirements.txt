@@ -1,0 +1,7 @@
+frozenlist
+pandas
+sympy==1.4
+mpmath>=0.19
+tabulate
+psycopg2-binary==2.9.9
+oracledb
